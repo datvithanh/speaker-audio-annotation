@@ -1,0 +1,39 @@
+{
+  "name": "evaluate-audio-vbee",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "server": "nodemon src/index.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "lint": "eslint . --ext .js,.jsx -f ./.eslintformatter.js; exit 0",
+    "format": "prettier-eslint 'server/**/*.{js,json}' --write"
+  },
+  "author": "Vũ Duy Mạnh",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "2.4.3",
+    "concurrently": "4.1.1",
+    "cors": "2.8.5",
+    "dotenv": "8.0.0",
+    "eslint": "5.16.0",
+    "express": "4.17.1",
+    "jsonwebtoken": "8.5.1",
+    "mongoose": "5.6.6",
+    "nodemon": "1.19.1",
+    "react-redux": "7.1.0",
+    "redux": "4.0.4",
+    "snakecase-keys": "3.1.0",
+    "validator": "11.1.0"
+  },
+  "devDependencies": {
+    "eslint-config-airbnb-base": "13.2.0",
+    "eslint-config-prettier": "6.0.0",
+    "eslint-plugin-import": "2.18.2",
+    "eslint-plugin-prettier": "3.1.0",
+    "prettier": "1.18.2",
+    "prettier-eslint-cli": "5.0.0"
+  }
+}
