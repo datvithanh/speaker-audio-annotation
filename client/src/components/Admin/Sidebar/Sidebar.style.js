@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 
 const SidebarStyle = styled.div`
-  
   ul {
     width: 300px;
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
     background: rgb(37, 37, 37);
   }
 
@@ -20,10 +20,9 @@ const SidebarStyle = styled.div`
   }
 
   li:hover {
-    
     color: black;
   }
-  
+
   a:hover {
     color: black;
     background: rgb(255, 248, 184);

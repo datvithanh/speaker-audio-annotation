@@ -6,7 +6,7 @@ import Home from './components/Home/Home';
 import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/routing/PrivateRoute';
-import CreateTest from './components/Admin/CreateTest/CreateTest';
+import CreateTest from './components/Admin/CreateTest';
 import UserManagement from './components/Admin/UserManagement/UserManagement.js';
 import AddUser from './components/Admin/UserManagement/AddUser/AddUser';
 import Layout from './components/Admin/Layout/Layout';

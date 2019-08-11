@@ -5,7 +5,7 @@ import UserManagementStyle from './UserManagement.style';
 const UserManagement = () => {
   return <UserManagementStyle>
     <Link className="btn" to='/admin/user-management/add-user'>Thêm User</Link>
-    <table id="t01">
+    {/* <table id="t01">
       <tr>
         <th>Firstname</th>
         <th>Lastname</th>
@@ -21,7 +21,7 @@ const UserManagement = () => {
         <td>Jackson</td>
         <td>94</td>
       </tr>
-    </table>
+    </table> */}
   </UserManagementStyle>;
 };
 

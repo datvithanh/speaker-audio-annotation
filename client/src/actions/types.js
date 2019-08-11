@@ -9,3 +9,5 @@ export const LOGIN_FAILED = 'LOGIN_FAILED';
 export const LOGOUT = 'LOGOUT';
 export const ADD_USER_SUCCESS = 'ADD_USER_SUCCESS';
 export const ADD_USER_FAILED = 'ADD_USER_FAILED';
+export const ADD_TEST_SUCCESS = 'ADD_TEST_SUCCESS';
+export const ADD_TEST_FAILED = 'ADD_TEST_FAILED';
