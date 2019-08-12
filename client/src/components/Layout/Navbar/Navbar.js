@@ -35,8 +35,8 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   
   return (
     <NavbarStyle>
-      <nav className="navbar bg-dark">
-        <Link to="/" className="logo">
+      <nav className="navbar1">
+        <Link to="/" className="logo-vbee">
           <img src={Logo} alt="VBEE" />
           <img
             className="logo-description"

@@ -5,15 +5,24 @@ import CreateTestStyle from './index.style';
 import { setAlert } from '../../../actions/alert';
 import { addTest } from '../../../actions/admin';
 
-const CreateTest = ({ setAlert, addTest }) => {
+const CreateTest = ({ setAlert, addTest, history }) => {
+  // const [formData, setFormData] = useState({
+  //   name: '',
+  //   numberOfVoices: '',
+  //   voices: '',
+  //   numberOfSentences: '',
+  //   accessModifier: 'Private',
+  //   dateOpened: '',
+  //   dateClosed: '',
+  // });
   const [formData, setFormData] = useState({
-    name: '',
-    numberOfVoices: '',
-    voices: '',
-    numberOfSentences: '',
+    name: 'Test1',
+    numberOfVoices: 3,
+    voices: ["Nam", "Manh" ,"Hung"],
+    numberOfSentences: 30,
     accessModifier: 'Private',
-    dateOpened: '',
-    dateClosed: '',
+    dateOpened: '2018-03-02',
+    dateClosed: '2018-05-05',
   });
 
   const {
@@ -59,24 +68,23 @@ const CreateTest = ({ setAlert, addTest }) => {
         3000,
       );
     } else {
-      console.log(formData);
-      // addTest({
-      //   name,
-      //   numberOfVoices,
-      //   voices,
-      //   numberOfSentences,
-      //   accessModifier,
-      //   dateOpened,
-      //   dateClosed,
-      // });
-      // setAlert('Thêm thành công', 'danger', 2000);
+      addTest({
+        name,
+        numberOfVoices,
+        voices,
+        numberOfSentences,
+        accessModifier,
+        dateOpened,
+        dateClosed,
+      });
+      history.push('/admin/create-test/upload');
     }
   };
 
   return (
     <CreateTestStyle>
       <Alert />
-      <h1 className="fas fa-user large text-primary"> Tạo bài test</h1>
+      <h1 className="fas fa-user large"> Tạo bài test</h1>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
           <h4>Nhập tên bài test</h4>

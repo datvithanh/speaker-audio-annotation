@@ -4,7 +4,7 @@ const LayoutStyle = styled.div`
   display: grid;
   grid-template-rows: 90px 1fr;
   grid-template-areas: 'navbar' 'content';
-  .navbar {
+  .navbar1 {
     grid-area: navbar;
   }
 

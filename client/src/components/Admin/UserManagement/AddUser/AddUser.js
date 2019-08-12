@@ -36,7 +36,7 @@ const AddUser = ({ setAlert, addUser }) => {
   return (
     <AddUserStyle>
       <Alert />
-      <h1 className="fas fa-user large text-primary"> Thêm User</h1>
+      <h1 className="fas fa-user large"> Thêm User</h1>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
           <input

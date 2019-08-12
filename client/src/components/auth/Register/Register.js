@@ -41,7 +41,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   return (
     <RegisterStyle>
       <Alert />
-      <h1 className="large text-primary">Đăng ký</h1>
+      <h1 className="large">Đăng ký</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Tạo tài khoản của bạn
       </p>

@@ -7,6 +7,7 @@ const errorCode = {
   INTERNAL_SERVER_ERROR: 500,
   EMAIL_ALREADY_EXIST: 1,
   FILE_TOO_LARGE: 2,
+  CANT_CREATE_FILE: 3,
 };
 
 module.exports = errorCode;

@@ -19,4 +19,4 @@ const sentenceSchema = mongoose.Schema(
 
 const sentenceModel = mongoose.model('Sentence', sentenceSchema);
 
-module.export = sentenceModel;
+module.exports = sentenceModel;

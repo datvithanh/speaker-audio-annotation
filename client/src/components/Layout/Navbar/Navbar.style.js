@@ -5,7 +5,7 @@ const NavbarStyle = styled.div`
   color: black;
   
 
-  .navbar {
+  .navbar1 {
     display: flex;
     box-shadow: rgb(221, 221, 221) 0px 0px 8px 2px;
     position: fixed;
@@ -20,13 +20,13 @@ const NavbarStyle = styled.div`
     padding: 10px;
   }
 
-  .logo {
+  .logo-vbee {
     display: flex;
     align-items: center;
     margin-left: 1rem;
   }
 
-  .logo .logo-description {
+  .logo-vbee .logo-description {
     padding-left: 0.7em;
     width: 130px;
   }

@@ -14,6 +14,8 @@ function getErrorMessage(code) {
       return 'Email already exist';
     case 2:
       return 'File too large';
+    case 3:
+      return 'Can not create file';
     default:
       return null;
   }

@@ -5,7 +5,7 @@ import Navbar from './Navbar/Navbar';
 const index = ({children}) => {
   return (
     <LayoutStyle>
-      <div className="navbar"><Navbar /></div>
+      <div className="navbar1"><Navbar /></div>
       <div className="content">{children}</div>
     </LayoutStyle>
   )

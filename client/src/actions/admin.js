@@ -66,6 +66,7 @@ export const addTest = ({
     if (res.data.status === 1) {
       dispatch({
         type: ADD_TEST_SUCCESS,
+        payload: res.data.results,
       });
     } else {
       dispatch(setAlert(res.data.message, 'danger', 2000));

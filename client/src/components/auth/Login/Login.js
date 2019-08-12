@@ -34,7 +34,7 @@ const Login = ({ login, isAuthenticated, user }) => {
   return (
     <LoginStyle>
       <Alert />
-      <h1 className="large text-primary">Đăng nhập</h1>
+      <h1 className="large">Đăng nhập</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Đăng nhập vào tài khoản của bạn
       </p>
