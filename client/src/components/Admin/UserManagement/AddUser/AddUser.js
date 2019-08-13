@@ -29,7 +29,7 @@ const AddUser = ({ setAlert, addUser }) => {
       setAlert('Mật khẩu không khớp', 'danger', 3000);
     } else {
       addUser({ name, email, password });
-      setAlert('Thêm thành công', 'danger', 2000);
+      setAlert('Thêm thành công', 'success', 2000);
     }
   };
 

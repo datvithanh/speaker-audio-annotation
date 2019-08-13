@@ -60,6 +60,10 @@ const NavbarStyle = styled.div`
     color: black;
   }
 
+  .logo-vbee:hover {
+    background: white;
+  }
+
   .logo:hover {
     background: white;
   }

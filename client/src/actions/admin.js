@@ -61,6 +61,7 @@ export const addTest = ({
     dateOpened,
     dateClosed,
   });
+
   try {
     const res = await axios.post('/api/admin/create-test', body, config);
     if (res.data.status === 1) {

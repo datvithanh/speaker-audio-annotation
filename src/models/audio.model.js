@@ -23,10 +23,10 @@ const audioSchema = mongoose.Schema(
         },
       },
     ],
-    text: {
-      type: mongoose.Schema.Types.ObjectId,
+    sentence: {
+      type: String,
       required: true,
-      ref: 'Text',
+      ref: 'Sentence',
     },
     test: {
       type: mongoose.Schema.Types.ObjectId,

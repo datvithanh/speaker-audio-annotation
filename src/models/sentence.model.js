@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const sentenceSchema = mongoose.Schema(
   {
+    _id: String,
     content: {
       type: String,
       required: true,
@@ -14,6 +15,7 @@ const sentenceSchema = mongoose.Schema(
   },
   {
     timestamps: true,
+    _id: false,
   },
 );
 

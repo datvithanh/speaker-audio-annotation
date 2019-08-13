@@ -39,34 +39,32 @@ const App = () => {
                 path="/test"
                 component={() => <div>abc</div>}
               />
-              <PrivateRoute>
-                <Layout>
-                  <Switch>
-                    <PrivateRoute
-                      exact
-                      path="/admin/create-test"
-                      component={CreateTest}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/admin/create-test/upload"
-                      component={UploadFile}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/admin/user-management"
-                      component={UserManagement}
-                    />
-                    <PrivateRoute
-                      exact
-                      path="/admin/user-management/add-user"
-                      component={AddUser}
-                    />
+              <Layout>
+                <Switch>
+                  <PrivateRoute
+                    exact
+                    path="/admin/create-test"
+                    component={CreateTest}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/create-test/upload"
+                    component={UploadFile}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/user-management"
+                    component={UserManagement}
+                  />
+                  <PrivateRoute
+                    exact
+                    path="/admin/user-management/add-user"
+                    component={AddUser}
+                  />
 
-                    <PrivateRoute path="*" component={Home} />
-                  </Switch>
-                </Layout>
-              </PrivateRoute>
+                  <PrivateRoute path="*" component={Home} />
+                </Switch>
+              </Layout>
             </Switch>
           </LayoutApp>
         </div>
