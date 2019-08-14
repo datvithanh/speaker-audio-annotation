@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const fs = require('fs');
+const { ObjectId } = require('mongoose').Types;
 const decompress = require('decompress');
 const uuid = require('uuid');
 const CustomError = require('../errors/CustomError');
@@ -9,6 +10,16 @@ const Test = require('../models/test.model');
 const Sentence = require('../models/sentence.model');
 const Audio = require('../models/audio.model');
 const { SRC_PATH } = require('../constant');
+
+async function getListUser(req, res) {
+  const users = await User.find({});
+  res.send({
+    status: 1,
+    results: {
+      users,
+    },
+  });
+}
 
 async function addUser(req, res) {
   const isExistMail = await User.findOne({ email: req.body.email });
@@ -63,7 +74,6 @@ async function uploadSentence(req, res) {
   }
 
   await decompress(filePath, directoryPath);
-
   fs.readdirSync(directoryPath).forEach(fileUnzip => {
     if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(txt)$/)) {
       throw new CustomError(
@@ -128,7 +138,11 @@ async function uploadAudio(req, res) {
         'Bạn cần upload file zip chỉ có file .wav bên trong',
       );
     }
-    if (fileUnzip.split('.')[0].split('-').length !== 2) {
+
+    if (
+      !fileUnzip.match(/\.(zip)$/) &&
+      fileUnzip.split('.')[0].split('-').length !== 2
+    ) {
       throw new CustomError(
         errorCode.BAD_REQUEST,
         'Tồn tại file sai định dạng. Hãy nhập đúng định dạng Mã_câu-Mã_voice.wav',
@@ -136,41 +150,70 @@ async function uploadAudio(req, res) {
     }
   });
 
-  fs.readdirSync(directoryPath).forEach(async fileUnzip => {
-    if (fileUnzip.match(/\.(wav)$/)) {
-      const sentence = `${test._id}-${fileUnzip.split('.')[0].split('-')[0]}`;
-      const voice = fileUnzip.split('.')[0].split('-')[1];
-      await Audio.create({
-        link: `${directoryPath}/${fileUnzip}`,
-        voice,
-        sentence,
-        test: test._id,
-      });
+  await Promise.all(
+    fs.readdirSync(directoryPath).map(async fileUnzip => {
+      if (fileUnzip.match(/\.(wav)$/)) {
+        const sentence = `${test._id}-${fileUnzip.split('.')[0].split('-')[0]}`;
+        const voice = fileUnzip.split('.')[0].split('-')[1];
+        await Audio.create({
+          link: `${directoryPath}/${fileUnzip}`,
+          voice,
+          sentence,
+          test: test._id,
+        });
+      }
+    }),
+  );
+
+  const results = await Audio.aggregate([
+    { $match: { test: ObjectId(test._id) } },
+    {
+      $group: {
+        _id: '$sentence',
+        total: { $sum: 1 },
+      },
+    },
+  ]);
+
+  let checkUpload = true;
+  results.forEach(result => {
+    if (result.total !== test.voices.length) {
+      checkUpload = false;
     }
   });
 
-  // Audio.aggregate(
-  //   [
-  //     {
-  //       $group: {
-  //         _id: '$voice',
-  //         total: { $sum: 1 },
-  //       },
-  //     },
-  //   ],
-  //   (err, res) => {
-  //     console.log(res);
-  //   },
-  // );
+  if (checkUpload === false) {
+    await Audio.deleteMany({ test: ObjectId(test._id) });
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'Kiểm tra lại file upload: Số giọng trong file khác số giọng của bài test hoặc số giọng mỗi câu không bằng nhau',
+    );
+  }
 
   res.send({
     status: 1,
   });
 }
 
+async function addUserChosen(req, res) {
+  const { users } = req.body;
+  const test = await Test.findById(req.body.test);
+  test.users = users;
+  await test.save();
+
+  res.send({
+    status: 1,
+    results: {
+      test,
+    },
+  });
+}
+
 module.exports = {
+  getListUser,
   addUser,
   createTest,
   uploadSentence,
   uploadAudio,
+  addUserChosen,
 };

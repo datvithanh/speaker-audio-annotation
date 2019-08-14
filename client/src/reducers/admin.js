@@ -1,36 +1,60 @@
 import {
+  GET_LIST_USERS,
   ADD_USER_SUCCESS,
   ADD_USER_FAILED,
   ADD_TEST_FAILED,
   ADD_TEST_SUCCESS,
+  SET_STEP_CREATE_TEST,
+  ADD_USER_CHOSEN_SUCCESS,
+  ADD_USER_CHOSEN_FAILED,
+  RESET_TEST,
 } from '../actions/types';
 
 const initialState = {
   // token: localStorage.getItem('token'),
   // isAuthenticated: null,
   loading: true,
-  // user: null,
+  users: [],
   test: null,
   sentence: null,
   audio: null,
+  stepCreateTest: 'step1',
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
   switch (type) {
+    case GET_LIST_USERS:
+      return {
+        ...state,
+        loading: false,
+        users: payload.users,
+      };
     case ADD_USER_SUCCESS:
     case ADD_USER_FAILED:
     case ADD_TEST_FAILED:
+    case ADD_USER_CHOSEN_FAILED:
       return {
         ...state,
         loading: false,
       };
-    case ADD_TEST_SUCCESS:
+    case ADD_TEST_SUCCESS: 
+    case ADD_USER_CHOSEN_SUCCESS:
       return {
         ...state,
         loading: false,
         test: payload.test,
       };
+    case SET_STEP_CREATE_TEST:
+      return {
+        ...state,
+        stepCreateTest: payload,
+      };
+    case RESET_TEST:
+      return {
+        ...state,
+        test: null,
+      }
     default:
       return state;
   }

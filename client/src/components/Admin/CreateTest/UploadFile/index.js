@@ -4,8 +4,9 @@ import UploadFileStyle from './index.style';
 import Message from './Message';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { getListUser, setStepCreateTest } from '../../../../actions/admin';
 
-const UploadFile = ({ test }) => {
+const UploadFile = ({ test, setStepCreateTest, getListUser }) => {
   const [file, setFile] = useState({
     sentence: '',
     audio: '',
@@ -131,6 +132,15 @@ const UploadFile = ({ test }) => {
           ...message,
           audio: 'Upload succesfully',
         });
+        getListUser();
+
+        setTimeout(() => {
+          if (test.accessModifier === 'Private') {
+            setStepCreateTest('step3');
+          } else {
+            setStepCreateTest('step4');
+          }
+        }, 1000);
       } else {
         setMessage({ ...message, audio: res.data.message });
       }
@@ -216,8 +226,8 @@ const UploadFile = ({ test }) => {
           <li>- Upload duy nhất 1 file ZIP (file.zip).</li>
           <li>
             - Upload Sentence bên trong file ZIP chỉ có một loại file duy nhất
-            là TEXT theo định dạng Mã_câu.txt. VD: 1234.txt Ngoài ra
-            không được có thêm bất kì loại file nào khác.
+            là TEXT theo định dạng Mã_câu.txt. VD: 1234.txt Ngoài ra không được
+            có thêm bất kì loại file nào khác.
           </li>
           <li>
             - Upload Audio bên trong file ZIP chỉ có một loại file duy nhất là
@@ -236,4 +246,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(UploadFile);
+export default connect(
+  mapStateToProps,
+  { setStepCreateTest, getListUser },
+)(UploadFile);

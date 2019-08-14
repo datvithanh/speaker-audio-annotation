@@ -7,7 +7,6 @@ import { loadUser } from './actions/auth';
 import setAuthToken from './utils/setAuthToken';
 import PrivateRoute from './components/routing/PrivateRoute';
 import CreateTest from './components/Admin/CreateTest';
-import UploadFile from './components/Admin/CreateTest/UploadFile';
 import UserManagement from './components/Admin/UserManagement/UserManagement.js';
 import AddUser from './components/Admin/UserManagement/AddUser/AddUser';
 import Layout from './components/Admin/Layout/Layout';
@@ -46,11 +45,11 @@ const App = () => {
                     path="/admin/create-test"
                     component={CreateTest}
                   />
-                  <PrivateRoute
+                  {/* <PrivateRoute
                     exact
                     path="/admin/create-test/upload"
                     component={UploadFile}
-                  />
+                  /> */}
                   <PrivateRoute
                     exact
                     path="/admin/user-management"
