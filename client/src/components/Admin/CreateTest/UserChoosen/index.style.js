@@ -9,8 +9,14 @@ const UserChoosenStyle = styled.div`
     text-align: center;
   }
 
-  button {
+  .table {
+    border: 1px solid #e8e8e8;
+    width: 730px;
     margin: 0 auto;
+  }
+
+  button {
+    margin: 1rem auto;
     display: block;
   }
 `;

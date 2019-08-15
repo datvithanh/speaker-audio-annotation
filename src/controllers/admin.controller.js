@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 const fs = require('fs');
+const fsExtra = require('fs-extra');
 const { ObjectId } = require('mongoose').Types;
 const decompress = require('decompress');
 const uuid = require('uuid');
@@ -74,14 +75,23 @@ async function uploadSentence(req, res) {
   }
 
   await decompress(filePath, directoryPath);
-  fs.readdirSync(directoryPath).forEach(fileUnzip => {
-    if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(txt)$/)) {
-      throw new CustomError(
-        errorCode.BAD_REQUEST,
-        'Bạn cần upload file zip chỉ có text bên trong',
-      );
-    }
-  });
+
+  let isValidInput = true;
+  await Promise.all(
+    fs.readdirSync(directoryPath).map(async fileUnzip => {
+      if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(txt)$/)) {
+        isValidInput = false;
+      }
+    }),
+  );
+
+  if (!isValidInput) {
+    fsExtra.removeSync(directoryPath);
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'Bạn cần upload file zip chỉ có text bên trong',
+    );
+  }
 
   fs.readdirSync(directoryPath).forEach(async fileUnzip => {
     const nameFileUnzip = fileUnzip.split('.')[0];
@@ -131,24 +141,35 @@ async function uploadAudio(req, res) {
 
   await decompress(filePath, directoryPath);
 
-  fs.readdirSync(directoryPath).forEach(fileUnzip => {
-    if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(wav)$/)) {
-      throw new CustomError(
-        errorCode.BAD_REQUEST,
-        'Bạn cần upload file zip chỉ có file .wav bên trong',
-      );
-    }
+  let errorInput = null;
+  await Promise.all(
+    fs.readdirSync(directoryPath).map(async fileUnzip => {
+      if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(wav)$/)) {
+        errorInput = 'error-ext';
+      } else if (
+        !fileUnzip.match(/\.(zip)$/) &&
+        fileUnzip.split('.')[0].split('-').length !== 2
+      ) {
+        errorInput = 'error-format';
+      }
+    }),
+  );
 
-    if (
-      !fileUnzip.match(/\.(zip)$/) &&
-      fileUnzip.split('.')[0].split('-').length !== 2
-    ) {
-      throw new CustomError(
-        errorCode.BAD_REQUEST,
-        'Tồn tại file sai định dạng. Hãy nhập đúng định dạng Mã_câu-Mã_voice.wav',
-      );
-    }
-  });
+  if (errorInput === 'error-ext') {
+    fsExtra.removeSync(directoryPath);
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'Bạn cần upload file zip chỉ có file .wav bên trong',
+    );
+  }
+
+  if (errorInput === 'error-format') {
+    fsExtra.removeSync(directoryPath);
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'Tồn tại file sai định dạng. Hãy nhập đúng định dạng Mã_câu-Mã_voice.wav',
+    );
+  }
 
   await Promise.all(
     fs.readdirSync(directoryPath).map(async fileUnzip => {
@@ -175,14 +196,14 @@ async function uploadAudio(req, res) {
     },
   ]);
 
-  let checkUpload = true;
   results.forEach(result => {
     if (result.total !== test.voices.length) {
-      checkUpload = false;
+      errorInput = 'error-quantity';
     }
   });
 
-  if (checkUpload === false) {
+  if (errorInput === 'error-quantity') {
+    fsExtra.removeSync(directoryPath);
     await Audio.deleteMany({ test: ObjectId(test._id) });
     throw new CustomError(
       errorCode.BAD_REQUEST,
