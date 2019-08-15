@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const AlertStyle = styled.div`
   padding: 0.8rem;
   opacity: 0.9;
-  max-width: 730px;
+  max-width: 100%;
   margin: 1rem auto;
   font-style: italic;
   border-radius: 7px;

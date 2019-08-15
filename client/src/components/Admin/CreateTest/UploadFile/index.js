@@ -43,7 +43,7 @@ const UploadFile = ({ test, setStepCreateTest, getListUser }) => {
     if (file.sentence === '') {
       return setMessage({
         ...message,
-        sentence: 'No file Upload',
+        sentence: 'Vui lòng chọn file upload',
       });
     }
     const formData = new FormData();
@@ -77,7 +77,7 @@ const UploadFile = ({ test, setStepCreateTest, getListUser }) => {
       if (error.response.status === 500) {
         setMessage({
           ...message,
-          sentence: 'There was a problem with the server',
+          sentence: 'Có lỗi xảy ra trên server',
         });
       } else {
         setMessage({ ...message, sentence: error.response.data.message });
@@ -104,7 +104,7 @@ const UploadFile = ({ test, setStepCreateTest, getListUser }) => {
     if (file.audio === '') {
       return setMessage({
         ...message,
-        audio: 'No file Upload',
+        audio: 'Vui lòng chọn file upload',
       });
     }
 

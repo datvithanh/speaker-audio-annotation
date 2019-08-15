@@ -27,7 +27,9 @@ const CreateTest = ({
     name: 'Test1',
     numberOfVoices: 3,
     voices: ['Nam', 'Manh', 'Hung'],
-    numberOfSentences: 30,
+    numberOfSentences: 200, // n
+    minSentences: 100, // a
+    minPeopleListenAudio: 3, // b
     accessModifier: 'Private',
     dateOpened: '2018-03-02',
     dateClosed: '2018-05-05',
@@ -38,6 +40,8 @@ const CreateTest = ({
     numberOfVoices,
     voices,
     numberOfSentences,
+    minSentences,
+    minPeopleListenAudio,
     accessModifier,
     dateOpened,
     dateClosed,
@@ -81,6 +85,8 @@ const CreateTest = ({
         numberOfVoices,
         voices,
         numberOfSentences,
+        minSentences,
+        minPeopleListenAudio,
         accessModifier,
         dateOpened,
         dateClosed,
@@ -93,90 +99,113 @@ const CreateTest = ({
   if (stepCreateTest === 'step1') {
     content = (
       <CreateTestStyle>
-        <Alert />
-
         <h1 className="fas fa-user large"> Tạo bài test</h1>
+        <Alert />
         <form className="form" onSubmit={e => onSubmit(e)}>
-          <div className="form-group">
-            <h4>Nhập tên bài test</h4>
-            <input
-              type="text"
-              style={{ fontStyle: 'italic' }}
-              name="name"
-              value={name}
-              onChange={e => onChange(e)}
-            />
+          <div className="container">
+            <div className="column1">
+              <div className="form-group">
+                <h6>Nhập tên bài test</h6>
+                <input
+                  type="text"
+                  style={{ fontStyle: 'italic' }}
+                  name="name"
+                  value={name}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+              <div className="form-group">
+                <h6>Nhập số lượng voices</h6>
+                <input
+                  type="text"
+                  style={{ fontStyle: 'italic' }}
+                  name="numberOfVoices"
+                  value={numberOfVoices}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+              <div className="form-group">
+                <h6>Nhập tên các voice cách nhau bởi dấu ","</h6>
+                <input
+                  type="text"
+                  style={{ fontStyle: 'italic' }}
+                  placeholder="VD: Mạnh, Nam, Hùng"
+                  name="voices"
+                  value={voices}
+                  onChange={e => onChangeVoices(e)}
+                />
+              </div>
+              <div className="form-group">
+                <h6>Nhập số câu của bài test</h6>
+                <input
+                  type="text"
+                  style={{ fontStyle: 'italic' }}
+                  name="numberOfSentences"
+                  value={numberOfSentences}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+              <div className="form-group">
+                <h6>
+                  Nhập số câu của một giọng mà bạn muốn một người phải nghe
+                </h6>
+                <input
+                  type="text"
+                  style={{ fontStyle: 'italic' }}
+                  name="minSentences"
+                  value={minSentences}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+            </div>
+            <div className="column2">
+              <div className="form-group">
+                <h6>Nhập số người tối thiểu phải nghe 1 audio</h6>
+                <input
+                  type="text"
+                  style={{ fontStyle: 'italic' }}
+                  name="minPeople"
+                  value={minPeopleListenAudio}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+              <div className="form-group">
+                <h6>Chọn chỉ định truy cập</h6>
+                <select
+                  value={formData.accessModifier}
+                  style={{
+                    fontStyle: 'italic',
+                    height: '40px',
+                    backgroundColor: 'white',
+                    borderRadius: '0px'
+                  }}
+                  onChange={e => onChangeAccessModifier(e)}
+                >
+                  <option value="Private">Private</option>
+                  <option value="Public">Public</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <h6>Ngày mở</h6>
+                <input
+                  type="date"
+                  name="dateOpened"
+                  value={dateOpened}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+              <div className="form-group">
+                <h6>Ngày hết hạn</h6>
+                <input
+                  type="date"
+                  name="dateClosed"
+                  value={dateClosed}
+                  onChange={e => onChange(e)}
+                />
+              </div>
+            </div>
           </div>
-          <div className="form-group">
-            <h4>Nhập số lượng voices</h4>
-            <input
-              type="text"
-              style={{ fontStyle: 'italic' }}
-              name="numberOfVoices"
-              value={numberOfVoices}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <h4>Nhập tên các voice cách nhau bởi dấu ","</h4>
-            <input
-              type="text"
-              style={{ fontStyle: 'italic' }}
-              placeholder="VD: Mạnh, Nam, Hùng"
-              name="voices"
-              value={voices}
-              onChange={e => onChangeVoices(e)}
-            />
-          </div>
-          <div className="form-group">
-            <h4>Nhập số câu của bài test</h4>
-            <input
-              type="text"
-              style={{ fontStyle: 'italic' }}
-              name="numberOfSentences"
-              value={numberOfSentences}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <h4>Chọn chỉ định truy cập</h4>
-            <select
-              value={formData.accessModifier}
-              style={{
-                fontStyle: 'italic',
-                height: '48px',
-                backgroundColor: 'white',
-              }}
-              onChange={e => onChangeAccessModifier(e)}
-            >
-              <option value="Private">Private</option>
-              <option value="Public">Public</option>
-            </select>
-            {/* <input
-            type="text"
-            name="accessModifier"
-            value={accessModifier}
-            onChange={e => onChange(e)}
-          /> */}
-          </div>
-          <div className="form-group">
-            <h4>Ngày mở</h4>
-            <input
-              type="date"
-              name="dateOpened"
-              value={dateOpened}
-              onChange={e => onChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <h4>Ngày hết hạn</h4>
-            <input
-              type="date"
-              name="dateClosed"
-              value={dateClosed}
-              onChange={e => onChange(e)}
-            />
-          </div>
+
           <div className="form-group">
             <input
               type="submit"

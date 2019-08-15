@@ -14,6 +14,18 @@ const testSchema = mongoose.Schema(
       type: Number,
       required: true,
     },
+    minSentences: {
+      type: Number,
+      required: true,
+    },
+    minPeopleListenAudio: {
+      type: Number,
+      required: true,
+    },
+    minPeopleJoin: {
+      type: Number,
+      required: true,
+    },
     accessModifier: {
       type: String,
       required: true,

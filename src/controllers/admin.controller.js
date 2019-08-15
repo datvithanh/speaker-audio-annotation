@@ -36,7 +36,10 @@ async function addUser(req, res) {
 }
 
 async function createTest(req, res) {
-  const test = await Test.create(req.body);
+  const { minPeopleListenAudio, numberOfSentences, minSentences } = req.body;
+  const minPeopleJoin =
+    (minPeopleListenAudio * numberOfSentences) / minSentences;
+  const test = await Test.create({ ...req.body, minPeopleJoin });
   res.send({
     status: 1,
     results: {
@@ -167,7 +170,7 @@ async function uploadAudio(req, res) {
     fsExtra.removeSync(directoryPath);
     throw new CustomError(
       errorCode.BAD_REQUEST,
-      'Tồn tại file sai định dạng. Hãy nhập đúng định dạng Mã_câu-Mã_voice.wav',
+      'Tồn tại file sai định dạng. Bạn cần upload file đúng định dạng Mã_câu-Mã_voice.wav',
     );
   }
 

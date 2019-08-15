@@ -15,6 +15,13 @@ const UserChoosenStyle = styled.div`
     margin: 0 auto;
   }
 
+  .notice {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 30px;
+  }
+
   button {
     margin: 1rem auto;
     display: block;

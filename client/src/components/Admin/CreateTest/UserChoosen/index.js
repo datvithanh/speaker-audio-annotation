@@ -13,6 +13,7 @@ const UserChoosen = ({
   addUserChosen,
   setStepCreateTest,
   setAlert,
+  minPeopleJoin,
 }) => {
   const [usersChose, setUsersChose] = useState([]);
   const columns = [
@@ -40,9 +41,8 @@ const UserChoosen = ({
   };
 
   const onClickedHandler = () => {
-    console.log(usersChose);
-    if (usersChose.length === 0) {
-      return setAlert('Bạn phải chọn đủ số người quy định', 'danger', 2000);
+    if (usersChose.length !== minPeopleJoin) {
+      return setAlert(`Bạn phải chọn đủ ${minPeopleJoin} người`, 'danger', 2000);
     }
     addUserChosen(usersChose, test._id);
     setStepCreateTest('step4');
@@ -53,6 +53,7 @@ const UserChoosen = ({
       <h1 style={{ textAlign: 'center' }}>
         Chỉ định user tham gia bài test Private
       </h1>
+      <p className="notice">Cần {minPeopleJoin} người cho bài test</p>
       <Alert />
       <Table
         className="table"
@@ -71,6 +72,7 @@ const mapStateToProps = state => {
   return {
     users: state.admin.users,
     test: state.admin.test,
+    minPeopleJoin: state.admin.test.minPeopleJoin,
   };
 };
 
