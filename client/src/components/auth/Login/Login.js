@@ -31,7 +31,7 @@ const Login = ({ login, isAuthenticated, user }) => {
     return user && user.role === 0 ? (
       <Redirect to="/" />
     ) : (
-      <Redirect to="/admin/test-management" />
+      <Redirect to="/admin/create-test" />
     );
   }
 

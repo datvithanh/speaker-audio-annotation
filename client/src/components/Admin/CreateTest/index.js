@@ -8,7 +8,12 @@ import UploadFile from './UploadFile';
 import UserChoosen from './UserChoosen';
 import AlertSuccess from './AlertSuccess';
 
-const CreateTest = ({ setAlert, addTest, stepCreateTest, setStepCreateTest }) => {
+const CreateTest = ({
+  setAlert,
+  addTest,
+  stepCreateTest,
+  setStepCreateTest,
+}) => {
   // const [formData, setFormData] = useState({
   //   name: '',
   //   numberOfVoices: '',
@@ -31,7 +36,7 @@ const CreateTest = ({ setAlert, addTest, stepCreateTest, setStepCreateTest }) =>
   const {
     name,
     numberOfVoices,
-    voices, 
+    voices,
     numberOfSentences,
     accessModifier,
     dateOpened,
@@ -136,6 +141,7 @@ const CreateTest = ({ setAlert, addTest, stepCreateTest, setStepCreateTest }) =>
           <div className="form-group">
             <h4>Chọn chỉ định truy cập</h4>
             <select
+              value={formData.accessModifier}
               style={{
                 fontStyle: 'italic',
                 height: '48px',
@@ -186,7 +192,7 @@ const CreateTest = ({ setAlert, addTest, stepCreateTest, setStepCreateTest }) =>
   } else if (stepCreateTest === 'step3') {
     content = <UserChoosen />;
   } else {
-    content = <AlertSuccess />
+    content = <AlertSuccess />;
   }
 
   return <>{content}</>;
