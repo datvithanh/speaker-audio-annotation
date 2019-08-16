@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { hot } from 'react-hot-loader/root';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Register from './components/auth/Register/Register';
 import Login from './components/auth/Login/Login';
@@ -72,4 +73,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default hot(App);
