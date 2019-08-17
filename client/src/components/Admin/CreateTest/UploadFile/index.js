@@ -4,9 +4,20 @@ import UploadFileStyle from './index.style';
 import Message from './Message';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { getListUser, setStepCreateTest } from '../../../../actions/admin';
+import {
+  getListUser,
+  setStepCreateTest,
+  setSentencePath,
+  setAudioPath,
+} from '../../../../actions/admin';
 
-const UploadFile = ({ test, setStepCreateTest, getListUser }) => {
+const UploadFile = ({
+  test,
+  setStepCreateTest,
+  getListUser,
+  setAudioPath,
+  setSentencePath,
+}) => {
   const [file, setFile] = useState({
     sentence: '',
     audio: '',
@@ -66,6 +77,7 @@ const UploadFile = ({ test, setStepCreateTest, getListUser }) => {
       });
 
       if (res.data.status === 1) {
+        setSentencePath(res.data.results.directoryPath);
         setMessage({
           ...message,
           sentence: 'Upload succesfully',
@@ -128,6 +140,7 @@ const UploadFile = ({ test, setStepCreateTest, getListUser }) => {
       });
 
       if (res.data.status === 1) {
+        setAudioPath(res.data.results.directoryPath);
         setMessage({
           ...message,
           audio: 'Upload succesfully',
@@ -248,5 +261,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { setStepCreateTest, getListUser },
+  { setStepCreateTest, getListUser, setAudioPath, setSentencePath },
 )(UploadFile);

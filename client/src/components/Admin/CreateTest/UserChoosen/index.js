@@ -3,17 +3,19 @@ import UserChoosenStyle from './index.style';
 import { connect } from 'react-redux';
 import { Table } from 'antd';
 import { setAlert } from '../../../../actions/alert';
-import { addUserChosen } from '../../../../actions/admin';
+import { addUserAndFileupload } from '../../../../actions/admin';
 import { setStepCreateTest } from '../../../../actions/admin';
 import Alert from '../../../Layout/Alert/Alert';
 
 const UserChoosen = ({
   users,
   test,
-  addUserChosen,
+  addUserAndFileupload,
   setStepCreateTest,
   setAlert,
   minPeopleJoin,
+  sentencePath,
+  audioPath,
 }) => {
   const [usersChose, setUsersChose] = useState([]);
   const columns = [
@@ -42,9 +44,13 @@ const UserChoosen = ({
 
   const onClickedHandler = () => {
     if (usersChose.length !== minPeopleJoin) {
-      return setAlert(`Bạn phải chọn đủ ${minPeopleJoin} người`, 'danger', 2000);
+      return setAlert(
+        `Bạn phải chọn đủ ${minPeopleJoin} người`,
+        'danger',
+        2000,
+      );
     }
-    addUserChosen(usersChose, test._id);
+    addUserAndFileupload(usersChose, test._id, sentencePath, audioPath);
     setStepCreateTest('step4');
   };
 
@@ -59,6 +65,7 @@ const UserChoosen = ({
         className="table"
         rowSelection={rowSelection}
         columns={columns}
+        rowKey='_id'
         dataSource={users.filter(user => user.role !== 1)}
       />
       <button className="btn btn-primary" onClick={onClickedHandler}>
@@ -73,10 +80,12 @@ const mapStateToProps = state => {
     users: state.admin.users,
     test: state.admin.test,
     minPeopleJoin: state.admin.test.minPeopleJoin,
+    sentencePath: state.admin.sentencePath,
+    audioPath: state.admin.audioPath,
   };
 };
 
 export default connect(
   mapStateToProps,
-  { addUserChosen, setStepCreateTest, setAlert },
+  { addUserAndFileupload, setStepCreateTest, setAlert },
 )(UserChoosen);

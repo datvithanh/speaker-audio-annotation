@@ -49,8 +49,6 @@ async function createTest(req, res) {
 }
 
 async function uploadSentence(req, res) {
-  const test = JSON.parse(req.body.test);
-
   const { sentence } = req.files;
 
   if (!sentence.name.match(/\.(zip)$/)) {
@@ -96,20 +94,11 @@ async function uploadSentence(req, res) {
     );
   }
 
-  fs.readdirSync(directoryPath).forEach(async fileUnzip => {
-    const nameFileUnzip = fileUnzip.split('.')[0];
-    if (fileUnzip.match(/\.(txt)$/)) {
-      const content = fs.readFileSync(`${directoryPath}/${fileUnzip}`, 'utf8');
-      await Sentence.create({
-        _id: `${test._id}_${nameFileUnzip}`,
-        content,
-        test: test._id,
-      });
-    }
-  });
-
   res.send({
     status: 1,
+    results: {
+      directoryPath,
+    },
   });
 }
 
@@ -216,19 +205,46 @@ async function uploadAudio(req, res) {
 
   res.send({
     status: 1,
+    results: {
+      directoryPath,
+    },
   });
 }
 
-async function addUserChosen(req, res) {
-  const { users } = req.body;
-  const test = await Test.findById(req.body.test);
-  test.users = users;
-  await test.save();
+async function addUserChosenAndFileUpload(req, res) {
+  const { audioPath, sentencePath, users, test } = req.body;
+  fs.readdirSync(sentencePath).forEach(async fileUnzip => {
+    const nameFileUnzip = fileUnzip.split('.')[0];
+    if (fileUnzip.match(/\.(txt)$/)) {
+      const content = fs.readFileSync(`${sentencePath}/${fileUnzip}`, 'utf8');
+      await Sentence.create({
+        _id: `${test}_${nameFileUnzip}`,
+        content,
+        test,
+      });
+    }
+  });
+
+  fs.readdirSync(audioPath).forEach(async fileUnzip => {
+    const nameFileUnzip = fileUnzip.split('.')[0];
+    if (fileUnzip.match(/\.(txt)$/)) {
+      const content = fs.readFileSync(`${audioPath}/${fileUnzip}`, 'utf8');
+      await Sentence.create({
+        _id: `${test}_${nameFileUnzip}`,
+        content,
+        test,
+      });
+    }
+  });
+
+  const testCurrently = await Test.findById(test);
+  testCurrently.users = users;
+  await testCurrently.save();
 
   res.send({
     status: 1,
     results: {
-      test,
+      test: testCurrently,
     },
   });
 }
@@ -239,5 +255,5 @@ module.exports = {
   createTest,
   uploadSentence,
   uploadAudio,
-  addUserChosen,
+  addUserChosenAndFileUpload,
 };

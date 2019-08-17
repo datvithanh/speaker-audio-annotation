@@ -6,9 +6,11 @@ import {
   ADD_TEST_FAILED,
   ADD_TEST_SUCCESS,
   SET_STEP_CREATE_TEST,
+  SET_DIRECTORY_AUDIO_PATH,
+  SET_DIRECTORY_SENTENCES_PATH,
   GET_LIST_USERS,
-  ADD_USER_CHOSEN_SUCCESS, 
-  ADD_USER_CHOSEN_FAILED,
+  ADD_USER_AND_FILEUPLOAD_SUCCESS,
+  ADD_USER_USER_AND_FILEUPLOAD_FAILED,
   RESET_TEST,
 } from './types';
 
@@ -80,7 +82,7 @@ export const addTest = ({
     voices,
     numberOfSentences,
     minSentences,
-    minPeopleListenAudio, 
+    minPeopleListenAudio,
     accessModifier,
     dateOpened,
     dateClosed,
@@ -115,38 +117,58 @@ export const setStepCreateTest = step => dispatch => {
 };
 
 // Add user
-export const addUserChosen = (users, test) => async dispatch => {
+export const addUserAndFileupload = (
+  users,
+  test,
+  sentencePath,
+  audioPath,
+) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const body = JSON.stringify({ users, test });
+  const body = JSON.stringify({ users, test, sentencePath, audioPath });
+  
   try {
-    const res = await axios.put('/api/admin/add-user-choosen', body, config);
+    const res = await axios.put('/api/admin/add-user-fileupload', body, config);
     
     if (res.data.status === 1) {
       dispatch({
-        type: ADD_USER_CHOSEN_SUCCESS,
+        type: ADD_USER_AND_FILEUPLOAD_SUCCESS,
         payload: res.data.results,
       });
     } else {
       dispatch(setAlert(res.data.message, 'danger', 2000));
       dispatch({
-        type: ADD_USER_CHOSEN_FAILED,
+        type: ADD_USER_USER_AND_FILEUPLOAD_FAILED,
       });
     }
   } catch (error) {
     dispatch(setAlert(error.response.data.message, 'danger', 2000));
     dispatch({
-      type: ADD_USER_CHOSEN_FAILED,
+      type: ADD_USER_USER_AND_FILEUPLOAD_FAILED,
     });
   }
+};
+
+export const setSentencePath = sentencePath => dispatch => {
+  dispatch({
+    type: SET_DIRECTORY_SENTENCES_PATH,
+    payload: sentencePath,
+  });
+};
+
+export const setAudioPath = audioPath => dispatch => {
+  dispatch({
+    type: SET_DIRECTORY_AUDIO_PATH,
+    payload: audioPath,
+  });
 };
 
 export const resetTest = () => async dispatch => {
   dispatch({
     type: RESET_TEST,
-  })
-}
+  });
+};

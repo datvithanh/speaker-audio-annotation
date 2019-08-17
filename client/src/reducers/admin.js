@@ -5,8 +5,10 @@ import {
   ADD_TEST_FAILED,
   ADD_TEST_SUCCESS,
   SET_STEP_CREATE_TEST,
-  ADD_USER_CHOSEN_SUCCESS,
-  ADD_USER_CHOSEN_FAILED,
+  SET_DIRECTORY_SENTENCES_PATH,
+  SET_DIRECTORY_AUDIO_PATH,
+  ADD_USER_AND_FILEUPLOAD_SUCCESS,
+  ADD_USER_USER_AND_FILEUPLOAD_FAILED,
   RESET_TEST,
 } from '../actions/types';
 
@@ -16,8 +18,8 @@ const initialState = {
   loading: true,
   users: [],
   test: null,
-  sentence: null,
-  audio: null,
+  sentencePath: null,
+  audioPath: null,
   stepCreateTest: 'step1',
 };
 
@@ -33,13 +35,12 @@ export default function(state = initialState, action) {
     case ADD_USER_SUCCESS:
     case ADD_USER_FAILED:
     case ADD_TEST_FAILED:
-    case ADD_USER_CHOSEN_FAILED:
+    case ADD_USER_USER_AND_FILEUPLOAD_FAILED:
       return {
         ...state,
         loading: false,
       };
-    case ADD_TEST_SUCCESS: 
-    case ADD_USER_CHOSEN_SUCCESS:
+    case ADD_TEST_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -54,6 +55,21 @@ export default function(state = initialState, action) {
       return {
         ...state,
         test: null,
+      };
+    case SET_DIRECTORY_SENTENCES_PATH:
+      return {
+        ...state,
+        sentencePath: payload,
+      };
+    case SET_DIRECTORY_AUDIO_PATH:
+      return {
+        ...state,
+        audioPath: payload,
+      };
+    case ADD_USER_AND_FILEUPLOAD_SUCCESS: 
+      return {
+        ...state,
+        test: payload.test,
       }
     default:
       return state;
