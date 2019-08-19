@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { setAlert } from '../../../actions/alert';
 import { register } from '../../../actions/auth';
 import PropTypes from 'prop-types';
-import Alert from "../../../components/Layout/Alert/Alert";
+import Alert from '../../../components/Layout/Alert/Alert';
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -26,7 +26,13 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    if (password !== password2) {
+    if (name === '') {
+      return setAlert('Tên không được bỏ trống', 'danger', 3000);
+    } else if (email === '') {
+      return setAlert('Email không được bỏ trống', 'danger', 3000);
+    } else if (password === '') {
+      return setAlert('Mật khẩu không được bỏ trống', 'danger', 3000);
+    } else if (password !== password2) {
       setAlert('Mật khẩu không khớp', 'danger', 3000);
     } else {
       register({ name, email, password });
@@ -35,7 +41,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   // Redirect if logged in
   if (isAuthenticated) {
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   }
 
   return (
@@ -49,7 +55,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         <div className="form-group">
           <input
             type="text"
-            placeholder="Name"
+            placeholder="Tên"
             name="name"
             value={name}
             onChange={e => onChange(e)}
@@ -58,7 +64,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         <div className="form-group">
           <input
             type="email"
-            placeholder="Email Address"
+            placeholder="Email"
             name="email"
             value={email}
             onChange={e => onChange(e)}
@@ -67,7 +73,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             name="password"
             value={password}
             onChange={e => onChange(e)}
@@ -76,7 +82,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Confirm Password"
+            placeholder="Xác thực mật khẩu"
             name="password2"
             value={password2}
             onChange={e => onChange(e)}
@@ -100,8 +106,8 @@ Register.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isAuthenticated: state.auth.isAuthenticated
-})
+  isAuthenticated: state.auth.isAuthenticated,
+});
 
 export default connect(
   mapStateToProps,

@@ -46,6 +46,7 @@ export default function(state = initialState, action) {
         token: null,
         isAuthenticated: false,
         loading: false,
+        user: null,
       };
     case ADD_USER_SUCCESS: 
     case ADD_USER_FAILED:

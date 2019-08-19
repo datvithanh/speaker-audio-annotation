@@ -2,20 +2,22 @@ import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import User from '../User';
 
-const Home = ({ auth: { user } }) => {
+const Home = ({ user }) => {
   if (user && user.role === 1) {
     return <Redirect to="/admin/test-management" />;
   }
-  return <Redirect to="/" />;
+
+  return <User />;
 };
 
 Home.propTypes = {
-  auth: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
-  auth: state.auth,
+  user: state.auth.user,
 });
 
 export default connect(mapStateToProps)(Home);

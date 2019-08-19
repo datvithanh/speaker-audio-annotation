@@ -3,10 +3,11 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LoginStyle from './Login.style';
 import { login } from '../../../actions/auth';
+import { setAlert } from '../../../actions/alert';
 import PropTypes from 'prop-types';
 import Alert from '../../../components/Layout/Alert/Alert';
 
-const Login = ({ login, isAuthenticated, user }) => {
+const Login = ({ login, isAuthenticated, user, setAlert }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -23,16 +24,22 @@ const Login = ({ login, isAuthenticated, user }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    login(email, password);
+    if (email === '') {
+      return setAlert('Email không được bỏ trống', 'danger', 3000);
+    } else if (password === '') {
+      return setAlert('Mật khẩu không được bỏ trống', 'danger', 3000);
+    } else {
+      await login(email, password);
+    }
   };
 
   // Redirect if logged in
-  if (isAuthenticated) {
-    return user && user.role === 0 ? (
-      <Redirect to="/" />
-    ) : (
-      <Redirect to="/admin/create-test" />
-    );
+  if (isAuthenticated && user) {
+    if (user && user.role === 1) {
+      return <Redirect to="/admin/create-test" />;
+    } else {
+      return <Redirect to="/" />;
+    }
   }
 
   return (
@@ -46,7 +53,7 @@ const Login = ({ login, isAuthenticated, user }) => {
         <div className="form-group">
           <input
             type="email"
-            placeholder="Email Address"
+            placeholder="Email"
             name="email"
             value={email}
             onChange={e => onChange(e)}
@@ -55,7 +62,7 @@ const Login = ({ login, isAuthenticated, user }) => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Password"
+            placeholder="Mật khẩu"
             name="password"
             value={password}
             onChange={e => onChange(e)}
@@ -79,9 +86,10 @@ Login.propTypes = {
 
 const mapStateToProps = state => ({
   isAuthenticated: state.auth.isAuthenticated,
+  user: state.auth.user,
 });
 
 export default connect(
   mapStateToProps,
-  { login },
+  { login, setAlert },
 )(Login);
