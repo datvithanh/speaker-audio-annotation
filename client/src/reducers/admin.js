@@ -10,6 +10,7 @@ import {
   ADD_USER_AND_FILEUPLOAD_SUCCESS,
   ADD_USER_USER_AND_FILEUPLOAD_FAILED,
   RESET_TEST,
+  SET_USER_CHOSEN,
 } from '../actions/types';
 
 const initialState = {
@@ -21,6 +22,7 @@ const initialState = {
   sentencePath: null,
   audioPath: null,
   stepCreateTest: 'step1',
+  userChosen: [],
 };
 
 export default function(state = initialState, action) {
@@ -70,6 +72,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         test: payload.test,
+      }
+    case SET_USER_CHOSEN:
+      return {
+        ...state,
+        userChosen: payload,
       }
     default:
       return state;

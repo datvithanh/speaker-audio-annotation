@@ -12,6 +12,7 @@ import {
   ADD_USER_AND_FILEUPLOAD_SUCCESS,
   ADD_USER_USER_AND_FILEUPLOAD_FAILED,
   RESET_TEST,
+  SET_USER_CHOSEN,
 } from './types';
 
 // Get list user
@@ -116,6 +117,13 @@ export const setStepCreateTest = step => dispatch => {
   });
 };
 
+export const setUserChosen = users => dispatch => {
+  dispatch({
+    type: SET_USER_CHOSEN,
+    payload: users,
+  });
+};
+
 // Add user
 export const addUserAndFileupload = (
   users,
@@ -130,10 +138,10 @@ export const addUserAndFileupload = (
   };
 
   const body = JSON.stringify({ users, test, sentencePath, audioPath });
-  
+
   try {
     const res = await axios.put('/api/admin/add-user-fileupload', body, config);
-    
+
     if (res.data.status === 1) {
       dispatch({
         type: ADD_USER_AND_FILEUPLOAD_SUCCESS,

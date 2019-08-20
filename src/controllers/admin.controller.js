@@ -203,6 +203,8 @@ async function uploadAudio(req, res) {
     );
   }
 
+  await Audio.deleteMany({ test: ObjectId(test._id) });
+
   res.send({
     status: 1,
     results: {
@@ -226,12 +228,13 @@ async function addUserChosenAndFileUpload(req, res) {
   });
 
   fs.readdirSync(audioPath).forEach(async fileUnzip => {
-    const nameFileUnzip = fileUnzip.split('.')[0];
-    if (fileUnzip.match(/\.(txt)$/)) {
-      const content = fs.readFileSync(`${audioPath}/${fileUnzip}`, 'utf8');
-      await Sentence.create({
-        _id: `${test}_${nameFileUnzip}`,
-        content,
+    if (fileUnzip.match(/\.(wav)$/)) {
+      const sentence = `${test}-${fileUnzip.split('.')[0].split('-')[0]}`;
+      const voice = fileUnzip.split('.')[0].split('-')[1];
+      await Audio.create({
+        link: `${audioPath}/${fileUnzip}`,
+        voice,
+        sentence,
         test,
       });
     }

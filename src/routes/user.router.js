@@ -8,11 +8,15 @@ const {
   signin,
   getInfoUser,
   logout,
+  getPublicTest,
+  getPrivateTestOfUser,
 } = require('../controllers/user.controller');
 
 router.post('/signup', asyncWrap(signup));
 router.post('/signin', asyncWrap(signin));
 router.post('/logout', auth, asyncWrap(logout));
 router.get('/', auth, asyncWrap(getInfoUser));
+router.get('/public-tests', auth, asyncWrap(getPublicTest));
+router.get('/private-tests/:user', auth, asyncWrap(getPrivateTestOfUser));
 
 module.exports = router;

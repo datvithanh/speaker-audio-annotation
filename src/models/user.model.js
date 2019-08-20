@@ -1,49 +1,36 @@
 /* eslint-disable func-names */
 const mongoose = require('mongoose');
-const validator = require('validator');
+// const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const errorCode = require('../errors/errorCode');
-const CustomError = require('../errors/CustomError');
+// const errorCode = require('../errors/errorCode');
+// const CustomError = require('../errors/CustomError');
 
 const userSchema = new mongoose.Schema(
   {
+    type: {
+      type: Boolean,
+      default: 0, // 0: user create, 1: system create
+    },
     name: {
       type: String,
-      required: true,
       trim: true,
       maxlength: 32,
     },
     email: {
       type: String,
       trim: true,
-      required: true,
       lowercase: true,
-      validate(email) {
-        if (!validator.isEmail(email)) {
-          throw new CustomError(errorCode.BAD_REQUEST, 'Email is invalid');
-        }
-      },
     },
     password: {
       type: String,
-      required: true,
       trim: true,
       minlength: 7,
-      validate(value) {
-        if (value.toLowerCase().includes('password')) {
-          throw new CustomError(
-            errorCode.BAD_REQUEST,
-            'Password can not contain "password"',
-          );
-        }
-      },
     },
     tokens: [
       {
         token: {
           type: String,
-          required: true,
         },
       },
     ],

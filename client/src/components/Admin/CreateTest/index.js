@@ -210,7 +210,7 @@ const CreateTest = ({
             <input
               type="submit"
               className="btn btn-primary"
-              value="Thêm bài test"
+              value="Xác nhận và chuyển sang bước tiếp theo"
             />
           </div>
         </form>

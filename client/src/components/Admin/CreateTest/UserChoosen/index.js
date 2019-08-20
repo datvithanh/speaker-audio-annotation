@@ -1,23 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import UserChoosenStyle from './index.style';
 import { connect } from 'react-redux';
 import { Table } from 'antd';
 import { setAlert } from '../../../../actions/alert';
-import { addUserAndFileupload } from '../../../../actions/admin';
+import { addUserAndFileupload, setUserChosen } from '../../../../actions/admin';
 import { setStepCreateTest } from '../../../../actions/admin';
 import Alert from '../../../Layout/Alert/Alert';
 
 const UserChoosen = ({
   users,
-  test,
-  addUserAndFileupload,
   setStepCreateTest,
   setAlert,
   minPeopleJoin,
-  sentencePath,
-  audioPath,
+  userChosen,
+  setUserChosen,
 }) => {
-  const [usersChose, setUsersChose] = useState([]);
   const columns = [
     {
       title: 'Name',
@@ -37,20 +34,19 @@ const UserChoosen = ({
       selectedRows.forEach(selectedRow => {
         userIds.push(selectedRow._id);
       });
-
-      setUsersChose(userIds);
+      setUserChosen(userIds);
     },
   };
 
   const onClickedHandler = () => {
-    if (usersChose.length !== minPeopleJoin) {
+    if (userChosen.length !== minPeopleJoin) {
       return setAlert(
         `Bạn phải chọn đủ ${minPeopleJoin} người`,
         'danger',
         2000,
       );
     }
-    addUserAndFileupload(usersChose, test._id, sentencePath, audioPath);
+    //addUserAndFileupload(userChosen, test._id, sentencePath, audioPath);
     setStepCreateTest('step4');
   };
 
@@ -65,11 +61,11 @@ const UserChoosen = ({
         className="table"
         rowSelection={rowSelection}
         columns={columns}
-        rowKey='_id'
+        rowKey="_id"
         dataSource={users.filter(user => user.role !== 1)}
       />
       <button className="btn btn-primary" onClick={onClickedHandler}>
-        Xác nhận
+        Xác nhận và chuyển sang bước tiếp theo
       </button>
     </UserChoosenStyle>
   );
@@ -80,12 +76,11 @@ const mapStateToProps = state => {
     users: state.admin.users,
     test: state.admin.test,
     minPeopleJoin: state.admin.test.minPeopleJoin,
-    sentencePath: state.admin.sentencePath,
-    audioPath: state.admin.audioPath,
+    userChosen: state.admin.userChosen,
   };
 };
 
 export default connect(
   mapStateToProps,
-  { addUserAndFileupload, setStepCreateTest, setAlert },
+  { addUserAndFileupload, setStepCreateTest, setAlert, setUserChosen },
 )(UserChoosen);

@@ -2,6 +2,7 @@ const bcrypt = require('bcryptjs');
 const CustomError = require('../errors/CustomError');
 const errorCode = require('../errors/errorCode');
 const User = require('../models/user.model');
+const Test = require('../models/test.model');
 
 async function signup(req, res) {
   const isExistMail = await User.findOne({ email: req.body.email });
@@ -62,10 +63,35 @@ async function logoutAllDevice(req, res) {
   res.send({ status: 1 });
 }
 
+async function getPublicTest(req, res) {
+  const tests = await Test.find({ accessModifier: 'Public' });
+  res.send({
+    status: 1,
+    results: {
+      tests,
+    },
+  });
+}
+
+async function getPrivateTestOfUser(req, res) {
+  const tests = await Test.find({
+    users: req.params.user,
+    accessModifier: 'Private',
+  });
+  res.send({
+    status: 1,
+    results: {
+      tests,
+    },
+  });
+}
+
 module.exports = {
   signup,
   signin,
   getInfoUser,
   logout,
   logoutAllDevice,
+  getPublicTest,
+  getPrivateTestOfUser,
 };
