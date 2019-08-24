@@ -18,6 +18,7 @@ const Evaluate = ({
   const [indexAudio, setIndexAudio] = useState(0);
   const [point, setPoint] = useState();
   const [visibleModal, setVisibleModal] = useState(false);
+  const [disabledButton, setDisableButton] = useState(true);
 
   useEffect(() => {
     if (user) {
@@ -32,10 +33,13 @@ const Evaluate = ({
     } else {
       showModal();
     }
+    setPoint();
+    setDisableButton(true);
   };
 
   const onChange = e => {
     setPoint(e.target.value);
+    setDisableButton(false);
   };
 
   const radioStyle = {
@@ -119,7 +123,7 @@ const Evaluate = ({
         </Radio.Group>
       </div>
 
-      <button className="btn btn-warning" onClick={onClickHandler}>
+      <button disabled={disabledButton} className="btn btn-warning" onClick={onClickHandler}>
         Hoàn thành
       </button>
     </EvaluateStyle>
