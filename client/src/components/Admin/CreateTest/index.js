@@ -26,9 +26,9 @@ const CreateTest = ({
   const [formData, setFormData] = useState({
     name: 'Test1',
     numberOfVoices: 3,
-    voices: ['Nam', 'Manh', 'Hung'],
-    numberOfSentences: 200, // n
-    minSentences: 100, // a
+    voices: ['Nam', 'Mạnh', 'Hùng'],
+    numberOfSentences: 4, // n
+    minSentences: 2, // a
     minPeopleListenAudio: 3, // b
     accessModifier: 'Private',
     dateOpened: '2018-03-02',
@@ -91,7 +91,6 @@ const CreateTest = ({
         dateOpened,
         dateClosed,
       });
-      setStepCreateTest('step2');
     }
   };
 

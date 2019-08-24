@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-console */
 const fs = require('fs');
 const fsExtra = require('fs-extra');
@@ -10,7 +11,9 @@ const User = require('../models/user.model');
 const Test = require('../models/test.model');
 const Sentence = require('../models/sentence.model');
 const Audio = require('../models/audio.model');
+const Voice = require('../models/voice.model');
 const { SRC_PATH } = require('../constant');
+const randomAudioForUser = require('../service/randomAudioForUser');
 
 async function getListUser(req, res) {
   const users = await User.find({});
@@ -19,6 +22,14 @@ async function getListUser(req, res) {
     results: {
       users,
     },
+  });
+}
+
+async function addVoice(req, res) {
+  const voice = await Voice.create(req.body);
+  res.send({
+    status: 1,
+    results: voice,
   });
 }
 
@@ -36,10 +47,45 @@ async function addUser(req, res) {
 }
 
 async function createTest(req, res) {
-  const { minPeopleListenAudio, numberOfSentences, minSentences } = req.body;
+  const {
+    minPeopleListenAudio,
+    numberOfSentences,
+    minSentences,
+    voices,
+  } = req.body;
+
+  const voiceSystem = await Voice.find({});
+  const voiceSystemArrayName = voiceSystem.map(item => item.name);
+
+  // const isValidOperation = updates.every(update =>
+  //   allowedUpdates.includes(update),
+  // );
+
+  // const found = arr1.some(r => arr2.includes(r));
+
+  const checkVoice = voices.every(item => voiceSystemArrayName.includes(item));
+
+  if (!checkVoice) {
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'Bạn đã nhập giọng không có trong hệ thông. Vui lòng xem lại!',
+    );
+  }
+
+  const voicesConvertToCode = [];
+
+  for (let i = 0; i < voices.length; i++) {
+    const voiceCurrently = await Voice.findOne({ name: voices[i] });
+    voicesConvertToCode.push(voiceCurrently._id);
+  }
+
   const minPeopleJoin =
     (minPeopleListenAudio * numberOfSentences) / minSentences;
-  const test = await Test.create({ ...req.body, minPeopleJoin });
+  const test = await Test.create({
+    ...req.body,
+    minPeopleJoin,
+    voices: voicesConvertToCode,
+  });
   res.send({
     status: 1,
     results: {
@@ -60,13 +106,14 @@ async function uploadSentence(req, res) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const random = uuid.v4();
-  const directoryPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
+  const directoryPath = `/${year}/${month}/${day}/${random}`;
+  const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
 
   // create folder to contain file zip
-  fs.mkdirSync(directoryPath, { recursive: true });
+  fs.mkdirSync(directoryFullPath, { recursive: true });
 
   const fileName = sentence.name;
-  const filePath = `${directoryPath}/${fileName}`;
+  const filePath = `${directoryFullPath}/${fileName}`;
 
   // upload file zip
   const errUpload = await sentence.mv(filePath);
@@ -75,11 +122,11 @@ async function uploadSentence(req, res) {
     console.log(errUpload);
   }
 
-  await decompress(filePath, directoryPath);
+  await decompress(filePath, directoryFullPath);
 
   let isValidInput = true;
   await Promise.all(
-    fs.readdirSync(directoryPath).map(async fileUnzip => {
+    fs.readdirSync(directoryFullPath).map(async fileUnzip => {
       if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(txt)$/)) {
         isValidInput = false;
       }
@@ -87,7 +134,7 @@ async function uploadSentence(req, res) {
   );
 
   if (!isValidInput) {
-    fsExtra.removeSync(directoryPath);
+    fsExtra.removeSync(directoryFullPath);
     throw new CustomError(
       errorCode.BAD_REQUEST,
       'Bạn cần upload file zip chỉ có text bên trong',
@@ -116,13 +163,14 @@ async function uploadAudio(req, res) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const random = uuid.v4();
-  const directoryPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
+  const directoryPath = `/${year}/${month}/${day}/${random}`;
+  const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
 
   // create folder to contain file zip
-  fs.mkdirSync(directoryPath, { recursive: true });
+  fs.mkdirSync(directoryFullPath, { recursive: true });
 
   const fileName = audio.name;
-  const filePath = `${directoryPath}/${fileName}`;
+  const filePath = `${directoryFullPath}/${fileName}`;
 
   // upload file zip
   const errUpload = await audio.mv(filePath);
@@ -131,11 +179,11 @@ async function uploadAudio(req, res) {
     console.log(errUpload);
   }
 
-  await decompress(filePath, directoryPath);
+  await decompress(filePath, directoryFullPath);
 
   let errorInput = null;
   await Promise.all(
-    fs.readdirSync(directoryPath).map(async fileUnzip => {
+    fs.readdirSync(directoryFullPath).map(async fileUnzip => {
       if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(wav)$/)) {
         errorInput = 'error-ext';
       } else if (
@@ -148,7 +196,7 @@ async function uploadAudio(req, res) {
   );
 
   if (errorInput === 'error-ext') {
-    fsExtra.removeSync(directoryPath);
+    fsExtra.removeSync(directoryFullPath);
     throw new CustomError(
       errorCode.BAD_REQUEST,
       'Bạn cần upload file zip chỉ có file .wav bên trong',
@@ -156,7 +204,7 @@ async function uploadAudio(req, res) {
   }
 
   if (errorInput === 'error-format') {
-    fsExtra.removeSync(directoryPath);
+    fsExtra.removeSync(directoryFullPath);
     throw new CustomError(
       errorCode.BAD_REQUEST,
       'Tồn tại file sai định dạng. Bạn cần upload file đúng định dạng Mã_câu-Mã_voice.wav',
@@ -164,12 +212,12 @@ async function uploadAudio(req, res) {
   }
 
   await Promise.all(
-    fs.readdirSync(directoryPath).map(async fileUnzip => {
+    fs.readdirSync(directoryFullPath).map(async fileUnzip => {
       if (fileUnzip.match(/\.(wav)$/)) {
         const sentence = `${test._id}-${fileUnzip.split('.')[0].split('-')[0]}`;
         const voice = fileUnzip.split('.')[0].split('-')[1];
         await Audio.create({
-          link: `${directoryPath}/${fileUnzip}`,
+          link: `${directoryFullPath}/${fileUnzip}`,
           voice,
           sentence,
           test: test._id,
@@ -195,7 +243,7 @@ async function uploadAudio(req, res) {
   });
 
   if (errorInput === 'error-quantity') {
-    fsExtra.removeSync(directoryPath);
+    fsExtra.removeSync(directoryFullPath);
     await Audio.deleteMany({ test: ObjectId(test._id) });
     throw new CustomError(
       errorCode.BAD_REQUEST,
@@ -215,21 +263,27 @@ async function uploadAudio(req, res) {
 
 async function addUserChosenAndFileUpload(req, res) {
   const { audioPath, sentencePath, users, test } = req.body;
-  fs.readdirSync(sentencePath).forEach(async fileUnzip => {
-    const nameFileUnzip = fileUnzip.split('.')[0];
-    if (fileUnzip.match(/\.(txt)$/)) {
-      const content = fs.readFileSync(`${sentencePath}/${fileUnzip}`, 'utf8');
-      await Sentence.create({
-        _id: `${test}_${nameFileUnzip}`,
-        content,
-        test,
-      });
-    }
-  });
 
-  fs.readdirSync(audioPath).forEach(async fileUnzip => {
+  fs.readdirSync(`${SRC_PATH}/static/${sentencePath}`).forEach(
+    async fileUnzip => {
+      const nameFileUnzip = fileUnzip.split('.')[0];
+      if (fileUnzip.match(/\.(txt)$/)) {
+        const content = fs.readFileSync(
+          `${SRC_PATH}/static/${sentencePath}/${fileUnzip}`,
+          'utf8',
+        );
+        await Sentence.create({
+          _id: `${test}_${nameFileUnzip}`,
+          content,
+          test,
+        });
+      }
+    },
+  );
+
+  fs.readdirSync(`${SRC_PATH}/static/${audioPath}`).forEach(async fileUnzip => {
     if (fileUnzip.match(/\.(wav)$/)) {
-      const sentence = `${test}-${fileUnzip.split('.')[0].split('-')[0]}`;
+      const sentence = `${test}_${fileUnzip.split('.')[0].split('-')[0]}`;
       const voice = fileUnzip.split('.')[0].split('-')[1];
       await Audio.create({
         link: `${audioPath}/${fileUnzip}`,
@@ -244,6 +298,10 @@ async function addUserChosenAndFileUpload(req, res) {
   testCurrently.users = users;
   await testCurrently.save();
 
+  for (const voice of testCurrently.voices) {
+    await randomAudioForUser(voice, testCurrently);
+  }
+
   res.send({
     status: 1,
     results: {
@@ -254,6 +312,7 @@ async function addUserChosenAndFileUpload(req, res) {
 
 module.exports = {
   getListUser,
+  addVoice,
   addUser,
   createTest,
   uploadSentence,

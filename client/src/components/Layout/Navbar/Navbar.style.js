@@ -3,7 +3,6 @@ import styled from 'styled-components';
 const NavbarStyle = styled.div`
   background-color: white;
   color: black;
-  
 
   .navbar1 {
     display: flex;
@@ -45,6 +44,7 @@ const NavbarStyle = styled.div`
   li {
     display: flex;
     align-items: center;
+    margin-left: 2px;
   }
 
   ul a {
@@ -55,6 +55,7 @@ const NavbarStyle = styled.div`
     font-size: 25px;
   }
 
+  .active,
   a:hover {
     background: rgb(255, 248, 184);
     color: black;

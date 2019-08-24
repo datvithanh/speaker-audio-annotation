@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import { Link } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { NavLink, Link } from 'react-router-dom';
 import NavbarStyle from './Navbar.style';
 import Logo from '../../../static/img/logo-vbee.svg';
 import LogoDescription from '../../../static/img/logo-description.svg';
@@ -15,8 +15,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           Xin chào, <b>{user ? user.name : null}</b>
         </span>
         <Link className="logout" to="/login" onClick={logout}>
-          <i className="fas fa-sign-out-alt" />{' '}
-          <span>Đăng xuất</span>
+          <i className="fas fa-sign-out-alt" /> <span>Đăng xuất</span>
         </Link>
       </li>
     </ul>
@@ -25,14 +24,18 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const guestLinks = (
     <ul>
       <li>
-        <Link to="/register">Đăng ký</Link>
+        <NavLink activeClassName="active" to="/register">
+          Đăng ký
+        </NavLink>
       </li>
       <li>
-        <Link to="/login">Đăng nhập</Link>
+        <NavLink activeClassName="active" to="/login">
+          Đăng nhập
+        </NavLink>
       </li>
     </ul>
   );
-  
+
   return (
     <NavbarStyle>
       <nav className="navbar1">
@@ -44,7 +47,9 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             alt="Vietnamese BE your Eyes"
           />
         </Link>
-        {!loading && (<Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>)}
+        {!loading && (
+          <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
+        )}
       </nav>
     </NavbarStyle>
   );

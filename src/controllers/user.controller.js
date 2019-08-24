@@ -3,6 +3,9 @@ const CustomError = require('../errors/CustomError');
 const errorCode = require('../errors/errorCode');
 const User = require('../models/user.model');
 const Test = require('../models/test.model');
+const Audio = require('../models/audio.model');
+const Sentence = require('../models/sentence.model');
+const Voice = require('../models/voice.model');
 
 async function signup(req, res) {
   const isExistMail = await User.findOne({ email: req.body.email });
@@ -86,6 +89,62 @@ async function getPrivateTestOfUser(req, res) {
   });
 }
 
+async function getAudioByUser(req, res) {
+  const { user, test } = req.query;
+
+  const audios = await Audio.find({
+    'users.userId': user,
+    test,
+  });
+
+  const audiosDisplayForUser = await Promise.all(
+    audios.map(async ({ _id, link, voice, sentence }) => {
+      const contentSentence = await Sentence.findOne({
+        _id: sentence,
+      });
+
+      const voiceName = await Voice.findOne({ _id: voice });
+
+      return {
+        _id,
+        link,
+        voice: voiceName.name,
+        sentence: contentSentence.content,
+      };
+    }),
+  );
+
+  res.send({
+    status: 1,
+    results: {
+      audios: audiosDisplayForUser,
+    },
+  });
+}
+
+async function setPointForAudio(req, res) {
+  const { audioId, point, userId } = req.body;
+  const audio = await Audio.findById(audioId);
+
+  audio.users.forEach(user => {
+    if (user.userId.toString() === userId) {
+      user.point = point;
+    }
+  });
+
+  audio.numberOfReviews += 1;
+
+  audio.averagePoint =
+    (audio.averagePoint * (audio.numberOfReviews - 1) + point) /
+    audio.numberOfReviews;
+
+  await audio.save();
+
+  res.send({
+    status: 1,
+  });
+}
+
 module.exports = {
   signup,
   signin,
@@ -94,4 +153,6 @@ module.exports = {
   logoutAllDevice,
   getPublicTest,
   getPrivateTestOfUser,
+  getAudioByUser,
+  setPointForAudio,
 };

@@ -7,9 +7,10 @@ import User from '../User';
 const Home = ({ user }) => {
   if (user && user.role === 1) {
     return <Redirect to="/admin/test-management" />;
-  }
-
-  return <User />;
+  } 
+  
+  return <User />
+  // return <Redirect to="/evaluate" />;
 };
 
 Home.propTypes = {

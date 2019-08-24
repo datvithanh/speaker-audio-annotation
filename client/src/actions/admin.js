@@ -96,6 +96,7 @@ export const addTest = ({
         type: ADD_TEST_SUCCESS,
         payload: res.data.results,
       });
+      dispatch(setStepCreateTest('step2'));
     } else {
       dispatch(setAlert(res.data.message, 'danger', 2000));
       dispatch({

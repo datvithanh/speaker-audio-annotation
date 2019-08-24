@@ -12,6 +12,7 @@ const audioSchema = mongoose.Schema(
     },
     users: [
       {
+        _id: false,
         userId: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
@@ -19,7 +20,6 @@ const audioSchema = mongoose.Schema(
         },
         point: {
           type: Number,
-          required: true,
         },
       },
     ],
@@ -32,6 +32,10 @@ const audioSchema = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: 'Test',
+    },
+    numberOfReviews: {
+      type: Number,
+      default: 0,
     },
     averagePoint: {
       type: Number,

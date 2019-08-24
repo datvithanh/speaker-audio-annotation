@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Table, Divider } from 'antd';
 import { connect } from 'react-redux';
-import { getPublicTest, getPrivateTest } from '../../actions/user';
+import {
+  getPublicTest,
+  getPrivateTest,
+  setTestCurrently,
+} from '../../actions/user';
 import UserStyle from './index.style';
+import { withRouter } from 'react-router-dom';
 
 const User = ({
   privateTest,
@@ -10,11 +15,19 @@ const User = ({
   user,
   getPublicTest,
   getPrivateTest,
+  setTestCurrently,
+  history,
 }) => {
-  const [isJoined, setIsJoined] = useState(false);
-  const onClickJoin = () => {
-    setIsJoined(true);
-  }
+  // const [isJoined, setIsJoined] = useState(false);
+  // const onClickJoin = () => {
+  //   setIsJoined(true);
+  // };
+
+  const onClickPerform = _id => {
+    setTestCurrently(_id);
+    history.push(`/evaluate/${_id}`);
+  };
+
   const columnsPublic = [
     {
       title: 'Name',
@@ -39,11 +52,20 @@ const User = ({
     {
       title: 'Action',
       key: 'actionjoin',
-      render: (text, record) => (
-        <span>
-          {!isJoined ? <button onClick={onClickJoin}>Tham gia</button> : <button>Thực hiện</button>}
-        </span>
-      ),
+      // render: (text, record) => {
+      //   const { _id } = record;
+      //   return (
+      //     <span>
+      //       {!isJoined ? (
+      //         <button onClick={() => onClickJoin(_id)}>Tham gia</button>
+      //       ) : (
+      //         <button>Thực hiện</button>
+      //       )}
+
+      //       <Divider type="vertical" />
+      //     </span>
+      //   );
+      // },
     },
   ];
 
@@ -71,12 +93,15 @@ const User = ({
     {
       title: 'Action',
       key: 'action',
-      render: (text, record) => (
-        <span>
-          <button>Thực hiện</button>
-          <Divider type="vertical" />
-        </span>
-      ),
+      render: (text, record) => {
+        const { _id } = record;
+        return (
+          <span>
+            <button onClick={() => onClickPerform(_id)}>Thực hiện</button>
+            <Divider type="vertical" />
+          </span>
+        );
+      },
     },
   ];
 
@@ -119,7 +144,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
+export default withRouter(connect(
   mapStateToProps,
-  { getPrivateTest, getPublicTest },
-)(User);
+  { getPrivateTest, getPublicTest, setTestCurrently },
+)(User));
