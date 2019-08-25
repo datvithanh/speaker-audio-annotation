@@ -21,6 +21,9 @@ const audioSchema = mongoose.Schema(
         point: {
           type: Number,
         },
+        lastUpdate: {
+          type: Date,
+        },
       },
     ],
     sentence: {

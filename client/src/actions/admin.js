@@ -13,6 +13,9 @@ import {
   ADD_USER_USER_AND_FILEUPLOAD_FAILED,
   RESET_TEST,
   SET_USER_CHOSEN,
+  GET_LIST_TEST,
+  GET_TEST_BY_ID,
+  GET_AUDIO_BY_TEST_AND_VOICE,
 } from './types';
 
 // Get list user
@@ -180,4 +183,51 @@ export const resetTest = () => async dispatch => {
   dispatch({
     type: RESET_TEST,
   });
+};
+
+export const getListTest = () => async dispatch => {
+  try {
+    const res = await axios.get('/api/admin/tests');
+
+    if (res.data.status === 1) {
+      dispatch({
+        type: GET_LIST_TEST,
+        payload: res.data.results,
+      });
+    }
+  } catch (error) {
+    console.log(error.response.data.message);
+  }
+};
+
+export const getTestById = id => async dispatch => {
+  try {
+    const res = await axios.get(`/api/admin/tests/${id}`);
+    
+    if (res.data.status === 1) {
+      dispatch({
+        type: GET_TEST_BY_ID,
+        payload: res.data.results,
+      });
+    }
+  } catch (error) {
+    console.log(error.response.data.message);
+  }
+};
+
+export const getAudioByTestAndVoice = (test, voice) => async dispatch => {
+  try {
+    const res = await axios.get(
+      `/api/admin/get-audio?test=${test}&voice=${voice}`,
+    );
+    
+    if (res.data.status === 1) {
+      dispatch({
+        type: GET_AUDIO_BY_TEST_AND_VOICE,
+        payload: res.data.results,
+      });
+    }
+  } catch (error) {
+    console.log(error.response.data.message);
+  }
 };

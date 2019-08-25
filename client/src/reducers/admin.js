@@ -11,22 +11,27 @@ import {
   ADD_USER_USER_AND_FILEUPLOAD_FAILED,
   RESET_TEST,
   SET_USER_CHOSEN,
+  GET_LIST_TEST,
+  GET_TEST_BY_ID,
+  GET_AUDIO_BY_TEST_AND_VOICE,
 } from '../actions/types';
 
 const initialState = {
-  // token: localStorage.getItem('token'),
-  // isAuthenticated: null,
   loading: true,
   users: [],
+  tests: [],
   test: null,
   sentencePath: null,
   audioPath: null,
   stepCreateTest: 'step1',
   userChosen: [],
+  testDetail: null,
+  audios: [],
 };
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
+
   switch (type) {
     case GET_LIST_USERS:
       return {
@@ -68,15 +73,30 @@ export default function(state = initialState, action) {
         ...state,
         audioPath: payload,
       };
-    case ADD_USER_AND_FILEUPLOAD_SUCCESS: 
+    case ADD_USER_AND_FILEUPLOAD_SUCCESS:
       return {
         ...state,
         test: payload.test,
-      }
+      };
     case SET_USER_CHOSEN:
       return {
         ...state,
         userChosen: payload,
+      };
+    case GET_LIST_TEST:
+      return {
+        ...state,
+        tests: payload.tests,
+      };
+    case GET_TEST_BY_ID:
+      return {
+        ...state,
+        testDetail: payload.test,
+      };
+    case GET_AUDIO_BY_TEST_AND_VOICE: 
+      return {
+        ...state,
+        audios: payload.audios,
       }
     default:
       return state;

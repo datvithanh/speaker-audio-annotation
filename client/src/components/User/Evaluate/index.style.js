@@ -45,10 +45,12 @@ const EvaluateStyle = styled.div`
     width: 600px;
     border: 1px solid black;
     text-align: left;
-
+    background-color: white;
+    font-size: 20px;
     border: 1px solid #ccc;
     border-radius: 3px;
-    padding: 0 1rem 1rem 1rem;
+    text-align: justify;
+    padding: 0.5rem 1rem 1rem 1rem;
     margin: 1rem 0;
   }
 `;

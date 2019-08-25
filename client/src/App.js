@@ -15,6 +15,7 @@ import PrivateRoute from './components/routing/PrivateRoute';
 import PrivateAdminRoute from './components/routing/PrivateAdminRoute';
 import CreateTest from './components/Admin/CreateTest';
 import UserManagement from './components/Admin/UserManagement/UserManagement.js';
+import TestManagement from './components/Admin/TestManagement';
 import AddUser from './components/Admin/UserManagement/AddUser/AddUser';
 import Layout from './components/Admin/Layout/Layout';
 import LayoutApp from './components/Layout';
@@ -25,6 +26,7 @@ import store from './store';
 
 import './App.css';
 import Evaluate from './components/User/Evaluate';
+import DetailTest from './components/Admin/TestManagement/DetailTest';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -32,7 +34,7 @@ const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
-  
+
   return (
     <Provider store={store}>
       <Router>
@@ -42,8 +44,6 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <PrivateRoute exact path="/" component={Home} />
-              {/* <PrivateRoute exact path="/" component={Home} /> */}
-              {/* <PrivateRoute exact path='/evaluate' component={User} /> */}
               <PrivateRoute exact path="/evaluate/:id" component={Evaluate} />
 
               <PrivateAdminRoute path="/admin">
@@ -54,11 +54,6 @@ const App = () => {
                       path="/admin/create-test"
                       component={CreateTest}
                     />
-                    {/* <PrivateRoute
-                    exact
-                    path="/admin/create-test/upload"
-                    component={UploadFile}
-                  /> */}
                     <PrivateRoute
                       exact
                       path="/admin/user-management"
@@ -68,6 +63,16 @@ const App = () => {
                       exact
                       path="/admin/user-management/add-user"
                       component={AddUser}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/admin/test-management"
+                      component={TestManagement}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/admin/test-management/:id"
+                      component={DetailTest}
                     />
                   </Switch>
                 </Layout>

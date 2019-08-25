@@ -310,6 +310,80 @@ async function addUserChosenAndFileUpload(req, res) {
   });
 }
 
+async function getListTest(req, res) {
+  const tests = await Test.find({});
+  res.send({
+    status: 1,
+    results: {
+      tests,
+    },
+  });
+}
+
+async function getTestById(req, res) {
+  const test = await Test.findById(req.params.id).lean();
+
+  const voices = await Promise.all(
+    test.voices.map(async voice => {
+      const voiceName = await Voice.findOne({ _id: voice });
+      return voiceName;
+    }),
+  );
+
+  res.send({
+    status: 1,
+    results: {
+      test: {
+        ...test,
+        voices,
+      },
+    },
+  });
+}
+
+async function getAudiosByTestAndVoice(req, res) {
+  const { test, voice } = req.query;
+
+  const audios = await Audio.find({ test, voice }).lean();
+  const voiceObj = await Voice.findOne({ _id: voice });
+  const audiosConvert = await Promise.all(
+    audios.map(async audio => {
+      const sentenceObj = await Sentence.findOne({
+        _id: audio.sentence,
+      });
+
+      let averagePointRound = null;
+      if (audio.averagePoint) {
+        averagePointRound = audio.averagePoint.toFixed(1);
+      }
+
+      const userConvert = await Promise.all(
+        audio.users.map(async user => {
+          const userObj = await User.findById(user.userId);
+          return {
+            ...user,
+            email: userObj.email,
+            name: userObj.name,
+          };
+        }),
+      );
+      return {
+        ...audio,
+        voice: voiceObj.name,
+        sentence: sentenceObj.content,
+        users: userConvert,
+        averagePoint: averagePointRound,
+      };
+    }),
+  );
+  res.send({
+    status: 1,
+    results: {
+      audios: audiosConvert,
+    },
+  });
+}
+
 module.exports = {
   getListUser,
   addVoice,
@@ -318,4 +392,7 @@ module.exports = {
   uploadSentence,
   uploadAudio,
   addUserChosenAndFileUpload,
+  getListTest,
+  getTestById,
+  getAudiosByTestAndVoice,
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Table, Divider } from 'antd';
+import { Table } from 'antd';
 import { connect } from 'react-redux';
 import {
   getPublicTest,
@@ -33,24 +33,51 @@ const User = ({
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      className: 'column',
     },
     {
       title: 'Số lượng câu',
       dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
+      className: 'column',
     },
     {
       title: 'Ngày mở',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
+      className: 'column',
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span>
+            {date.getDate() +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
     },
     {
       title: 'Ngày hết hạn',
       dataIndex: 'dateClosed',
       key: 'dateClosed',
+      className: 'column',
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span>
+            {date.getDate() +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
     },
     {
-      title: 'Action',
       key: 'actionjoin',
       // render: (text, record) => {
       //   const { _id } = record;
@@ -74,31 +101,57 @@ const User = ({
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+      className: 'column',
     },
     {
       title: 'Số lượng câu',
       dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
+      className: 'column',
     },
     {
       title: 'Ngày mở',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
+      className: 'column',
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span>
+            {date.getDate() +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
     },
     {
       title: 'Ngày hết hạn',
       dataIndex: 'dateClosed',
       key: 'dateClosed',
+      className: 'column',
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span>
+            {date.getDate() +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
     },
     {
-      title: 'Action',
       key: 'action',
       render: (text, record) => {
         const { _id } = record;
         return (
           <span>
             <button onClick={() => onClickPerform(_id)}>Thực hiện</button>
-            <Divider type="vertical" />
           </span>
         );
       },
@@ -117,6 +170,7 @@ const User = ({
       <h4>Danh sách các public test bạn có thể tham gia</h4>
       {publicTest && (
         <Table
+          bordered
           className="table"
           rowKey="_id"
           columns={columnsPublic}
@@ -126,6 +180,7 @@ const User = ({
       <h4>Danh sách các private test bạn được chỉ định tham gia</h4>{' '}
       {privateTest && (
         <Table
+          bordered
           className="table"
           rowKey="_id"
           columns={columnsPrivate}
@@ -144,7 +199,9 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  { getPrivateTest, getPublicTest, setTestCurrently },
-)(User));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { getPrivateTest, getPublicTest, setTestCurrently },
+  )(User),
+);

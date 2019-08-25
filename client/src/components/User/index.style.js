@@ -23,6 +23,12 @@ const UserStyle = styled.div`
 
   button {
     min-width: 100px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .column {
+    text-align: center;
   }
 `;
 
