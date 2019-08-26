@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table } from 'antd';
 import { connect } from 'react-redux';
 import {
   getPublicTest,
   getPrivateTest,
   setTestCurrently,
+  updateRealUserForAudio,
 } from '../../actions/user';
 import UserStyle from './index.style';
 import { withRouter } from 'react-router-dom';
@@ -17,13 +18,20 @@ const User = ({
   getPrivateTest,
   setTestCurrently,
   history,
+  updateRealUserForAudio,
 }) => {
-  // const [isJoined, setIsJoined] = useState(false);
-  // const onClickJoin = () => {
-  //   setIsJoined(true);
-  // };
+  const [displayPerform, setDisplayPerform] = useState(false);
 
-  const onClickPerform = _id => {
+  const onClickJoinPublicTest = _id => {
+    updateRealUserForAudio(user._id, _id);
+    setDisplayPerform(true);
+  };
+
+  const onClickPerformPrivateTest = _id => {
+    setTestCurrently(_id);
+    history.push(`/evaluate/${_id}`);
+  };
+  const onClickPerformPublicTest = _id => {
     setTestCurrently(_id);
     history.push(`/evaluate/${_id}`);
   };
@@ -78,21 +86,24 @@ const User = ({
       },
     },
     {
-      key: 'actionjoin',
-      // render: (text, record) => {
-      //   const { _id } = record;
-      //   return (
-      //     <span>
-      //       {!isJoined ? (
-      //         <button onClick={() => onClickJoin(_id)}>Tham gia</button>
-      //       ) : (
-      //         <button>Thực hiện</button>
-      //       )}
+      key: 'action',
+      render: (text, record) => {
+        const { _id } = record;
 
-      //       <Divider type="vertical" />
-      //     </span>
-      //   );
-      // },
+        return (
+          <span>
+            {!record.users.includes(user._id) && !displayPerform ? (
+              <button onClick={() => onClickJoinPublicTest(_id)}>
+                Join bài test
+              </button>
+            ) : (
+              <button onClick={() => onClickPerformPublicTest(_id)}>
+                Thực hiện
+              </button>
+            )}
+          </span>
+        );
+      },
     },
   ];
 
@@ -151,7 +162,9 @@ const User = ({
         const { _id } = record;
         return (
           <span>
-            <button onClick={() => onClickPerform(_id)}>Thực hiện</button>
+            <button onClick={() => onClickPerformPrivateTest(_id)}>
+              Thực hiện
+            </button>
           </span>
         );
       },
@@ -202,6 +215,6 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(
     mapStateToProps,
-    { getPrivateTest, getPublicTest, setTestCurrently },
+    { getPrivateTest, getPublicTest, setTestCurrently, updateRealUserForAudio },
   )(User),
 );

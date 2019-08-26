@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
 const UserManagementStyle = styled.div`
+  margin: 0 auto;
+  margin-top: 3rem;
+  width: 90%;
   .btn {
     display: block;
     background: rgb(236, 202, 81);
@@ -17,33 +20,13 @@ const UserManagementStyle = styled.div`
     margin-top: 3rem;
   }
 
+  .table {
+    border: 1px solid #e8e8e8;
+    margin: 2rem auto;
+  }
+
   .btn:hover {
     background: #ebeb5b;
-  }
-
-  table,
-  th,
-  td {
-    border: 1px solid black;
-    margin:2rem auto;
-    width: 80%;
-    border-collapse: collapse;
-  }
-
-  th,
-  td {
-    padding: 15px;
-    text-align: left;
-  }
-  table#t01 tr:nth-child(even) {
-    background-color: #eee;
-  }
-  table#t01 tr:nth-child(odd) {
-    background-color: #fff;
-  }
-  table#t01 th {
-    background-color: black;
-    color: white;
   }
 `;
 

@@ -4,10 +4,9 @@ import TestManagementStyle from './index.style';
 import { connect } from 'react-redux';
 import { getListTest, resetAudioStore } from '../../../actions/admin';
 
-const TestManagement = ({ tests, getListTest, history, resetAudioStore }) => {
+const TestManagement = ({ tests, getListTest, history }) => {
   const onClickDetailTest = _id => {
     history.push(`test-management/${_id}`);
-    resetAudioStore();
   };
 
   const columns = [

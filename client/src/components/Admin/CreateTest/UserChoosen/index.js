@@ -62,7 +62,8 @@ const UserChoosen = ({
         rowSelection={rowSelection}
         columns={columns}
         rowKey="_id"
-        dataSource={users.filter(user => user.role !== 1)}
+        bordered
+        dataSource={users.filter(user => user.role !== 1 && user.type === false )}
       />
       <button className="btn btn-primary" onClick={onClickedHandler}>
         Xác nhận và chuyển sang bước tiếp theo

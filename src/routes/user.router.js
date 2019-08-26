@@ -12,6 +12,7 @@ const {
   getPrivateTestOfUser,
   getAudioByUser,
   setPointForAudio,
+  updateRealUserForAudio,
 } = require('../controllers/user.controller');
 
 router.post('/signup', asyncWrap(signup));
@@ -22,5 +23,6 @@ router.get('/public-tests', auth, asyncWrap(getPublicTest));
 router.get('/private-tests/:user', auth, asyncWrap(getPrivateTestOfUser));
 router.get('/get-audio', auth, asyncWrap(getAudioByUser));
 router.put('/set-point', auth, asyncWrap(setPointForAudio));
+router.put('/update-real-user', auth, asyncWrap(updateRealUserForAudio));
 
 module.exports = router;

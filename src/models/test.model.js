@@ -36,6 +36,12 @@ const testSchema = mongoose.Schema(
         _id: false,
       },
     ],
+    systemUsers: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        _id: false,
+      },
+    ],
     dateOpened: {
       type: Date,
       required: true,

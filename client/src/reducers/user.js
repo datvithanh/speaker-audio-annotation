@@ -4,6 +4,8 @@ import {
   SET_TEST_CURRENTLY,
   GET_AUDIO_FOR_USER, 
   SET_POINT_FOR_AUDIO,
+  UPDATE_REAL_USER_FOR_AUDIO,
+  GET_ALL_AUDIO_BY_TEST_ID,
 } from '../actions/types';
 
 const initialState = {
@@ -15,6 +17,7 @@ const initialState = {
 
 export default function(state = initialState, action) {
   const { type, payload } = action;
+  
   switch (type) {
     case GET_PUBLIC_TEST_SUCCESS:
       return {
@@ -40,6 +43,15 @@ export default function(state = initialState, action) {
       return {
         ...state,
       }
+    case UPDATE_REAL_USER_FOR_AUDIO:
+      return {
+        ...state, 
+        // publicTest: payload.test,
+      }
+    case GET_ALL_AUDIO_BY_TEST_ID: 
+      return {
+        
+      } 
     default:
       return state;
   }

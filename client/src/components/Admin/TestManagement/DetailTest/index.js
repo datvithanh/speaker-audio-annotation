@@ -4,7 +4,11 @@ import { connect } from 'react-redux';
 import DetailTestStyle from './index.style';
 import { withRouter } from 'react-router-dom';
 
-import { getTestById, getAudioByTestAndVoice } from '../../../../actions/admin';
+import {
+  getTestById,
+  getAudioByTestAndVoice,
+  getAllAudioByTestId,
+} from '../../../../actions/admin';
 
 const { Option } = Select;
 
@@ -14,6 +18,7 @@ const DetailTest = ({
   testDetail,
   match,
   audios,
+  getAllAudioByTestId,
   user,
 }) => {
   const [visible, setVisible] = useState(false);
@@ -21,17 +26,32 @@ const DetailTest = ({
 
   useEffect(() => {
     getTestById(match.params.id);
-  }, [getTestById, match.params.id]);
+    getAllAudioByTestId(match.params.id);
+  }, [getAllAudioByTestId, getTestById, match.params.id]);
 
   const handleChange = voice => {
-    testDetail.voices.forEach(item => {
-      if (item.name === voice) {
-        getAudioByTestAndVoice(match.params.id, item._id);
-      }
-    });
+    if (voice === 'all') {
+      getAllAudioByTestId(testDetail._id);
+    } else {
+      testDetail.voices.forEach(item => {
+        if (item.name === voice) {
+          getAudioByTestAndVoice(match.params.id, item._id);
+        }
+      });
+    }
   };
 
   const columns = [
+    {
+      title: 'Tên voice',
+      dataIndex: 'voice',
+      key: 'voice',
+      width: '90px',
+      className: 'column',
+      render: data => (
+        <span style={{ textAlign: 'center', display: 'block' }}>{data}</span>
+      ),
+    },
     {
       title: 'Nội dung audio',
       dataIndex: 'sentence',
@@ -95,19 +115,18 @@ const DetailTest = ({
       title: 'Tên',
       dataIndex: 'name',
       key: 'name',
-      className: 'column',
     },
     {
       title: 'Email',
       dataIndex: 'email',
       key: 'email',
-      className: 'column',
     },
     {
       title: 'Điểm đánh giá',
       dataIndex: 'point',
       key: 'point',
       className: 'ant-table-thead',
+      align: 'center',
       render: data => (
         <span style={{ textAlign: 'center', display: 'block' }}>{data}</span>
       ),
@@ -116,7 +135,7 @@ const DetailTest = ({
       title: 'Cập nhật ngày',
       dataIndex: 'lastUpdate',
       key: 'lastUpdate',
-      className: 'column',
+      align: 'center',
       render: dateString => {
         const date = new Date(dateString);
         return (
@@ -140,10 +159,11 @@ const DetailTest = ({
     <DetailTestStyle>
       {testDetail ? (
         <Select
-          defaultValue="Chọn giọng"
+          defaultValue="Tất cả"
           style={{ width: 120 }}
           onChange={handleChange}
         >
+          <Option value="all">Tất cả</Option>
           {testDetail.voices.map(voice => (
             <Option key={voice._id} value={voice.name}>
               {voice.name}
@@ -164,7 +184,7 @@ const DetailTest = ({
         visible={visible}
         onOk={handleOk}
         onCancel={handleCancel}
-        style={{minWidth: '60%'}}
+        style={{ minWidth: '60%' }}
       >
         {contentModal ? (
           <Table
@@ -191,6 +211,6 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(
     mapStateToProps,
-    { getTestById, getAudioByTestAndVoice },
+    { getTestById, getAudioByTestAndVoice, getAllAudioByTestId },
   )(DetailTest),
 );

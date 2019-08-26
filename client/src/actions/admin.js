@@ -17,6 +17,8 @@ import {
   GET_TEST_BY_ID,
   GET_AUDIO_BY_TEST_AND_VOICE,
   RESET_AUDIO_STORE,
+  RESET_USER_CHOOSEN,
+  GET_ALL_AUDIO_BY_TEST_ID,
 } from './types';
 
 // Get list user
@@ -152,6 +154,9 @@ export const addUserAndFileupload = (
         type: ADD_USER_AND_FILEUPLOAD_SUCCESS,
         payload: res.data.results,
       });
+      dispatch({
+        type: RESET_USER_CHOOSEN,
+      });
     } else {
       dispatch(setAlert(res.data.message, 'danger', 2000));
       dispatch({
@@ -204,7 +209,7 @@ export const getListTest = () => async dispatch => {
 export const getTestById = id => async dispatch => {
   try {
     const res = await axios.get(`/api/admin/tests/${id}`);
-    
+
     if (res.data.status === 1) {
       dispatch({
         type: GET_TEST_BY_ID,
@@ -221,7 +226,7 @@ export const getAudioByTestAndVoice = (test, voice) => async dispatch => {
     const res = await axios.get(
       `/api/admin/get-audio?test=${test}&voice=${voice}`,
     );
-    
+
     if (res.data.status === 1) {
       dispatch({
         type: GET_AUDIO_BY_TEST_AND_VOICE,
@@ -237,8 +242,23 @@ export const resetAudioStore = () => async dispatch => {
   try {
     dispatch({
       type: RESET_AUDIO_STORE,
-    })
+    });
   } catch (error) {
     console.log(error.response.data.message);
   }
-}
+};
+
+export const getAllAudioByTestId = testId => async dispatch => {
+  try {
+    const res = await axios.get(`/api/admin/get-all-audios/${testId}`);
+
+    if (res.data.status === 1) {
+      dispatch({
+        type: GET_ALL_AUDIO_BY_TEST_ID,
+        payload: res.data.results,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};

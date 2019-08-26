@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const { ObjectId } = require('mongoose').Types;
 const CustomError = require('../errors/CustomError');
 const errorCode = require('../errors/errorCode');
 const User = require('../models/user.model');
@@ -146,6 +147,43 @@ async function setPointForAudio(req, res) {
   });
 }
 
+async function updateRealUserForAudio(req, res) {
+  const { userId, testId } = req.body;
+
+  const test = await Test.findById(testId);
+  if (test.users.includes(userId)) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Bạn đã join bài test');
+  }
+  const systemUser = test.systemUsers[0];
+  const audios = await Audio.find({
+    'users.userId': systemUser,
+    test: testId,
+  }).lean();
+
+  await Promise.all(
+    audios.map(async audio => {
+      let { users } = audio;
+      users = users.map(user => {
+        if (user.userId.equals(systemUser)) {
+          return { ...user, userId: ObjectId(userId) };
+        }
+
+        return user;
+      });
+      await Audio.findByIdAndUpdate(audio._id, { users });
+    }),
+  );
+  test.systemUsers.shift();
+
+  await User.deleteOne({ _id: systemUser });
+  test.users.push(userId);
+  await test.save();
+  res.send({
+    status: 1,
+    results: { test },
+  });
+}
+
 module.exports = {
   signup,
   signin,
@@ -156,4 +194,5 @@ module.exports = {
   getPrivateTestOfUser,
   getAudioByUser,
   setPointForAudio,
+  updateRealUserForAudio,
 };

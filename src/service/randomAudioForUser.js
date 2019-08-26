@@ -23,13 +23,25 @@ const shuffle = async array => {
 
 const randomAudioForUser = async (voice, test) => {
   try {
-    const { minSentences, minPeopleListenAudio, minPeopleJoin, users } = test;
+    const {
+      minSentences,
+      minPeopleListenAudio,
+      minPeopleJoin,
+      users,
+      systemUsers,
+    } = test;
+
     const audioRandom = Array(minSentences)
       .fill(null)
       .map(() => []);
     for (let i = 0; i <= minSentences - 1; i++) {
-      const randomUsers = await shuffle(users);
-      // console.log(randomUsers);
+      let randomUsers;
+      if (users.length !== 0) {
+        randomUsers = await shuffle(users);
+      } else {
+        randomUsers = await shuffle(systemUsers);
+      }
+
       const audios = await Audio.find({ test: test._id, voice });
       for (let j = 0; j <= minPeopleJoin / minPeopleListenAudio - 1; j++) {
         audioRandom[i][j] = randomUsers.slice(

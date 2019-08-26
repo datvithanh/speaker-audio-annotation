@@ -4,6 +4,7 @@ import {
   SET_TEST_CURRENTLY,
   GET_AUDIO_FOR_USER,
   SET_POINT_FOR_AUDIO,
+  UPDATE_REAL_USER_FOR_AUDIO,
 } from './types';
 import axios from 'axios';
 import { setAlert } from './alert';
@@ -74,7 +75,7 @@ export const setPointForAudio = (audioId, userId, point) => async dispatch => {
   };
   try {
     const res = await axios.put(`/api/users/set-point`, body, config);
-    
+
     if (res.data.status === 1) {
       dispatch({
         type: SET_POINT_FOR_AUDIO,
@@ -83,5 +84,31 @@ export const setPointForAudio = (audioId, userId, point) => async dispatch => {
   } catch (error) {
     console.log(error.response.data.message);
     dispatch(setAlert(error.response.data.message, 'danger', 2000));
+  }
+};
+
+export const updateRealUserForAudio = (userId, testId) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = {
+    userId,
+    testId,
+  };
+  try {
+    const res = await axios.put('/api/users/update-real-user', body, config);
+
+    if (res.data.status === 1) {
+      dispatch({
+        type: UPDATE_REAL_USER_FOR_AUDIO,
+        payload: res.data.results,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    // console.log(error.response.data.message);
   }
 };

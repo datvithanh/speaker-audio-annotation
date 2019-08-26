@@ -15,6 +15,7 @@ const {
   getListTest,
   getTestById,
   getAudiosByTestAndVoice,
+  getAllAudioByTestId,
 } = require('../controllers/admin.controller');
 
 router.get('/users', auth, asyncWrap(getListUser));
@@ -27,5 +28,6 @@ router.post('/add-voice', auth, asyncWrap(addVoice));
 router.get('/tests', auth, asyncWrap(getListTest));
 router.get('/tests/:id', auth, asyncWrap(getTestById));
 router.get('/get-audio', auth, asyncWrap(getAudiosByTestAndVoice));
+router.get('/get-all-audios/:testId', auth, asyncWrap(getAllAudioByTestId));
 
 module.exports = router;
