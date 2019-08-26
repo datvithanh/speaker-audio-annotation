@@ -48,7 +48,7 @@ const Evaluate = ({
 
   return (
     <EvaluateStyle>
-      {audios.length && indexAudio < audios.length ? (
+      {audios && audios.length && indexAudio < audios.length ? (
         <>
           <div key={audios[indexAudio]._id} className="container">
             <div className="voice">
@@ -111,7 +111,12 @@ const Evaluate = ({
           title="Bạn đã hoàn thành bài test"
           subTitle="Cảm ơn bạn đã tham gia đánh giá chất lượng giọng nói cùng chúng tôi!"
           extra={[
-            <Button style={{margin: '0 auto'}} onClick={() => history.push('/')} type="primary" key="console">
+            <Button
+              style={{ margin: '0 auto' }}
+              onClick={() => history.push('/')}
+              type="primary"
+              key="console"
+            >
               Quay về trang chủ
             </Button>,
           ]}

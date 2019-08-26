@@ -59,9 +59,30 @@ const DetailTest = ({
       className: 'column',
       render: data => (
         <span
-          style={{ textAlign: 'justify', display: 'block', maxWidth: '700px' }}
+          style={{
+            textAlign: 'justify',
+            display: 'flex',
+            alignItems: 'flex-end',
+            maxWidth: '700px',
+          }}
         >
           {data}
+        </span>
+      ),
+    },
+    {
+      title: 'Nghe audio',
+      dataIndex: 'link',
+      key: 'link',
+      className: 'column',
+      render: data => (
+        <span
+          style={{ textAlign: 'center', display: 'block', cursor: 'pointer' }}
+        >
+          <audio controls>
+            <source src={data} />
+            <track kind="captions" />
+          </audio>
         </span>
       ),
     },
@@ -69,6 +90,7 @@ const DetailTest = ({
       title: 'Số lượt đánh giá',
       dataIndex: 'numberOfReviews',
       key: 'numberOfReviews',
+      width: '100px',
       className: 'column',
       render: data => (
         <span style={{ textAlign: 'center', display: 'block' }}>{data}</span>
@@ -78,6 +100,7 @@ const DetailTest = ({
       title: 'Điểm trung bình',
       dataIndex: 'averagePoint',
       key: 'averagePoint',
+      width: '100px',
       className: 'column',
       render: data => (
         <span style={{ textAlign: 'center', display: 'block' }}>{data}</span>

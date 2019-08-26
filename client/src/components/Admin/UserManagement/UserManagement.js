@@ -19,6 +19,23 @@ const UserManagement = ({ getListUser, users }) => {
       title: 'Email',
       dataIndex: 'email',
     },
+    {
+      title: 'Thời điểm tạo',
+      dataIndex: 'createdAt',
+      align: 'center',
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span style={{ textAlign: 'center', display: 'block' }}>
+            {date.getDate() +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
+    },
   ];
 
   return (

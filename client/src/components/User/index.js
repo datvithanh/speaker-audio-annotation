@@ -20,11 +20,11 @@ const User = ({
   history,
   updateRealUserForAudio,
 }) => {
-  const [displayPerform, setDisplayPerform] = useState(false);
+  const [displayPerform, setDisplayPerform] = useState();
 
   const onClickJoinPublicTest = _id => {
     updateRealUserForAudio(user._id, _id);
-    setDisplayPerform(true);
+    setDisplayPerform(_id);
   };
 
   const onClickPerformPrivateTest = _id => {
@@ -92,7 +92,7 @@ const User = ({
 
         return (
           <span>
-            {!record.users.includes(user._id) && !displayPerform ? (
+            {!record.users.includes(user._id) && displayPerform !== _id ? (
               <button onClick={() => onClickJoinPublicTest(_id)}>
                 Join bài test
               </button>
@@ -187,7 +187,11 @@ const User = ({
           className="table"
           rowKey="_id"
           columns={columnsPublic}
-          dataSource={publicTest}
+          dataSource={publicTest.filter(
+            item =>
+              Date.now() >= new Date(item.dateOpened) &&
+              Date.now() <= new Date(item.dateClosed),
+          )}
         />
       )}
       <h4>Danh sách các private test bạn được chỉ định tham gia</h4>{' '}
@@ -197,7 +201,11 @@ const User = ({
           className="table"
           rowKey="_id"
           columns={columnsPrivate}
-          dataSource={privateTest}
+          dataSource={privateTest.filter(
+            item =>
+              Date.now() >= new Date(item.dateOpened) &&
+              Date.now() <= new Date(item.dateClosed),
+          )}
         />
       )}
     </UserStyle>

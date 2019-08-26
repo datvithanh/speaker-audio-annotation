@@ -14,26 +14,26 @@ const CreateTest = ({
   stepCreateTest,
   setStepCreateTest,
 }) => {
-  // const [formData, setFormData] = useState({
-  //   name: '',
-  //   numberOfVoices: '',
-  //   voices: '',
-  //   numberOfSentences: '',
-  //   accessModifier: 'Private',
-  //   dateOpened: '',
-  //   dateClosed: '',
-  // });
   const [formData, setFormData] = useState({
-    name: 'Test1',
-    numberOfVoices: 3,
-    voices: ['Nam', 'Mạnh', 'Hùng'],
-    numberOfSentences: 4, // n
-    minSentences: 2, // a
-    minPeopleListenAudio: 3, // b
+    name: '',
+    numberOfVoices: '',
+    voices: '',
+    numberOfSentences: '',
     accessModifier: 'Private',
-    dateOpened: '2018-03-02',
-    dateClosed: '2018-05-05',
+    dateOpened: '',
+    dateClosed: '',
   });
+  // const [formData, setFormData] = useState({
+  //   name: 'Test1',
+  //   numberOfVoices: 3,
+  //   voices: ['Nam', 'Mạnh', 'Hùng'],
+  //   numberOfSentences: 4, // n
+  //   minSentences: 2, // a
+  //   minPeopleListenAudio: 3, // b
+  //   accessModifier: 'Private',
+  //   dateOpened: '2019-07-05',
+  //   dateClosed: '2019-09-09',
+  // });
 
   const {
     name,
@@ -176,7 +176,7 @@ const CreateTest = ({
                     fontStyle: 'italic',
                     height: '40px',
                     backgroundColor: 'white',
-                    borderRadius: '0px'
+                    borderRadius: '0px',
                   }}
                   onChange={e => onChangeAccessModifier(e)}
                 >
