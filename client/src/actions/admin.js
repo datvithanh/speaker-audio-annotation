@@ -16,6 +16,7 @@ import {
   GET_LIST_TEST,
   GET_TEST_BY_ID,
   GET_AUDIO_BY_TEST_AND_VOICE,
+  RESET_AUDIO_STORE,
 } from './types';
 
 // Get list user
@@ -231,3 +232,13 @@ export const getAudioByTestAndVoice = (test, voice) => async dispatch => {
     console.log(error.response.data.message);
   }
 };
+
+export const resetAudioStore = () => async dispatch => {
+  try {
+    dispatch({
+      type: RESET_AUDIO_STORE,
+    })
+  } catch (error) {
+    console.log(error.response.data.message);
+  }
+}

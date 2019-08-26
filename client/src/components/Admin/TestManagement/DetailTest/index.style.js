@@ -22,7 +22,7 @@ const DetailTestStyle = styled.div`
   }
 
   .column {
-    text-align: center;
+    text-align: center !important;
   }
 
   button {

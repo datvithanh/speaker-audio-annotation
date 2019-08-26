@@ -129,6 +129,7 @@ async function setPointForAudio(req, res) {
   audio.users.forEach(user => {
     if (user.userId.toString() === userId) {
       user.point = point;
+      user.lastUpdate = Date.now();
     }
   });
 

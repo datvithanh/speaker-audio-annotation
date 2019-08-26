@@ -14,6 +14,7 @@ import {
   GET_LIST_TEST,
   GET_TEST_BY_ID,
   GET_AUDIO_BY_TEST_AND_VOICE,
+  RESET_AUDIO_STORE,
 } from '../actions/types';
 
 const initialState = {
@@ -93,11 +94,16 @@ export default function(state = initialState, action) {
         ...state,
         testDetail: payload.test,
       };
-    case GET_AUDIO_BY_TEST_AND_VOICE: 
+    case GET_AUDIO_BY_TEST_AND_VOICE:
       return {
         ...state,
         audios: payload.audios,
-      }
+      };
+    case RESET_AUDIO_STORE:
+      return {
+        ...state,
+        audios: null,
+      };
     default:
       return state;
   }

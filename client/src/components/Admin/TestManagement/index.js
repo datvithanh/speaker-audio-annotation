@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { Table } from 'antd';
 import TestManagementStyle from './index.style';
 import { connect } from 'react-redux';
-import { getListTest } from '../../../actions/admin';
+import { getListTest, resetAudioStore } from '../../../actions/admin';
 
-const TestManagement = ({ tests, getListTest, history }) => {
+const TestManagement = ({ tests, getListTest, history, resetAudioStore }) => {
   const onClickDetailTest = _id => {
     history.push(`test-management/${_id}`);
+    resetAudioStore();
   };
 
   const columns = [
@@ -132,5 +133,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { getListTest },
+  { getListTest, resetAudioStore },
 )(TestManagement);

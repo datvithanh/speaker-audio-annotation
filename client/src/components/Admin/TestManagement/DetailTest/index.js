@@ -95,7 +95,7 @@ const DetailTest = ({
       title: 'Tên',
       dataIndex: 'name',
       key: 'name',
-      className: 'column1',
+      className: 'column',
     },
     {
       title: 'Email',
@@ -107,10 +107,32 @@ const DetailTest = ({
       title: 'Điểm đánh giá',
       dataIndex: 'point',
       key: 'point',
-      className: 'column',
+      className: 'ant-table-thead',
       render: data => (
         <span style={{ textAlign: 'center', display: 'block' }}>{data}</span>
       ),
+    },
+    {
+      title: 'Cập nhật ngày',
+      dataIndex: 'lastUpdate',
+      key: 'lastUpdate',
+      className: 'column',
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <>
+            {dateString ? (
+              <span style={{ textAlign: 'center', display: 'block' }}>
+                {date.getDate() +
+                  ' - ' +
+                  (date.getMonth() + 1) +
+                  ' - ' +
+                  date.getFullYear()}
+              </span>
+            ) : null}
+          </>
+        );
+      },
     },
   ];
 
@@ -138,10 +160,11 @@ const DetailTest = ({
         dataSource={audios}
       />
       <Modal
-        title="Basic Modal"
+        title="Chi tiết đánh giá từng người"
         visible={visible}
         onOk={handleOk}
         onCancel={handleCancel}
+        style={{minWidth: '60%'}}
       >
         {contentModal ? (
           <Table
