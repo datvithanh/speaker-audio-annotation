@@ -9,6 +9,10 @@ const DetailTestStyle = styled.div`
     margin-top: 2rem;
   }
 
+  h2 {
+    text-align: center;
+  }
+
   .table {
     border: 1px solid #e8e8e8;
     margin: 0 auto;
@@ -25,10 +29,10 @@ const DetailTestStyle = styled.div`
     text-align: center !important;
   }
 
-  button {
-    min-width: 100px;
-    margin: 0 auto;
+  .audio {
     display: block;
+    margin: 30px auto 30px auto;
+    width: 600px;
   }
 `;
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Select, Table, Modal } from 'antd';
+import React, { useState, useEffect, useRef } from 'react';
+import { Select, Table, Modal, Icon, Button } from 'antd';
 import { connect } from 'react-redux';
 import DetailTestStyle from './index.style';
 import { withRouter } from 'react-router-dom';
@@ -19,10 +19,10 @@ const DetailTest = ({
   match,
   audios,
   getAllAudioByTestId,
-  user,
 }) => {
   const [visible, setVisible] = useState(false);
   const [contentModal, setContentModal] = useState([]);
+  const audioRef = useRef(null);
 
   useEffect(() => {
     getTestById(match.params.id);
@@ -39,6 +39,11 @@ const DetailTest = ({
         }
       });
     }
+  };
+
+  const onClickIconAudioHanler = link => {
+    audioRef.current.src = link;
+    audioRef.current.play();
   };
 
   const columns = [
@@ -75,14 +80,15 @@ const DetailTest = ({
       dataIndex: 'link',
       key: 'link',
       className: 'column',
-      render: data => (
+      render: link => (
         <span
           style={{ textAlign: 'center', display: 'block', cursor: 'pointer' }}
         >
-          <audio controls>
-            <source src={data} />
-            <track kind="captions" />
-          </audio>
+          <Icon
+            onClick={() => onClickIconAudioHanler(link)}
+            type="sound"
+            theme="filled"
+          />
         </span>
       ),
     },
@@ -111,9 +117,9 @@ const DetailTest = ({
       render: (text, record) => {
         return (
           <span>
-            <button onClick={() => showModal(record)}>
+            <Button onClick={() => showModal(record)} type="primary">
               Xem chi tiết đánh giá
-            </button>
+            </Button>
           </span>
         );
       },
@@ -181,18 +187,24 @@ const DetailTest = ({
   return (
     <DetailTestStyle>
       {testDetail ? (
-        <Select
-          defaultValue="Tất cả"
-          style={{ width: 120 }}
-          onChange={handleChange}
-        >
-          <Option value="all">Tất cả</Option>
-          {testDetail.voices.map(voice => (
-            <Option key={voice._id} value={voice.name}>
-              {voice.name}
-            </Option>
-          ))}
-        </Select>
+        <>
+          <h2>Chi tiết các audio của bài test {testDetail.name}</h2>
+          <audio className="audio" ref={audioRef} controls>
+            <track kind="captions" />
+          </audio>
+          <Select
+            defaultValue="Tất cả"
+            style={{ width: 120 }}
+            onChange={handleChange}
+          >
+            <Option value="all">Tất cả</Option>
+            {testDetail.voices.map(voice => (
+              <Option key={voice._id} value={voice.name}>
+                {voice.name}
+              </Option>
+            ))}
+          </Select>
+        </>
       ) : null}
 
       <Table

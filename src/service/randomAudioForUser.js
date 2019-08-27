@@ -37,7 +37,7 @@ const randomAudioForUser = async (voice, test) => {
     for (let i = 0; i <= minSentences - 1; i++) {
       let randomUsers;
       if (users.length !== 0) {
-        randomUsers = await shuffle(users);
+        randomUsers = await shuffle(users.map(user => user.id));
       } else {
         randomUsers = await shuffle(systemUsers);
       }

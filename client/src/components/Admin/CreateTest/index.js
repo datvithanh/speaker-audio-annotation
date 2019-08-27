@@ -14,26 +14,26 @@ const CreateTest = ({
   stepCreateTest,
   setStepCreateTest,
 }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    numberOfVoices: '',
-    voices: '',
-    numberOfSentences: '',
-    accessModifier: 'Private',
-    dateOpened: '',
-    dateClosed: '',
-  });
   // const [formData, setFormData] = useState({
-  //   name: 'Test1',
-  //   numberOfVoices: 3,
-  //   voices: ['Nam', 'Mạnh', 'Hùng'],
-  //   numberOfSentences: 4, // n
-  //   minSentences: 2, // a
-  //   minPeopleListenAudio: 3, // b
+  //   name: '',
+  //   numberOfVoices: '',
+  //   voices: '',
+  //   numberOfSentences: '',
   //   accessModifier: 'Private',
-  //   dateOpened: '2019-07-05',
-  //   dateClosed: '2019-09-09',
+  //   dateOpened: '',
+  //   dateClosed: '',
   // });
+  const [formData, setFormData] = useState({
+    name: 'Test1',
+    numberOfVoices: 3,
+    voices: ['Nam', 'Mạnh', 'Hùng'],
+    numberOfSentences: 4, // n
+    minSentences: 2, // a
+    minPeopleListenAudio: 3, // b
+    accessModifier: 'Private',
+    dateOpened: '2019-07-05',
+    dateClosed: '2019-09-09',
+  });
 
   const {
     name,

@@ -48,11 +48,20 @@ async function addUser(req, res) {
 
 async function createTest(req, res) {
   const {
+    name,
     minPeopleListenAudio,
     numberOfSentences,
     minSentences,
     voices,
   } = req.body;
+
+  const checkNameTestExist = await Test.findOne({ name });
+  if (checkNameTestExist) {
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'Trùng tên bài test đã có trong hệ thống. Vui lòng nhập tên khác!',
+    );
+  }
 
   const voiceSystem = await Voice.find({});
   const voiceSystemArrayName = voiceSystem.map(item => item.name);
@@ -297,7 +306,7 @@ async function addUserChosenAndFileUpload(req, res) {
   const testCurrently = await Test.findById(test);
 
   if (users.length !== 0) {
-    testCurrently.users = users;
+    testCurrently.users = users.map(user => ({ id: user, indexAudio: 0 }));
   } else {
     for (let i = 0; i < testCurrently.minPeopleJoin; i++) {
       const user = await User.create({ type: 1 });

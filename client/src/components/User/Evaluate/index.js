@@ -1,8 +1,16 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
-import { getAudioForUser, setPointForAudio } from '../../../actions/user';
+import {
+  getAudioForUser,
+  setPointForAudio,
+  getIndexAudio,
+  decreaseIndexAudio,
+  increaseIndexAudio,
+  setAudios,
+} from '../../../actions/user';
 import { connect } from 'react-redux';
-import { Radio, Result, Button } from 'antd';
+import { Radio, Result, Button, Icon } from 'antd';
 import EvaluateStyle from './index.style';
 
 const Evaluate = ({
@@ -13,30 +21,70 @@ const Evaluate = ({
   user,
   match,
   history,
+  indexAudio,
+  increaseIndexAudio,
+  decreaseIndexAudio,
+  getIndexAudio,
+  setAudios,
 }) => {
-  const [indexAudio, setIndexAudio] = useState(0);
   const [point, setPoint] = useState();
   const [disabledButton, setDisableButton] = useState(true);
+  const [disableButtonBack, setDisableButtonBack] = useState(false);
+  const [disableButtonNext, setDisableButtonNext] = useState(false);
 
   useEffect(() => {
     if (user) {
+      getIndexAudio(user._id, match.params.id);
       getAudioForUser(user._id, match.params.id);
+      console.log(indexAudio);
     }
-  }, [getAudioForUser, match, test, user]);
+  }, [getAudioForUser, getIndexAudio, match.params.id, user]);
 
   const onClickHandler = () => {
     if (indexAudio < audios.length) {
-      setIndexAudio(indexAudio + 1);
-      setPointForAudio(audios[indexAudio]._id, user._id, point);
+      console.log('indexAudio', indexAudio);
+      setPointForAudio(
+        match.params.id,
+        audios[indexAudio]._id,
+        user._id,
+        point,
+        indexAudio,
+      );
     }
+    setPoint(null);
 
-    setPoint();
     setDisableButton(true);
+    // console.log(audios[indexAudio]._id, point);
+    setAudios(audios[indexAudio]._id, point);
   };
 
   const onChange = e => {
     setPoint(e.target.value);
     setDisableButton(false);
+  };
+
+  const backSentence = () => {
+    if (indexAudio > 0) {
+      decreaseIndexAudio();
+      setDisableButtonNext(false);
+      console.log(indexAudio);
+      console.log(audios);
+      setPoint(audios[indexAudio - 1].user.point);
+    } else {
+      setDisableButtonBack(true);
+    }
+  };
+
+  const nextSentence = () => {
+    if (indexAudio < audios.length - 1) {
+      increaseIndexAudio();
+      setPoint(audios[indexAudio + 1].user.point);
+      console.log(indexAudio);
+      setDisableButtonBack(false);
+      // }
+    } else {
+      setDisableButtonNext(true);
+    }
   };
 
   const radioStyle = {
@@ -47,9 +95,9 @@ const Evaluate = ({
   };
 
   return (
-    <EvaluateStyle>
+    <>
       {audios && audios.length && indexAudio < audios.length ? (
-        <>
+        <EvaluateStyle>
           <div key={audios[indexAudio]._id} className="container">
             <div className="voice">
               <h5>Giọng đọc: {audios[indexAudio].voice}</h5>
@@ -57,11 +105,7 @@ const Evaluate = ({
 
             <div className="user-evaluate">
               <h5>
-                Bạn đã đánh giá :{' '}
-                <b>
-                  {indexAudio}/{audios.length}
-                </b>{' '}
-                câu.
+                Câu thứ <b>{indexAudio + 1}</b> (tổng số {audios.length} câu).
               </h5>
             </div>
 
@@ -96,21 +140,47 @@ const Evaluate = ({
               </Radio>
             </Radio.Group>
           </div>
-
-          <button
-            disabled={disabledButton}
-            className="btn btn-warning"
-            onClick={onClickHandler}
-          >
-            Hoàn thành
-          </button>
-        </>
+          <div className="group-button">
+            <Button
+              disabled={disableButtonBack}
+              className="btn btn-warning"
+              onClick={backSentence}
+              type="primary"
+            >
+              <Icon type="left" />
+              Câu trước
+            </Button>
+            <Button
+              disabled={disabledButton}
+              className="btn btn-warning"
+              onClick={onClickHandler}
+            >
+              Hoàn thành
+            </Button>
+            <Button
+              disabled={disableButtonNext}
+              className="btn btn-warning"
+              onClick={nextSentence}
+              type="primary"
+            >
+              Câu tiếp
+              <Icon type="right" />
+            </Button>
+          </div>
+        </EvaluateStyle>
       ) : (
         <Result
           status="success"
           title="Bạn đã hoàn thành bài test"
           subTitle="Cảm ơn bạn đã tham gia đánh giá chất lượng giọng nói cùng chúng tôi!"
           extra={[
+            <Button
+              style={{ margin: '0 auto' }}
+              onClick={backSentence}
+              key="console"
+            >
+              Quay lại đánh giá
+            </Button>,
             <Button
               style={{ margin: '0 auto' }}
               onClick={() => history.push('/')}
@@ -122,7 +192,7 @@ const Evaluate = ({
           ]}
         />
       )}
-    </EvaluateStyle>
+    </>
   );
 };
 
@@ -131,12 +201,20 @@ const mapStateToProps = state => {
     test: state.user.testCurrently,
     audios: state.user.audios,
     user: state.auth.user,
+    indexAudio: state.user.indexAudio,
   };
 };
 
 export default withRouter(
   connect(
     mapStateToProps,
-    { getAudioForUser, setPointForAudio },
+    {
+      getAudioForUser,
+      setPointForAudio,
+      getIndexAudio,
+      decreaseIndexAudio,
+      increaseIndexAudio,
+      setAudios,
+    },
   )(Evaluate),
 );

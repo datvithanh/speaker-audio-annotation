@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import TestManagementStyle from './index.style';
 import { connect } from 'react-redux';
 import { getListTest, resetAudioStore } from '../../../actions/admin';
@@ -96,9 +96,12 @@ const TestManagement = ({ tests, getListTest, history }) => {
       render: (text, record) => {
         return (
           <span>
-            <button onClick={() => onClickDetailTest(record._id)}>
+            <Button
+              onClick={() => onClickDetailTest(record._id)}
+              type="primary"
+            >
               Xem chi tiết
-            </button>
+            </Button>
           </span>
         );
       },

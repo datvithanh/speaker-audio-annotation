@@ -79,7 +79,7 @@ async function getPublicTest(req, res) {
 
 async function getPrivateTestOfUser(req, res) {
   const tests = await Test.find({
-    users: req.params.user,
+    'users.id': req.params.user,
     accessModifier: 'Private',
   });
   res.send({
@@ -99,18 +99,20 @@ async function getAudioByUser(req, res) {
   });
 
   const audiosDisplayForUser = await Promise.all(
-    audios.map(async ({ _id, link, voice, sentence }) => {
+    audios.map(async ({ _id, link, voice, sentence, users }) => {
       const contentSentence = await Sentence.findOne({
         _id: sentence,
       });
 
       const voiceName = await Voice.findOne({ _id: voice });
+      const userSpec = users.find(item => item.userId.toString() === user);
 
       return {
         _id,
         link,
         voice: voiceName.name,
         sentence: contentSentence.content,
+        user: userSpec,
       };
     }),
   );
@@ -124,17 +126,28 @@ async function getAudioByUser(req, res) {
 }
 
 async function setPointForAudio(req, res) {
-  const { audioId, point, userId } = req.body;
+  const { testId, audioId, point, userId, indexAudio } = req.body;
+  console.log('indexAudio', indexAudio);
+  const test = await Test.findOne({ _id: testId });
+
+  const userUpdateIndexAudio = test.users.find(
+    user => user.id.toString() === userId,
+  );
+  if (indexAudio >= userUpdateIndexAudio.indexAudio) {
+    userUpdateIndexAudio.indexAudio += 1;
+  }
+  await test.save();
   const audio = await Audio.findById(audioId);
 
   audio.users.forEach(user => {
     if (user.userId.toString() === userId) {
+      if (!user.point) {
+        audio.numberOfReviews += 1;
+      }
       user.point = point;
       user.lastUpdate = Date.now();
     }
   });
-
-  audio.numberOfReviews += 1;
 
   audio.averagePoint =
     (audio.averagePoint * (audio.numberOfReviews - 1) + point) /
@@ -144,6 +157,9 @@ async function setPointForAudio(req, res) {
 
   res.send({
     status: 1,
+    results: {
+      indexAudio: userUpdateIndexAudio.indexAudio,
+    },
   });
 }
 
@@ -151,10 +167,9 @@ async function updateRealUserForAudio(req, res) {
   const { userId, testId } = req.body;
 
   const test = await Test.findById(testId);
-  if (test.users.includes(userId)) {
-    throw new CustomError(errorCode.BAD_REQUEST, 'Bạn đã join bài test');
-  }
+
   const systemUser = test.systemUsers[0];
+
   const audios = await Audio.find({
     'users.userId': systemUser,
     test: testId,
@@ -176,11 +191,66 @@ async function updateRealUserForAudio(req, res) {
   test.systemUsers.shift();
 
   await User.deleteOne({ _id: systemUser });
-  test.users.push(userId);
+  test.users.push({ id: userId, indexAudio: 0 });
   await test.save();
   res.send({
     status: 1,
     results: { test },
+  });
+}
+
+async function getIndexAudio(req, res) {
+  const { testId, userId } = req.query;
+  const test = await Test.findOne({ _id: testId });
+
+  const userUpdateIndexAudio = test.users.find(
+    user => user.id.toString() === userId,
+  );
+
+  res.send({
+    status: 1,
+    results: {
+      indexAudio: userUpdateIndexAudio.indexAudio,
+    },
+  });
+}
+
+async function increaseIndexAudio(req, res) {
+  const { testId, userId } = req.body;
+  const test = await Test.findOne({ _id: testId });
+
+  const userUpdateIndexAudio = test.users.find(
+    user => user.id.toString() === userId,
+  );
+
+  userUpdateIndexAudio.indexAudio += 1;
+  await test.save();
+
+  res.send({
+    status: 1,
+    results: {
+      indexAudio: userUpdateIndexAudio.indexAudio,
+    },
+  });
+}
+
+async function decreaseIndexAudio(req, res) {
+  const { testId, userId } = req.body;
+  console.log(req.body);
+  const test = await Test.findOne({ _id: testId });
+
+  const userUpdateIndexAudio = test.users.find(
+    user => user.id.toString() === userId,
+  );
+
+  userUpdateIndexAudio.indexAudio -= 1;
+  await test.save();
+
+  res.send({
+    status: 1,
+    results: {
+      indexAudio: userUpdateIndexAudio.indexAudio,
+    },
   });
 }
 
@@ -195,4 +265,7 @@ module.exports = {
   getAudioByUser,
   setPointForAudio,
   updateRealUserForAudio,
+  getIndexAudio,
+  increaseIndexAudio,
+  decreaseIndexAudio,
 };

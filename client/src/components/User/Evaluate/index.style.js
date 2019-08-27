@@ -14,6 +14,8 @@ const EvaluateStyle = styled.div`
     display: block;
     margin: 0 auto;
     margin-top: 1rem;
+    height: 40px;
+    width: 130px;
   }
 
   .voice {
@@ -38,6 +40,10 @@ const EvaluateStyle = styled.div`
 
   .evaluate {
     text-align: left;
+  }
+
+  .group-button {
+    display: flex;
   }
 
   .content-text {

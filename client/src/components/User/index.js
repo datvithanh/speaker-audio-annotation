@@ -7,6 +7,7 @@ import {
   setTestCurrently,
   updateRealUserForAudio,
 } from '../../actions/user';
+
 import UserStyle from './index.style';
 import { withRouter } from 'react-router-dom';
 
@@ -21,7 +22,12 @@ const User = ({
   updateRealUserForAudio,
 }) => {
   const [displayPerform, setDisplayPerform] = useState();
-
+  useEffect(() => {
+    getPublicTest();
+    if (user) {
+      getPrivateTest(user._id);
+    }
+  }, [getPrivateTest, getPublicTest, user]);
   const onClickJoinPublicTest = _id => {
     updateRealUserForAudio(user._id, _id);
     setDisplayPerform(_id);
@@ -92,7 +98,8 @@ const User = ({
 
         return (
           <span>
-            {!record.users.includes(user._id) && displayPerform !== _id ? (
+            {!record.users.map(user => user.id).includes(user._id) &&
+            displayPerform !== _id ? (
               <button onClick={() => onClickJoinPublicTest(_id)}>
                 Join bài test
               </button>
@@ -171,13 +178,6 @@ const User = ({
     },
   ];
 
-  useEffect(() => {
-    getPublicTest();
-    if (user) {
-      getPrivateTest(user._id);
-    }
-  }, [getPrivateTest, getPublicTest, user]);
-
   return (
     <UserStyle>
       <h4>Danh sách các public test bạn có thể tham gia</h4>
@@ -223,6 +223,11 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(
     mapStateToProps,
-    { getPrivateTest, getPublicTest, setTestCurrently, updateRealUserForAudio },
+    {
+      getPrivateTest,
+      getPublicTest,
+      setTestCurrently,
+      updateRealUserForAudio,
+    },
   )(User),
 );
