@@ -5,7 +5,6 @@ import {
   ADD_TEST_FAILED,
   ADD_TEST_SUCCESS,
   SET_STEP_CREATE_TEST,
-  SET_DIRECTORY_SENTENCES_PATH,
   SET_DIRECTORY_AUDIO_PATH,
   ADD_USER_AND_FILEUPLOAD_SUCCESS,
   ADD_USER_USER_AND_FILEUPLOAD_FAILED,
@@ -24,7 +23,6 @@ const initialState = {
   users: [],
   tests: [],
   test: null,
-  sentencePath: null,
   audioPath: null,
   stepCreateTest: 'step1',
   userChosen: [],
@@ -65,11 +63,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         test: null,
-      };
-    case SET_DIRECTORY_SENTENCES_PATH:
-      return {
-        ...state,
-        sentencePath: payload,
       };
     case SET_DIRECTORY_AUDIO_PATH:
       return {

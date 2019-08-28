@@ -7,7 +7,6 @@ import {
   ADD_TEST_SUCCESS,
   SET_STEP_CREATE_TEST,
   SET_DIRECTORY_AUDIO_PATH,
-  SET_DIRECTORY_SENTENCES_PATH,
   GET_LIST_USERS,
   ADD_USER_AND_FILEUPLOAD_SUCCESS,
   ADD_USER_USER_AND_FILEUPLOAD_FAILED,
@@ -135,7 +134,6 @@ export const setUserChosen = users => dispatch => {
 export const addUserAndFileupload = (
   users,
   test,
-  sentencePath,
   audioPath,
 ) => async dispatch => {
   const config = {
@@ -144,7 +142,7 @@ export const addUserAndFileupload = (
     },
   };
 
-  const body = JSON.stringify({ users, test, sentencePath, audioPath });
+  const body = JSON.stringify({ users, test, audioPath });
 
   try {
     const res = await axios.put('/api/admin/add-user-fileupload', body, config);
@@ -171,12 +169,12 @@ export const addUserAndFileupload = (
   }
 };
 
-export const setSentencePath = sentencePath => dispatch => {
-  dispatch({
-    type: SET_DIRECTORY_SENTENCES_PATH,
-    payload: sentencePath,
-  });
-};
+// export const setSentencePath = sentencePath => dispatch => {
+//   dispatch({
+//     type: SET_DIRECTORY_SENTENCES_PATH,
+//     payload: sentencePath,
+//   });
+// };
 
 export const setAudioPath = audioPath => dispatch => {
   dispatch({

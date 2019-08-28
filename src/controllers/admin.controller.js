@@ -193,10 +193,15 @@ async function uploadAudio(req, res) {
   let errorInput = null;
   await Promise.all(
     fs.readdirSync(directoryFullPath).map(async fileUnzip => {
-      if (!fileUnzip.match(/\.(zip)$/) && !fileUnzip.match(/\.(wav)$/)) {
+      if (
+        !fileUnzip.match(/\.(zip)$/) &&
+        !fileUnzip.match(/\.(wav)$/) &&
+        !fileUnzip.match(/\.(txt)$/)
+      ) {
         errorInput = 'error-ext';
       } else if (
         !fileUnzip.match(/\.(zip)$/) &&
+        fileUnzip.match(/\.(wav)$/) &&
         fileUnzip.split('.')[0].split('-').length !== 2
       ) {
         errorInput = 'error-format';
@@ -208,7 +213,7 @@ async function uploadAudio(req, res) {
     fsExtra.removeSync(directoryFullPath);
     throw new CustomError(
       errorCode.BAD_REQUEST,
-      'Bạn cần upload file zip chỉ có file .wav bên trong',
+      'Bạn cần upload file zip chỉ có file .wav hooặc file text bên trong',
     );
   }
 
@@ -271,26 +276,21 @@ async function uploadAudio(req, res) {
 }
 
 async function addUserChosenAndFileUpload(req, res) {
-  const { audioPath, sentencePath, users, test } = req.body;
-
-  fs.readdirSync(`${SRC_PATH}/static/${sentencePath}`).forEach(
-    async fileUnzip => {
-      const nameFileUnzip = fileUnzip.split('.')[0];
-      if (fileUnzip.match(/\.(txt)$/)) {
-        const content = fs.readFileSync(
-          `${SRC_PATH}/static/${sentencePath}/${fileUnzip}`,
-          'utf8',
-        );
-        await Sentence.create({
-          _id: `${test}_${nameFileUnzip}`,
-          content,
-          test,
-        });
-      }
-    },
-  );
+  const { audioPath, users, test } = req.body;
 
   fs.readdirSync(`${SRC_PATH}/static/${audioPath}`).forEach(async fileUnzip => {
+    const nameFileUnzip = fileUnzip.split('.')[0];
+    if (fileUnzip.match(/\.(txt)$/)) {
+      const content = fs.readFileSync(
+        `${SRC_PATH}/static/${audioPath}/${fileUnzip}`,
+        'utf8',
+      );
+      await Sentence.create({
+        _id: `${test}_${nameFileUnzip}`,
+        content,
+        test,
+      });
+    }
     if (fileUnzip.match(/\.(wav)$/)) {
       const sentence = `${test}_${fileUnzip.split('.')[0].split('-')[0]}`;
       const voice = fileUnzip.split('.')[0].split('-')[1];
@@ -302,6 +302,19 @@ async function addUserChosenAndFileUpload(req, res) {
       });
     }
   });
+
+  // fs.readdirSync(`${SRC_PATH}/static/${audioPath}`).forEach(async fileUnzip => {
+  //   if (fileUnzip.match(/\.(wav)$/)) {
+  //     const sentence = `${test}_${fileUnzip.split('.')[0].split('-')[0]}`;
+  //     const voice = fileUnzip.split('.')[0].split('-')[1];
+  //     await Audio.create({
+  //       link: `${audioPath}/${fileUnzip}`,
+  //       voice,
+  //       sentence,
+  //       test,
+  //     });
+  //   }
+  // });
 
   const testCurrently = await Test.findById(test);
 

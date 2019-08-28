@@ -14,12 +14,11 @@ const index = ({
   resetTest,
   test,
   userChosen,
-  sentencePath,
   audioPath,
   addUserAndFileupload,
 }) => {
   const onClickHandler = () => {
-    addUserAndFileupload(userChosen, test._id, sentencePath, audioPath);
+    addUserAndFileupload(userChosen, test._id, audioPath);
     setStepCreateTest('step1');
     resetTest();
     return <Redirect to="/admin/create-test" />;
@@ -46,7 +45,6 @@ const index = ({
 
 const mapStateToProps = state => {
   return {
-    sentencePath: state.admin.sentencePath,
     audioPath: state.admin.audioPath,
     userChosen: state.admin.userChosen,
     test: state.admin.test,

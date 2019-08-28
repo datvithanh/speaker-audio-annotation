@@ -7,19 +7,11 @@ import { connect } from 'react-redux';
 import {
   getListUser,
   setStepCreateTest,
-  setSentencePath,
   setAudioPath,
 } from '../../../../actions/admin';
 
-const UploadFile = ({
-  test,
-  setStepCreateTest,
-  getListUser,
-  setAudioPath,
-  setSentencePath,
-}) => {
+const UploadFile = ({ test, setStepCreateTest, getListUser, setAudioPath }) => {
   const [file, setFile] = useState({
-    sentence: '',
     audio: '',
   });
   const [filename, setFilename] = useState({
@@ -35,67 +27,67 @@ const UploadFile = ({
     audio: '',
   });
 
-  const onChangeSentence = e => {
-    if (e.target.files[0]) {
-      setFile({ ...file, sentence: e.target.files[0] });
-      setFilename({ ...filename, sentence: e.target.files[0].name });
-    }
-  };
+  // const onChangeSentence = e => {
+  //   if (e.target.files[0]) {
+  //     setFile({ ...file, sentence: e.target.files[0] });
+  //     setFilename({ ...filename, sentence: e.target.files[0].name });
+  //   }
+  // };
 
-  const onSubmitSentence = async e => {
-    e.preventDefault();
-    if (!test) {
-      return setMessage({
-        ...message,
-        sentence: 'Bạn phải tạo bài test trước khi upload',
-      });
-    }
+  // const onSubmitSentence = async e => {
+  //   e.preventDefault();
+  //   if (!test) {
+  //     return setMessage({
+  //       ...message,
+  //       sentence: 'Bạn phải tạo bài test trước khi upload',
+  //     });
+  //   }
 
-    if (file.sentence === '') {
-      return setMessage({
-        ...message,
-        sentence: 'Vui lòng chọn file upload',
-      });
-    }
-    const formData = new FormData();
-    formData.append('sentence', file.sentence);
-    formData.append('test', JSON.stringify(test));
+  //   if (file.sentence === '') {
+  //     return setMessage({
+  //       ...message,
+  //       sentence: 'Vui lòng chọn file upload',
+  //     });
+  //   }
+  //   const formData = new FormData();
+  //   formData.append('sentence', file.sentence);
+  //   formData.append('test', JSON.stringify(test));
 
-    try {
-      const res = await axios.post('/api/admin/upload-sentence', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: progressEvent => {
-          setUploadPercentage({
-            ...uploadPercentage,
-            sentence: parseInt(
-              Math.round((progressEvent.loaded * 100) / progressEvent.total),
-            ),
-          });
-        },
-      });
+  //   try {
+  //     const res = await axios.post('/api/admin/upload-sentence', formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data',
+  //       },
+  //       onUploadProgress: progressEvent => {
+  //         setUploadPercentage({
+  //           ...uploadPercentage,
+  //           sentence: parseInt(
+  //             Math.round((progressEvent.loaded * 100) / progressEvent.total),
+  //           ),
+  //         });
+  //       },
+  //     });
 
-      if (res.data.status === 1) {
-        setSentencePath(res.data.results.directoryPath);
-        setMessage({
-          ...message,
-          sentence: 'Upload succesfully',
-        });
-      } else {
-        setMessage({ ...message, sentence: res.data.message });
-      }
-    } catch (error) {
-      if (error.response.status === 500) {
-        setMessage({
-          ...message,
-          sentence: 'Có lỗi xảy ra trên server',
-        });
-      } else {
-        setMessage({ ...message, sentence: error.response.data.message });
-      }
-    }
-  };
+  //     if (res.data.status === 1) {
+  //       setSentencePath(res.data.results.directoryPath);
+  //       setMessage({
+  //         ...message,
+  //         sentence: 'Upload succesfully',
+  //       });
+  //     } else {
+  //       setMessage({ ...message, sentence: res.data.message });
+  //     }
+  //   } catch (error) {
+  //     if (error.response.status === 500) {
+  //       setMessage({
+  //         ...message,
+  //         sentence: 'Có lỗi xảy ra trên server',
+  //       });
+  //     } else {
+  //       setMessage({ ...message, sentence: error.response.data.message });
+  //     }
+  //   }
+  // };
 
   const onChangeAudio = e => {
     if (e.target.files[0]) {
@@ -161,7 +153,7 @@ const UploadFile = ({
       if (error.response.status === 500) {
         setMessage({
           ...message,
-          audio: 'There was a problem with the server',
+          audio: 'Có lỗi xảy ra trên server',
         });
       } else {
         setMessage({ ...message, audio: error.response.data.message });
@@ -172,7 +164,7 @@ const UploadFile = ({
   return (
     <>
       <UploadFileStyle>
-        <div className="container">
+        {/* <div className="container">
           <h4 className="display-4 sentence-center mb-4">Upload câu</h4>
           {message.sentence ? <Message msg={message.sentence} /> : null}
           <form onSubmit={onSubmitSentence}>
@@ -195,8 +187,8 @@ const UploadFile = ({
               className="btn btn btn-success btn-block mt-4"
             />
           </form>
-        </div>
-        {message.sentence === 'Upload succesfully' ? (
+        </div> */}
+        {/* {message.sentence === 'Upload succesfully' ? ( */}
           <div className="container">
             <h4 className="display-4 sentence-center mb-4">Upload audio</h4>
             {message.audio ? <Message msg={message.audio} /> : null}
@@ -221,7 +213,7 @@ const UploadFile = ({
               />
             </form>
           </div>
-        ) : null}
+        {/* ) : null} */}
       </UploadFileStyle>
       <i
         style={{
@@ -261,5 +253,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { setStepCreateTest, getListUser, setAudioPath, setSentencePath },
+  { setStepCreateTest, getListUser, setAudioPath },
 )(UploadFile);

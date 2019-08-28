@@ -25,10 +25,10 @@ const CreateTest = ({
   // });
   const [formData, setFormData] = useState({
     name: 'Test1',
-    numberOfVoices: 3,
-    voices: ['Nam', 'Mạnh', 'Hùng'],
-    numberOfSentences: 4, // n
-    minSentences: 2, // a
+    numberOfVoices: 4,
+    voices: ['FIN', 'INI', 'NA1', 'NA2'],
+    numberOfSentences: 40, // n
+    minSentences: 20, // a
     minPeopleListenAudio: 3, // b
     accessModifier: 'Private',
     dateOpened: '2019-07-05',

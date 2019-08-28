@@ -143,15 +143,18 @@ async function setPointForAudio(req, res) {
     if (user.userId.toString() === userId) {
       if (!user.point) {
         audio.numberOfReviews += 1;
+        audio.averagePoint =
+          (audio.averagePoint * (audio.numberOfReviews - 1) + point) /
+          audio.numberOfReviews;
+      } else {
+        audio.averagePoint =
+          (audio.averagePoint * audio.numberOfReviews - user.point + point) /
+          audio.numberOfReviews;
       }
       user.point = point;
       user.lastUpdate = Date.now();
     }
   });
-
-  audio.averagePoint =
-    (audio.averagePoint * (audio.numberOfReviews - 1) + point) /
-    audio.numberOfReviews;
 
   await audio.save();
 

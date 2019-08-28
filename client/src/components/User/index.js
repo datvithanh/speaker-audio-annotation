@@ -125,10 +125,14 @@ const User = ({
       className: 'column',
     },
     {
-      title: 'Số lượng câu',
-      dataIndex: 'numberOfSentences',
+      title: 'Số lượng audio',
+      // dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
       className: 'column',
+      render: ({ voices, minSentences }) => {
+        // console.log(data);
+        return voices.length * minSentences;
+      },
     },
     {
       title: 'Ngày mở',
