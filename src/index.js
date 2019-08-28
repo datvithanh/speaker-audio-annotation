@@ -2,6 +2,7 @@
 /* eslint-disable no-unused-vars */
 require('dotenv').config();
 require('./db/mongoose');
+const bodyParse = require('body-parser');
 const path = require('path');
 
 const express = require('express');
@@ -14,6 +15,7 @@ const port = process.env.PORT;
 
 app.use(express.json());
 app.use(cors());
+
 app.use(fileUpload({ parseNested: true }));
 app.use('/api/users', require('./routes/user.router'));
 app.use('/api/admin/', require('./routes/admin.router'));

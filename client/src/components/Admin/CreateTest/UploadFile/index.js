@@ -117,7 +117,7 @@ const UploadFile = ({ test, setStepCreateTest, getListUser, setAudioPath }) => {
     formData.append('test', JSON.stringify(test));
 
     try {
-      const res = await axios.post('/api/admin/upload-audio', formData, {
+      const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/admin/upload-audio', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
