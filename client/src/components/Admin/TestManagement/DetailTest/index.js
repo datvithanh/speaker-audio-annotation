@@ -42,7 +42,7 @@ const DetailTest = ({
   };
 
   const onClickIconAudioHanler = link => {
-    audioRef.current.src = link;
+    audioRef.current.src = process.env.REACT_APP_API_DOMAIN + link;
     audioRef.current.play();
   };
 

@@ -127,7 +127,11 @@ const Evaluate = ({
                 </div>
 
                 <audio controls>
-                  <source src={audios[indexAudio].link} />
+                  <source
+                    src={
+                      process.env.REACT_APP_API_DOMAIN+audios[indexAudio].link
+                    }
+                  />
                   <track kind="captions" />
                 </audio>
               </div>
