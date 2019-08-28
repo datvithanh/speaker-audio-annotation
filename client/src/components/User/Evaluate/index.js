@@ -36,13 +36,11 @@ const Evaluate = ({
     if (user) {
       getIndexAudio(user._id, match.params.id);
       getAudioForUser(user._id, match.params.id);
-      console.log(indexAudio);
     }
   }, [getAudioForUser, getIndexAudio, match.params.id, user]);
 
   const onClickHandler = () => {
     if (indexAudio < audios.length) {
-      console.log('indexAudio', indexAudio);
       setPointForAudio(
         match.params.id,
         audios[indexAudio]._id,
@@ -64,11 +62,10 @@ const Evaluate = ({
   };
 
   const backSentence = () => {
+    setDisableButton(true);
     if (indexAudio > 0) {
       decreaseIndexAudio();
       setDisableButtonNext(false);
-      console.log(indexAudio);
-      console.log(audios);
       setPoint(audios[indexAudio - 1].user.point);
     } else {
       setDisableButtonBack(true);
@@ -76,6 +73,7 @@ const Evaluate = ({
   };
 
   const nextSentence = () => {
+    setDisableButton(true);
     if (indexAudio < audios.length - 1) {
       increaseIndexAudio();
       setPoint(audios[indexAudio + 1].user.point);

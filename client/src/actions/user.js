@@ -71,7 +71,7 @@ export const setPointForAudio = (
   audioId,
   userId,
   point,
-  indexAudio
+  indexAudio,
 ) => async dispatch => {
   const config = {
     headers: {
@@ -87,7 +87,7 @@ export const setPointForAudio = (
   };
   try {
     const res = await axios.put(`/api/users/set-point`, body, config);
-    console.log(res.data);
+
     if (res.data.status === 1) {
       dispatch({
         type: SET_POINT_FOR_AUDIO,
@@ -130,58 +130,12 @@ export const increaseIndexAudio = () => dispatch => {
   dispatch({
     type: INCREASE_INDEX_AUDIO,
   });
-  // const config = {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // };
-
-  // const body = { userId, testId };
-
-  // try {
-  //   const res = await axios.put(
-  //     '/api/users/increase-index-audio',
-  //     body,
-  //     config,
-  //   );
-  //   if (res.data.status === 1) {
-  //     dispatch({
-  //       type: INCREASE_INDEX_AUDIO,
-  //       payload: res.data.results,
-  //     });
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
 export const decreaseIndexAudio = () => dispatch => {
   dispatch({
     type: DECREASE_INDEX_AUDIO,
   });
-  // const config = {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // };
-
-  // const body = { userId, testId };
-
-  // try {
-  //   const res = await axios.put(
-  //     '/api/users/decrease-index-audio',
-  //     body,
-  //     config,
-  //   );
-  //   if (res.data.status === 1) {
-  //     dispatch({
-  //       type: DECREASE_INDEX_AUDIO,
-  //       payload: res.data.results,
-  //     });
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
 export const getIndexAudio = (userId, testId) => async dispatch => {

@@ -48,7 +48,9 @@ const UserManagement = ({ getListUser, users }) => {
         rowKey="_id"
         bordered
         className="table"
-        dataSource={users}
+        dataSource={users.filter(
+          user => user.role !== 1 && user.type === false,
+        )}
         pagination={{ pageSize: 6 }}
       />
     </UserManagementStyle>

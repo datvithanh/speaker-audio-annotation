@@ -127,7 +127,7 @@ async function getAudioByUser(req, res) {
 
 async function setPointForAudio(req, res) {
   const { testId, audioId, point, userId, indexAudio } = req.body;
-  console.log('indexAudio', indexAudio);
+
   const test = await Test.findOne({ _id: testId });
 
   const userUpdateIndexAudio = test.users.find(
@@ -215,45 +215,6 @@ async function getIndexAudio(req, res) {
   });
 }
 
-async function increaseIndexAudio(req, res) {
-  const { testId, userId } = req.body;
-  const test = await Test.findOne({ _id: testId });
-
-  const userUpdateIndexAudio = test.users.find(
-    user => user.id.toString() === userId,
-  );
-
-  userUpdateIndexAudio.indexAudio += 1;
-  await test.save();
-
-  res.send({
-    status: 1,
-    results: {
-      indexAudio: userUpdateIndexAudio.indexAudio,
-    },
-  });
-}
-
-async function decreaseIndexAudio(req, res) {
-  const { testId, userId } = req.body;
-  console.log(req.body);
-  const test = await Test.findOne({ _id: testId });
-
-  const userUpdateIndexAudio = test.users.find(
-    user => user.id.toString() === userId,
-  );
-
-  userUpdateIndexAudio.indexAudio -= 1;
-  await test.save();
-
-  res.send({
-    status: 1,
-    results: {
-      indexAudio: userUpdateIndexAudio.indexAudio,
-    },
-  });
-}
-
 module.exports = {
   signup,
   signin,
@@ -266,6 +227,4 @@ module.exports = {
   setPointForAudio,
   updateRealUserForAudio,
   getIndexAudio,
-  increaseIndexAudio,
-  decreaseIndexAudio,
 };

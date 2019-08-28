@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from 'antd';
+import { Table, Button } from 'antd';
 import { connect } from 'react-redux';
 import {
   getPublicTest,
@@ -47,19 +47,19 @@ const User = ({
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      className: 'column',
+      align: 'center',
     },
     {
       title: 'Số lượng câu',
       dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
-      className: 'column',
+      align: 'center',
     },
     {
       title: 'Ngày mở',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
-      className: 'column',
+      align: 'center',
       render: dateString => {
         const date = new Date(dateString);
         return (
@@ -77,7 +77,7 @@ const User = ({
       title: 'Ngày hết hạn',
       dataIndex: 'dateClosed',
       key: 'dateClosed',
-      className: 'column',
+      align: 'center',
       render: dateString => {
         const date = new Date(dateString);
         return (
@@ -100,13 +100,16 @@ const User = ({
           <span>
             {!record.users.map(user => user.id).includes(user._id) &&
             displayPerform !== _id ? (
-              <button onClick={() => onClickJoinPublicTest(_id)}>
+              <Button onClick={() => onClickJoinPublicTest(_id)} type="primary">
                 Join bài test
-              </button>
+              </Button>
             ) : (
-              <button onClick={() => onClickPerformPublicTest(_id)}>
+              <Button
+                onClick={() => onClickPerformPublicTest(_id)}
+                type="primary"
+              >
                 Thực hiện
-              </button>
+              </Button>
             )}
           </span>
         );
@@ -168,11 +171,9 @@ const User = ({
       render: (text, record) => {
         const { _id } = record;
         return (
-          <span>
-            <button onClick={() => onClickPerformPrivateTest(_id)}>
-              Thực hiện
-            </button>
-          </span>
+          <Button onClick={() => onClickPerformPrivateTest(_id)} type="primary">
+            Thực hiện
+          </Button>
         );
       },
     },
