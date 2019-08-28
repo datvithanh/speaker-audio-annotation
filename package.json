@@ -8,6 +8,7 @@
     "server": "nodemon src/index.js",
     "client": "npm start --prefix client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "deploy:server": "pm2 start src --name server-evaluate",
     "lint": "eslint . --ext .js,.jsx -f ./.eslintformatter.js; exit 0",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write"
   },
@@ -23,10 +24,12 @@
     "express": "4.17.1",
     "express-fileupload": "1.1.5",
     "fs-extra": "8.1.0",
+    "global": "^4.4.0",
     "jsonwebtoken": "8.5.1",
     "mongodb": "3.3.0",
     "mongoose": "5.6.6",
     "nodemon": "1.19.1",
+    "pm2": "^3.5.1",
     "snakecase-keys": "3.1.0",
     "uuid": "3.3.2",
     "validator": "11.1.0"
