@@ -129,7 +129,7 @@ const Evaluate = ({
                 <audio controls>
                   <source
                     src={
-                      process.env.REACT_APP_API_DOMAIN+audios[indexAudio].link
+                      process.env.REACT_APP_API_DOMAIN + audios[indexAudio].link
                     }
                   />
                   <track kind="captions" />
@@ -185,30 +185,32 @@ const Evaluate = ({
               </div>
             </EvaluateStyle>
           )}
-          {audios.length !== 0 && indexAudio === audios.length && (
-            <Result
-              status="success"
-              title="Bạn đã hoàn thành bài test"
-              subTitle="Cảm ơn bạn đã tham gia đánh giá chất lượng giọng nói cùng chúng tôi!"
-              extra={[
-                <Button
-                  style={{ margin: '0 auto' }}
-                  onClick={backSentence}
-                  key="console"
-                >
-                  Quay lại đánh giá
-                </Button>,
-                <Button
-                  style={{ margin: '0 auto' }}
-                  onClick={() => history.push('/')}
-                  type="primary"
-                  key="console"
-                >
-                  Quay về trang chủ
-                </Button>,
-              ]}
-            />
-          )}
+          {audios.length &&
+            audios.length !== 0 &&
+            indexAudio === audios.length && (
+              <Result
+                status="success"
+                title="Bạn đã hoàn thành bài test"
+                subTitle="Cảm ơn bạn đã tham gia đánh giá chất lượng giọng nói cùng chúng tôi!"
+                extra={[
+                  <Button
+                    style={{ margin: '0 auto' }}
+                    onClick={backSentence}
+                    key="console"
+                  >
+                    Quay lại đánh giá
+                  </Button>,
+                  <Button
+                    style={{ margin: '0 auto' }}
+                    onClick={() => history.push('/')}
+                    type="primary"
+                    key="console"
+                  >
+                    Quay về trang chủ
+                  </Button>,
+                ]}
+              />
+            )}
         </>
       )}
     </>
