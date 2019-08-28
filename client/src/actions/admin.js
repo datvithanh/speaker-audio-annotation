@@ -23,7 +23,7 @@ import {
 // Get list user
 export const getListUser = () => async dispatch => {
   try {
-    const res = await axios.get('/api/admin/users');
+    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+'/api/admin/users');
     if (res.data.status === 1) {
       dispatch({
         type: GET_LIST_USERS,
@@ -44,7 +44,7 @@ export const addUser = ({ name, email, password }) => async dispatch => {
 
   const body = JSON.stringify({ name, email, password });
   try {
-    const res = await axios.post('/api/admin/add-user', body, config);
+    const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/admin/add-user', body, config);
     if (res.data.status === 1) {
       dispatch({
         type: ADD_USER_SUCCESS,
@@ -95,7 +95,7 @@ export const addTest = ({
   });
 
   try {
-    const res = await axios.post('/api/admin/create-test', body, config);
+    const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/admin/create-test', body, config);
     if (res.data.status === 1) {
       dispatch({
         type: ADD_TEST_SUCCESS,
@@ -145,7 +145,7 @@ export const addUserAndFileupload = (
   const body = JSON.stringify({ users, test, audioPath });
 
   try {
-    const res = await axios.put('/api/admin/add-user-fileupload', body, config);
+    const res = await axios.put(process.env.REACT_APP_API_DOMAIN+'/api/admin/add-user-fileupload', body, config);
 
     if (res.data.status === 1) {
       dispatch({
@@ -191,7 +191,7 @@ export const resetTest = () => async dispatch => {
 
 export const getListTest = () => async dispatch => {
   try {
-    const res = await axios.get('/api/admin/tests');
+    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+'/api/admin/tests');
 
     if (res.data.status === 1) {
       dispatch({

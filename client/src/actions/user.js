@@ -15,7 +15,9 @@ import { setAlert } from './alert';
 
 export const getPublicTest = () => async dispatch => {
   try {
-    const res = await axios.get('/api/users/public-tests');
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + '/api/users/public-tests',
+    );
     if (res.data.status === 1) {
       dispatch({
         type: GET_PUBLIC_TEST_SUCCESS,
@@ -29,7 +31,9 @@ export const getPublicTest = () => async dispatch => {
 
 export const getPrivateTest = user => async dispatch => {
   try {
-    const res = await axios.get(`/api/users/private-tests/${user}`);
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + `/api/users/private-tests/${user}`,
+    );
 
     if (res.data.status === 1) {
       dispatch({
@@ -52,7 +56,8 @@ export const setTestCurrently = testCurrently => dispatch => {
 export const getAudioForUser = (user, test) => async dispatch => {
   try {
     const res = await axios.get(
-      `/api/users/get-audio?user=${user}&test=${test}`,
+      process.env.REACT_APP_API_DOMAIN +
+        `/api/users/get-audio?user=${user}&test=${test}`,
     );
 
     if (res.data.status === 1) {
@@ -86,7 +91,11 @@ export const setPointForAudio = (
     indexAudio,
   };
   try {
-    const res = await axios.put(`/api/users/set-point`, body, config);
+    const res = await axios.put(
+      process.env.REACT_APP_API_DOMAIN + `/api/users/set-point`,
+      body,
+      config,
+    );
 
     if (res.data.status === 1) {
       dispatch({
@@ -112,7 +121,11 @@ export const updateRealUserForAudio = (userId, testId) => async dispatch => {
     testId,
   };
   try {
-    const res = await axios.put('/api/users/update-real-user', body, config);
+    const res = await axios.put(
+      process.env.REACT_APP_API_DOMAIN + '/api/users/update-real-user',
+      body,
+      config,
+    );
 
     if (res.data.status === 1) {
       dispatch({
@@ -141,7 +154,8 @@ export const decreaseIndexAudio = () => dispatch => {
 export const getIndexAudio = (userId, testId) => async dispatch => {
   try {
     const res = await axios.get(
-      `/api/users/get-index-audio?userId=${userId}&&testId=${testId}`,
+      process.env.REACT_APP_API_DOMAIN +
+        `/api/users/get-index-audio?userId=${userId}&&testId=${testId}`,
     );
 
     if (res.data.status === 1) {
