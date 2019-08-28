@@ -25,9 +25,9 @@ const Login = ({ login, isAuthenticated, user, setAlert }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (email === '') {
-      return setAlert('Email không được bỏ trống', 'danger', 3000);
+      return setAlert('Email không được bỏ trống', 'danger', 1000);
     } else if (password === '') {
-      return setAlert('Mật khẩu không được bỏ trống', 'danger', 3000);
+      return setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
     } else {
       await login(email, password);
     }

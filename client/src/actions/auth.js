@@ -81,13 +81,13 @@ export const login = (email, password) => async dispatch => {
 
       dispatch(loadUser());
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 2000));
+      dispatch(setAlert(res.data.message, 'danger', 1000));
       dispatch({
         type: LOGIN_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 2000));
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
     dispatch({
       type: LOGIN_FAILED,
     });

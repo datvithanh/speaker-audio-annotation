@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react';
 import { Select, Table, Modal, Icon, Button, Spin } from 'antd';
 import { connect } from 'react-redux';
@@ -35,7 +36,7 @@ const DetailTest = ({
       getTestById(match.params.id);
       getAllAudioByTestId(match.params.id);
     }
-  }, [audios, getAllAudioByTestId, getTestById, match.params.id]);
+  }, [getAllAudioByTestId, getTestById, match.params.id]);
 
   const handleChange = voice => {
     if (voice === 'all') {

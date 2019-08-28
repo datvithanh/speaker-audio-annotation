@@ -35,13 +35,16 @@ const Evaluate = ({
 
   useEffect(() => {
     if (user) {
-      setTimeout(() => {
-        setDisplaySpinner(false);
-        getIndexAudio(user._id, match.params.id);
-        getAudioForUser(user._id, match.params.id);
-      }, 1000);
-    } else {
-      setDisplaySpinner(true);
+      if (audios && audios.length !== 0) {
+        setDisplaySpinner(true);
+      } else {
+        setDisplaySpinner(true);
+        setTimeout(() => {
+          setDisplaySpinner(false);
+          getIndexAudio(user._id, match.params.id);
+          getAudioForUser(user._id, match.params.id);
+        }, 1000);
+      }
     }
   }, [getAudioForUser, getIndexAudio, match.params.id, user]);
   const onClickHandler = () => {
@@ -79,9 +82,7 @@ const Evaluate = ({
 
   const nextSentence = () => {
     setDisableButton(true);
-    // if (audios[indexAudio-1].user.point === null) {
-    //   setDisableButtonNext(true);
-    // }
+
     if (indexAudio < audios.length - 1) {
       increaseIndexAudio();
       setPoint(audios[indexAudio + 1].user.point);
@@ -185,32 +186,30 @@ const Evaluate = ({
               </div>
             </EvaluateStyle>
           )}
-          {audios.length &&
-            audios.length !== 0 &&
-            indexAudio === audios.length && (
-              <Result
-                status="success"
-                title="Bạn đã hoàn thành bài test"
-                subTitle="Cảm ơn bạn đã tham gia đánh giá chất lượng giọng nói cùng chúng tôi!"
-                extra={[
-                  <Button
-                    style={{ margin: '0 auto' }}
-                    onClick={backSentence}
-                    key="console"
-                  >
-                    Quay lại đánh giá
-                  </Button>,
-                  <Button
-                    style={{ margin: '0 auto' }}
-                    onClick={() => history.push('/')}
-                    type="primary"
-                    key="console"
-                  >
-                    Quay về trang chủ
-                  </Button>,
-                ]}
-              />
-            )}
+          {audios && audios.length !== 0 && indexAudio === audios.length && (
+            <Result
+              status="success"
+              title="Bạn đã hoàn thành bài test"
+              subTitle="Cảm ơn bạn đã tham gia đánh giá chất lượng giọng nói cùng chúng tôi!"
+              extra={[
+                <Button
+                  style={{ margin: '0 auto' }}
+                  onClick={backSentence}
+                  key="console"
+                >
+                  Quay lại đánh giá
+                </Button>,
+                <Button
+                  style={{ margin: '0 auto' }}
+                  onClick={() => history.push('/')}
+                  type="primary"
+                  key="console"
+                >
+                  Quay về trang chủ
+                </Button>,
+              ]}
+            />
+          )}
         </>
       )}
     </>

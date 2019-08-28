@@ -29,12 +29,12 @@ async function signin(req, res) {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user) {
-    throw new CustomError(errorCode.UNAUTHORIZED, 'Login failed');
+    throw new CustomError(errorCode.BAD_REQUEST, 'Đăng nhập thất bại');
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
   if (!isMatch) {
-    throw new CustomError(errorCode.UNAUTHORIZED);
+    throw new CustomError(errorCode.BAD_REQUEST, 'Đăng nhập thất bại');
   }
 
   const token = await user.generateAuthToken();

@@ -27,13 +27,13 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (name === '') {
-      return setAlert('Tên không được bỏ trống', 'danger', 3000);
+      return setAlert('Tên không được bỏ trống', 'danger', 1000);
     } else if (email === '') {
-      return setAlert('Email không được bỏ trống', 'danger', 3000);
+      return setAlert('Email không được bỏ trống', 'danger', 1000);
     } else if (password === '') {
-      return setAlert('Mật khẩu không được bỏ trống', 'danger', 3000);
+      return setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
     } else if (password !== password2) {
-      setAlert('Mật khẩu không khớp', 'danger', 3000);
+      setAlert('Mật khẩu không khớp', 'danger', 1000);
     } else {
       register({ name, email, password });
     }
