@@ -206,7 +206,7 @@ export const getListTest = () => async dispatch => {
 
 export const getTestById = id => async dispatch => {
   try {
-    const res = await axios.get(`/api/admin/tests/${id}`);
+    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+`/api/admin/tests/${id}`);
 
     if (res.data.status === 1) {
       dispatch({
@@ -222,7 +222,7 @@ export const getTestById = id => async dispatch => {
 export const getAudioByTestAndVoice = (test, voice) => async dispatch => {
   try {
     const res = await axios.get(
-      `/api/admin/get-audio?test=${test}&voice=${voice}`,
+      process.env.REACT_APP_API_DOMAIN+`/api/admin/get-audio?test=${test}&voice=${voice}`,
     );
 
     if (res.data.status === 1) {
@@ -248,7 +248,7 @@ export const resetAudioStore = () => async dispatch => {
 
 export const getAllAudioByTestId = testId => async dispatch => {
   try {
-    const res = await axios.get(`/api/admin/get-all-audios/${testId}`);
+    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+`/api/admin/get-all-audios/${testId}`);
 
     if (res.data.status === 1) {
       dispatch({
