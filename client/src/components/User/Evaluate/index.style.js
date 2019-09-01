@@ -2,12 +2,15 @@ import styled from 'styled-components';
 
 const EvaluateStyle = styled.div`
   text-align: center;
-  max-width: 600px;
-  margin: 0 auto;
   font-size: 25px;
+  display: flex;
+  padding: 2rem;
   .container {
     margin: 0 auto;
-    margin-top: 3rem;
+  }
+
+  .content-evaluate {
+    margin: 0 auto;
   }
 
   button {

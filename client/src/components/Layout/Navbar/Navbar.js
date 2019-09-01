@@ -14,6 +14,9 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         <span className="welcome">
           Xin chào, <b>{user ? user.name : null}</b>
         </span>
+        <Link to="/change-password">
+          <span>Đổi mật khẩu</span>
+        </Link>
         <Link className="logout" to="/login" onClick={logout}>
           <i className="fas fa-sign-out-alt" /> <span>Đăng xuất</span>
         </Link>

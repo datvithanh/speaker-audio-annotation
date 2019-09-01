@@ -27,6 +27,7 @@ import store from './store';
 import './App.css';
 import Evaluate from './components/User/Evaluate';
 import DetailTest from './components/Admin/TestManagement/DetailTest';
+import ChangePassword from './components/User/ChangePassword';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -43,6 +44,7 @@ const App = () => {
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
+              <PrivateRoute exact path="/change-password" component={ChangePassword} />
               <PrivateRoute exact path="/" component={Home} />
               <PrivateRoute exact path="/evaluate/:id" component={Evaluate} />
 

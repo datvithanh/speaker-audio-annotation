@@ -127,15 +127,18 @@ async function getAudioByUser(req, res) {
 
 async function setPointForAudio(req, res) {
   const { testId, audioId, point, userId, indexAudio } = req.body;
-
   const test = await Test.findOne({ _id: testId });
 
   const userUpdateIndexAudio = test.users.find(
     user => user.id.toString() === userId,
   );
-  if (indexAudio >= userUpdateIndexAudio.indexAudio) {
+
+  if (indexAudio === userUpdateIndexAudio.indexAudio) {
     userUpdateIndexAudio.indexAudio += 1;
+  } else {
+    userUpdateIndexAudio.indexAudio = indexAudio + 1;
   }
+
   await test.save();
   const audio = await Audio.findById(audioId);
 
@@ -218,6 +221,24 @@ async function getIndexAudio(req, res) {
   });
 }
 
+async function changePassword(req, res) {
+  const { userId, password, newPassword } = req.body;
+  const user = await User.findById(userId);
+
+  const isMatch = await bcrypt.compare(password, user.password);
+
+  if (!isMatch) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Mật khẩu không đúng');
+  }
+
+  user.password = newPassword;
+  await user.save();
+
+  res.send({
+    status: 1,
+  });
+}
+
 module.exports = {
   signup,
   signin,
@@ -230,4 +251,5 @@ module.exports = {
   setPointForAudio,
   updateRealUserForAudio,
   getIndexAudio,
+  changePassword,
 };

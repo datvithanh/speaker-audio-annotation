@@ -10,6 +10,7 @@ import {
   DECREASE_INDEX_AUDIO,
   GET_INDEX_AUDIO,
   SET_AUDIOS,
+  SET_INDEX_AUDIO,
 } from '../actions/types';
 
 const initialState = {
@@ -86,6 +87,12 @@ export default function(state = initialState, action) {
           return audio;
         }),
       };
+    case SET_INDEX_AUDIO: {
+      return {
+        ...state,
+        indexAudio: payload,
+      };
+    }
     default:
       return state;
   }

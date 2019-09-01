@@ -9,6 +9,8 @@ import {
   DECREASE_INDEX_AUDIO,
   GET_INDEX_AUDIO,
   SET_AUDIOS,
+  SET_INDEX_AUDIO,
+  CHANGE_PASSWORD,
 } from './types';
 import axios from 'axios';
 import { setAlert } from './alert';
@@ -151,6 +153,13 @@ export const decreaseIndexAudio = () => dispatch => {
   });
 };
 
+export const setIndexAudio = _id => dispatch => {
+  dispatch({
+    type: SET_INDEX_AUDIO,
+    payload: _id,
+  });
+};
+
 export const getIndexAudio = (userId, testId) => async dispatch => {
   try {
     const res = await axios.get(
@@ -174,4 +183,36 @@ export const setAudios = (id, point) => dispatch => {
     type: SET_AUDIOS,
     payload: { id, point },
   });
+};
+
+export const changePassword = (
+  userId,
+  password,
+  newPassword,
+) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = { userId, password, newPassword };
+  try {
+    const res = await axios.put(
+      process.env.REACT_APP_API_DOMAIN + '/api/users/change-password',
+      body,
+      config,
+    );
+
+    if (res.data.status === 1) {
+      dispatch({
+        type: CHANGE_PASSWORD,
+      });
+      dispatch(setAlert('Đổi mật khẩu thành công', 'success', 1000));
+    } else {
+      dispatch(setAlert(res.data.message, 'danger', 1000));
+    }
+  } catch (error) {
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+  }
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import PropTypes from 'prop-types';
 import User from '../User';
 
 const Home = ({ user }) => {
@@ -10,11 +9,6 @@ const Home = ({ user }) => {
   } 
   
   return <User />
-  // return <Redirect to="/evaluate" />;
-};
-
-Home.propTypes = {
-  user: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = state => ({
