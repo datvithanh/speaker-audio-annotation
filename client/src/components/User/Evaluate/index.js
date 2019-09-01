@@ -43,9 +43,7 @@ const Evaluate = ({
         setDisplaySpinner(false);
         setPoint(audios[indexAudio].user.point);
         const check = audios.every(audio => audio.user.point !== null);
-        console.log('check', check);
         if (check) {
-          // setCheckFinished(true);
           setDisplayFinishButton(true);
         }
       } else if (audios && indexAudio === audios.length) {
@@ -82,7 +80,6 @@ const Evaluate = ({
       );
     }
     if (indexAudio < audios.length) {
-      console.log(indexAudio);
       if (audios[indexAudio + 1] && audios[indexAudio + 1].user.point) {
         setPoint(audios[indexAudio + 1].user.point);
       } else {

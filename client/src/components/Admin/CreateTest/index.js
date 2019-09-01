@@ -1,9 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import Alert from '../../../components/Layout/Alert/Alert';
 import CreateTestStyle from './index.style';
 import { setAlert } from '../../../actions/alert';
-import { addTest, setStepCreateTest } from '../../../actions/admin';
+import {
+  addTest,
+  setStepCreateTest,
+  getListUser,
+} from '../../../actions/admin';
 import UploadFile from './UploadFile';
 import UserChoosen from './UserChoosen';
 import AlertSuccess from './AlertSuccess';
@@ -13,6 +17,8 @@ const CreateTest = ({
   addTest,
   stepCreateTest,
   setStepCreateTest,
+  getListUser,
+  users,
 }) => {
   // const [formData, setFormData] = useState({
   //   name: '',
@@ -34,6 +40,10 @@ const CreateTest = ({
     dateOpened: '2019-07-05',
     dateClosed: '2019-09-09',
   });
+
+  useEffect(() => {
+    getListUser();
+  }, [getListUser]);
 
   const {
     name,
@@ -73,11 +83,33 @@ const CreateTest = ({
 
   const onSubmit = e => {
     e.preventDefault();
+
     if (voices.length !== parseInt(numberOfVoices, 10)) {
       setAlert(
         `Không khớp số lượng voices. Hãy nhập đúng ${numberOfVoices} voices`,
         'danger',
-        3000,
+        1000,
+      );
+    } else if (parseInt(numberOfSentences) % parseInt(minSentences) !== 0) {
+      setAlert(
+        `Số câu phải chia hết cho số câu tối thiểu 1 người nghe`,
+        'danger',
+        1000,
+      );
+    } else if (
+      (parseInt(numberOfSentences) / parseInt(minSentences)) *
+        parseInt(minPeopleListenAudio) >
+      users.filter(user => user.role !== 1 && user.type === false).length
+    ) {
+      setAlert(
+        `Bài test cần ${(parseInt(numberOfSentences) / parseInt(minSentences)) *
+          parseInt(
+            minPeopleListenAudio,
+          )} số người. Vượt quá số lượng user trong hệ thống: ${
+          users.filter(user => user.role !== 1 && user.type === false).length
+        }`,
+        'danger',
+        1000,
       );
     } else {
       addTest({
@@ -163,7 +195,7 @@ const CreateTest = ({
                 <input
                   type="text"
                   style={{ fontStyle: 'italic' }}
-                  name="minPeople"
+                  name="minPeopleListenAudio"
                   value={minPeopleListenAudio}
                   onChange={e => onChange(e)}
                 />
@@ -229,10 +261,11 @@ const CreateTest = ({
 const mapStateToProps = state => {
   return {
     stepCreateTest: state.admin.stepCreateTest,
+    users: state.admin.users,
   };
 };
 
 export default connect(
   mapStateToProps,
-  { setAlert, addTest, setStepCreateTest },
+  { setAlert, addTest, setStepCreateTest, getListUser },
 )(CreateTest);
