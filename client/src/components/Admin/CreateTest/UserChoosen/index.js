@@ -43,7 +43,7 @@ const UserChoosen = ({
       return setAlert(
         `Bạn phải chọn đủ ${minPeopleJoin} người`,
         'danger',
-        2000,
+        1000,
       );
     }
     //addUserAndFileupload(userChosen, test._id, sentencePath, audioPath);

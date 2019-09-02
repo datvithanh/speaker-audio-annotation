@@ -8,6 +8,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAILED,
   LOGOUT,
+  RESET_AUDIOS,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -49,13 +50,13 @@ export const register = ({ name, email, password }) => async dispatch => {
 
       dispatch(loadUser());
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 2000));
+      dispatch(setAlert(res.data.message, 'danger', 1000));
       dispatch({
         type: REGISTER_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 2000));
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
     dispatch({
       type: REGISTER_FAILED,
     });
@@ -100,6 +101,7 @@ export const logout = () => async dispatch => {
     const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/users/logout');
     if (res.data.status === 1) {
       dispatch({ type: LOGOUT });
+      dispatch({type: RESET_AUDIOS})
     } else {
       dispatch(setAlert(res.data.message, 'danger'));
     }

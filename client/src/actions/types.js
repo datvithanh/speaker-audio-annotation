@@ -36,3 +36,6 @@ export const SET_INDEX_AUDIO = 'SET_INDEX_AUDIO';
 export const GET_INDEX_AUDIO = 'GET_INDEX_AUDIO';
 export const SET_AUDIOS = 'SET_AUDIOS';
 export const CHANGE_PASSWORD = 'CHANGE_PASSWORD';
+export const RESET_AUDIOS = 'RESET_AUDIOS';
+export const ADD_VOICE = 'ADD_VOICE';
+export const GET_VOICES = 'GET_VOICES';

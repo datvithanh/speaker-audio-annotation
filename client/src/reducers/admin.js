@@ -16,6 +16,7 @@ import {
   RESET_AUDIO_STORE,
   RESET_USER_CHOOSEN,
   GET_ALL_AUDIO_BY_TEST_ID,
+  GET_VOICES, 
 } from '../actions/types';
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
   userChosen: [],
   testDetail: null,
   audios: [],
+  voices: []
 };
 
 export default function(state = initialState, action) {
@@ -108,6 +110,11 @@ export default function(state = initialState, action) {
       return {
         ...state,
         audios: payload.audios,
+      }
+    case GET_VOICES: 
+      return {
+        ...state, 
+        voices: payload.voices,
       }
     default:
       return state;

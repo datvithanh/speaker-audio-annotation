@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Table } from 'antd';
@@ -39,25 +38,33 @@ const Evaluate = ({
 
   useEffect(() => {
     if (user) {
-      if (audios && (audios.length !== 0 && indexAudio < audios.length)) {
+      if (
+        audios &&
+        audios.length !== 0 &&
+        indexAudio < audios.length &&
+        audios[indexAudio]
+      ) {
         setDisplaySpinner(false);
         setPoint(audios[indexAudio].user.point);
         const check = audios.every(audio => audio.user.point !== null);
         if (check) {
           setDisplayFinishButton(true);
         }
-      } else if (audios && indexAudio === audios.length) {
+      } else if (
+        audios &&
+        audios.length !== 0 &&
+        indexAudio === audios.length
+      ) {
         setDisplaySpinner(false);
         setIndexAudio(indexAudio - 1);
       } else {
         setDisplaySpinner(true);
-
         getIndexAudio(user._id, match.params.id);
         getAudioForUser(user._id, match.params.id);
 
         setTimeout(() => {
           setDisplaySpinner(false);
-        }, 100);
+        }, 500);
       }
     }
   }, [
@@ -67,6 +74,8 @@ const Evaluate = ({
     match.params.id,
     user,
     indexAudio,
+    audios,
+    setIndexAudio,
   ]);
 
   const onClickHandler = () => {
@@ -181,6 +190,7 @@ const Evaluate = ({
           {!displayFinishForm &&
             audios &&
             audios.length !== 0 &&
+            audios[indexAudio] &&
             indexAudio < audios.length && (
               <EvaluateStyle>
                 <div>

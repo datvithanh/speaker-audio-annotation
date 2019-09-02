@@ -28,6 +28,8 @@ import './App.css';
 import Evaluate from './components/User/Evaluate';
 import DetailTest from './components/Admin/TestManagement/DetailTest';
 import ChangePassword from './components/User/ChangePassword';
+import VoiceManagement from './components/Admin/VoiceManagement';
+import AddVocie from './components/Admin/VoiceManagement/AddVocie';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -44,7 +46,11 @@ const App = () => {
             <Switch>
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <PrivateRoute exact path="/change-password" component={ChangePassword} />
+              <PrivateRoute
+                exact
+                path="/change-password"
+                component={ChangePassword}
+              />
               <PrivateRoute exact path="/" component={Home} />
               <PrivateRoute exact path="/evaluate/:id" component={Evaluate} />
 
@@ -75,6 +81,16 @@ const App = () => {
                       exact
                       path="/admin/test-management/:id"
                       component={DetailTest}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/admin/voice-management"
+                      component={VoiceManagement}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/admin/voice-management/add-voice"
+                      component={AddVocie}
                     />
                   </Switch>
                 </Layout>

@@ -1,7 +1,6 @@
 import styled from 'styled-components';
 
 const SidebarStyle = styled.div`
-  
   ul {
     width: 300px;
     height: 100%;
@@ -23,6 +22,12 @@ const SidebarStyle = styled.div`
 
   li:hover {
     color: black;
+  }
+
+  .active {
+    color: black;
+    background: rgb(255, 248, 184);
+    text-decoration: none;
   }
 
   a:hover {

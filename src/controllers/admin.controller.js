@@ -25,14 +25,6 @@ async function getListUser(req, res) {
   });
 }
 
-async function addVoice(req, res) {
-  const voice = await Voice.create(req.body);
-  res.send({
-    status: 1,
-    results: voice,
-  });
-}
-
 async function addUser(req, res) {
   const isExistMail = await User.findOne({ email: req.body.email });
   if (isExistMail) {
@@ -458,9 +450,43 @@ async function getAllAudioByTestId(req, res) {
   });
 }
 
+async function getVoices(req, res) {
+  const voices = await Voice.find({});
+  res.send({
+    status: 1,
+    results: {
+      status: 1,
+      voices,
+    },
+  });
+}
+
+async function addVoice(req, res) {
+  const { voiceId, voiceName } = req.body;
+  const existedVoice = await Voice.findById(voiceId);
+  if (existedVoice) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Mã voice đã tồn tại');
+  }
+  const voice = await Voice.create({ _id: voiceId, name: voiceName });
+  res.send({
+    status: 1,
+    results: {
+      status: 1,
+      voice,
+    },
+  });
+}
+
+async function deleteVoice(req, res) {
+  const { voiceId } = req.params;
+  await Voice.findOneAndDelete({ _id: voiceId });
+  res.send({
+    status: 1,
+  });
+}
+
 module.exports = {
   getListUser,
-  addVoice,
   addUser,
   createTest,
   uploadSentence,
@@ -470,4 +496,7 @@ module.exports = {
   getTestById,
   getAudiosByTestAndVoice,
   getAllAudioByTestId,
+  getVoices,
+  addVoice,
+  deleteVoice,
 };

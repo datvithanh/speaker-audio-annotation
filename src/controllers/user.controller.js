@@ -181,28 +181,31 @@ async function updateRealUserForAudio(req, res) {
     test: testId,
   }).lean();
 
-  await Promise.all(
-    audios.map(async audio => {
-      let { users } = audio;
-      users = users.map(user => {
-        if (user.userId.equals(systemUser)) {
-          return { ...user, userId: ObjectId(userId) };
-        }
+  if (!test.users.map(user => user.id).includes(userId)) {
+    // throw new CustomError(errorCode.BAD_REQUEST, 'Ban da join bai test');
+    await Promise.all(
+      audios.map(async audio => {
+        let { users } = audio;
+        users = users.map(user => {
+          if (user.userId.equals(systemUser)) {
+            return { ...user, userId: ObjectId(userId) };
+          }
 
-        return user;
-      });
-      await Audio.findByIdAndUpdate(audio._id, { users });
-    }),
-  );
-  test.systemUsers.shift();
+          return user;
+        });
+        await Audio.findByIdAndUpdate(audio._id, { users });
+      }),
+    );
+    test.systemUsers.shift();
 
-  await User.deleteOne({ _id: systemUser });
-  test.users.push({ id: userId, indexAudio: 0 });
-  await test.save();
-  res.send({
-    status: 1,
-    results: { test },
-  });
+    await User.deleteOne({ _id: systemUser });
+    test.users.push({ id: userId, indexAudio: 0 });
+    await test.save();
+    res.send({
+      status: 1,
+      results: { test },
+    });
+  }
 }
 
 async function getIndexAudio(req, res) {

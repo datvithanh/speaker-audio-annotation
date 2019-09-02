@@ -11,6 +11,7 @@ import {
   GET_INDEX_AUDIO,
   SET_AUDIOS,
   SET_INDEX_AUDIO,
+  RESET_AUDIOS,
 } from '../actions/types';
 
 const initialState = {
@@ -91,6 +92,13 @@ export default function(state = initialState, action) {
       return {
         ...state,
         indexAudio: payload,
+      };
+    }
+    case RESET_AUDIOS: {
+      return {
+        ...state,
+        audios: [],
+        indexAudio: 0,
       };
     }
     default:

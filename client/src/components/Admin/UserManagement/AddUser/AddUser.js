@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import Alert from '../../../Layout/Alert/Alert';
 import { setAlert } from '../../../../actions/alert';
 import { addUser } from '../../../../actions/admin';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import AddUserStyle from './AddUserStyle';
 
 const AddUser = ({ setAlert, addUser }) => {
@@ -25,11 +25,18 @@ const AddUser = ({ setAlert, addUser }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
-    if (password !== password2) {
-      setAlert('Mật khẩu không khớp', 'danger', 3000);
+    if (name === '') {
+      setAlert('Tên không được bỏ trống', 'danger', 1000);
+    } else if (email === '') {
+      setAlert('Email không được bỏ trống', 'danger', 1000);
+    } else if (password === '') {
+      setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
+    } else if (password2 === '') {
+      setAlert('Xác thực mật khẩu không được bỏ trống', 'danger', 1000);
+    } else if (password !== password2) {
+      setAlert('Mật khẩu không khớp', 'danger', 1000);
     } else {
       addUser({ name, email, password });
-      setAlert('Thêm thành công', 'success', 2000);
     }
   };
 
@@ -79,8 +86,8 @@ const AddUser = ({ setAlert, addUser }) => {
         </div>
       </form>
     </AddUserStyle>
-  )
-}
+  );
+};
 
 AddUser.propTypes = {
   setAlert: PropTypes.func.isRequired,

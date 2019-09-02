@@ -11,6 +11,7 @@ import {
   SET_AUDIOS,
   SET_INDEX_AUDIO,
   CHANGE_PASSWORD,
+  RESET_AUDIOS,
 } from './types';
 import axios from 'axios';
 import { setAlert } from './alert';
@@ -69,7 +70,7 @@ export const getAudioForUser = (user, test) => async dispatch => {
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 2000));
+    console.log(error);
   }
 };
 
@@ -107,7 +108,7 @@ export const setPointForAudio = (
     }
   } catch (error) {
     console.log(error);
-    dispatch(setAlert(error.response.data.message, 'danger', 2000));
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
   }
 };
 
@@ -216,3 +217,9 @@ export const changePassword = (
     dispatch(setAlert(error.response.data.message, 'danger', 1000));
   }
 };
+
+export const resetAudio = () => dispatch => {
+  dispatch({
+    type: RESET_AUDIOS,
+  })
+}

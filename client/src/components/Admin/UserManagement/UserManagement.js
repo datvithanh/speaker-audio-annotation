@@ -38,6 +38,8 @@ const UserManagement = ({ getListUser, users }) => {
     },
   ];
 
+  
+
   return (
     <UserManagementStyle>
       <Link className="btn" to="/admin/user-management/add-user">

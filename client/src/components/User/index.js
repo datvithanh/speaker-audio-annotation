@@ -7,6 +7,7 @@ import {
   getPrivateTest,
   setTestCurrently,
   updateRealUserForAudio,
+  resetAudio,
 } from '../../actions/user';
 
 import UserStyle from './index.style';
@@ -21,11 +22,13 @@ const User = ({
   setTestCurrently,
   history,
   updateRealUserForAudio,
+  resetAudio,
 }) => {
   const [displayPerform, setDisplayPerform] = useState();
   const [displaySpinner, setDisplaySpinner] = useState(false);
 
   useEffect(() => {
+    resetAudio();
     if (user) {
       if (
         privateTest &&
@@ -263,6 +266,7 @@ export default withRouter(
       getPublicTest,
       setTestCurrently,
       updateRealUserForAudio,
+      resetAudio,
     },
   )(User),
 );

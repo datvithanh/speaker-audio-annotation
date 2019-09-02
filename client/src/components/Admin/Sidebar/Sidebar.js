@@ -1,19 +1,22 @@
 import React from 'react';
 import SidebarStyle from './Sidebar.style';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
     <SidebarStyle>
       <ul>
         <li>
-          <Link to="/admin/create-test">Tạo bài test</Link>
+          <NavLink activeClassName="active" to="/admin/create-test">Tạo bài test</NavLink>
         </li>
         <li>
-          <Link to="/admin/test-management">Quản lý bài test</Link>
+          <NavLink activeClassName="active" to="/admin/test-management">Quản lý bài test</NavLink>
         </li>
         <li>
-          <Link to="/admin/user-management">Quản lý user</Link>
+          <NavLink activeClassName="active" to="/admin/user-management">Quản lý user</NavLink>
+        </li>
+        <li>
+          <NavLink activeClassName="active" to="/admin/voice-management">Quản lý voice</NavLink>
         </li>
       </ul>
     </SidebarStyle>

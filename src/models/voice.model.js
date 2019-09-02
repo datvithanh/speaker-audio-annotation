@@ -12,6 +12,9 @@ const voiceSchema = mongoose.Schema(
     },
   },
   {
+    timestamps: true,
+  },
+  {
     _id: false,
   },
 );

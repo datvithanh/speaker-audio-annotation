@@ -18,12 +18,15 @@ import {
   RESET_AUDIO_STORE,
   RESET_USER_CHOOSEN,
   GET_ALL_AUDIO_BY_TEST_ID,
+  GET_VOICES,
 } from './types';
 
 // Get list user
 export const getListUser = () => async dispatch => {
   try {
-    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+'/api/admin/users');
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/users',
+    );
     if (res.data.status === 1) {
       dispatch({
         type: GET_LIST_USERS,
@@ -44,19 +47,24 @@ export const addUser = ({ name, email, password }) => async dispatch => {
 
   const body = JSON.stringify({ name, email, password });
   try {
-    const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/admin/add-user', body, config);
+    const res = await axios.post(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/add-user',
+      body,
+      config,
+    );
     if (res.data.status === 1) {
       dispatch({
         type: ADD_USER_SUCCESS,
       });
+      dispatch(setAlert('Thêm thành công', 'success', 1000));
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 2000));
+      dispatch(setAlert(res.data.message, 'danger', 1000));
       dispatch({
         type: ADD_USER_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 2000));
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
     dispatch({
       type: ADD_USER_FAILED,
     });
@@ -95,7 +103,11 @@ export const addTest = ({
   });
 
   try {
-    const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/admin/create-test', body, config);
+    const res = await axios.post(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/create-test',
+      body,
+      config,
+    );
     if (res.data.status === 1) {
       dispatch({
         type: ADD_TEST_SUCCESS,
@@ -103,13 +115,13 @@ export const addTest = ({
       });
       dispatch(setStepCreateTest('step2'));
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 2000));
+      dispatch(setAlert(res.data.message, 'danger', 1000));
       dispatch({
         type: ADD_TEST_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 2000));
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
     dispatch({
       type: ADD_TEST_FAILED,
     });
@@ -145,7 +157,11 @@ export const addUserAndFileupload = (
   const body = JSON.stringify({ users, test, audioPath });
 
   try {
-    const res = await axios.put(process.env.REACT_APP_API_DOMAIN+'/api/admin/add-user-fileupload', body, config);
+    const res = await axios.put(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/add-user-fileupload',
+      body,
+      config,
+    );
 
     if (res.data.status === 1) {
       dispatch({
@@ -156,13 +172,13 @@ export const addUserAndFileupload = (
         type: RESET_USER_CHOOSEN,
       });
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 2000));
+      dispatch(setAlert(res.data.message, 'danger', 1000));
       dispatch({
         type: ADD_USER_USER_AND_FILEUPLOAD_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 2000));
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
     dispatch({
       type: ADD_USER_USER_AND_FILEUPLOAD_FAILED,
     });
@@ -191,7 +207,9 @@ export const resetTest = () => async dispatch => {
 
 export const getListTest = () => async dispatch => {
   try {
-    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+'/api/admin/tests');
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/tests',
+    );
 
     if (res.data.status === 1) {
       dispatch({
@@ -206,7 +224,9 @@ export const getListTest = () => async dispatch => {
 
 export const getTestById = id => async dispatch => {
   try {
-    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+`/api/admin/tests/${id}`);
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + `/api/admin/tests/${id}`,
+    );
 
     if (res.data.status === 1) {
       dispatch({
@@ -222,7 +242,8 @@ export const getTestById = id => async dispatch => {
 export const getAudioByTestAndVoice = (test, voice) => async dispatch => {
   try {
     const res = await axios.get(
-      process.env.REACT_APP_API_DOMAIN+`/api/admin/get-audio?test=${test}&voice=${voice}`,
+      process.env.REACT_APP_API_DOMAIN +
+        `/api/admin/get-audio?test=${test}&voice=${voice}`,
     );
 
     if (res.data.status === 1) {
@@ -248,7 +269,9 @@ export const resetAudioStore = () => async dispatch => {
 
 export const getAllAudioByTestId = testId => async dispatch => {
   try {
-    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+`/api/admin/get-all-audios/${testId}`);
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + `/api/admin/get-all-audios/${testId}`,
+    );
 
     if (res.data.status === 1) {
       dispatch({
@@ -256,6 +279,58 @@ export const getAllAudioByTestId = testId => async dispatch => {
         payload: res.data.results,
       });
     }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getVoices = () => async dispatch => {
+  try {
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/get-voices',
+    );
+    if (res.data.status === 1) {
+      dispatch({
+        type: GET_VOICES,
+        payload: res.data.results,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const addVoice = (voiceId, voiceName) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = {
+    voiceId,
+    voiceName,
+  };
+  try {
+    const res = await axios.post(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/add-voice',
+      body,
+      config,
+    );
+
+    if (res.data.status === 1) {
+      dispatch(setAlert('Thêm voice thành công!', 'danger', 1000));
+    } else {
+      dispatch(setAlert(res.data.message, 'danger', 1000));
+    }
+  } catch (error) {
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+  }
+};
+
+export const deleteVoice = voiceId => async dispatch => {
+  try {
+    await axios.delete(process.env.REACT_APP_API_DOMAIN + '/api/admin/delete-voice/' + voiceId);
   } catch (error) {
     console.log(error);
   }

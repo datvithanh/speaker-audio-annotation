@@ -36,7 +36,7 @@ const Login = ({ login, isAuthenticated, user, setAlert }) => {
   // Redirect if logged in
   if (isAuthenticated && user) {
     if (user && user.role === 1) {
-      return <Redirect to="/admin/create-test" />;
+      return <Redirect to="/admin/test-management" />;
     } else {
       return <Redirect to="/" />;
     }
