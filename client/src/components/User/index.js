@@ -8,6 +8,7 @@ import {
   setTestCurrently,
   updateRealUserForAudio,
   resetAudio,
+  updatePublicTestAfterUserJoin,
 } from '../../actions/user';
 
 import UserStyle from './index.style';
@@ -23,13 +24,16 @@ const User = ({
   history,
   updateRealUserForAudio,
   resetAudio,
+  updatePublicTestAfterUserJoin,
 }) => {
-  const [displayPerform, setDisplayPerform] = useState();
+  // const [displayPerform, setDisplayPerform] = useState();
   const [displaySpinner, setDisplaySpinner] = useState(false);
 
   useEffect(() => {
     resetAudio();
     if (user) {
+      getPublicTest();
+      getPrivateTest(user._id);
       if (
         privateTest &&
         privateTest.length !== 0 &&
@@ -40,19 +44,16 @@ const User = ({
       } else {
         setDisplaySpinner(true);
 
-        getPublicTest();
-        getPrivateTest(user._id);
-
         setTimeout(() => {
           setDisplaySpinner(false);
         }, 500);
       }
     }
-  }, [user]);
+  }, [user, resetAudio, getPublicTest, getPrivateTest]);
 
   const onClickJoinPublicTest = _id => {
     updateRealUserForAudio(user._id, _id);
-    setDisplayPerform(_id);
+    updatePublicTestAfterUserJoin(_id, user._id);
   };
 
   const onClickPerformPrivateTest = _id => {
@@ -66,7 +67,7 @@ const User = ({
 
   const columnsPublic = [
     {
-      title: 'Name',
+      title: 'Tên bài test',
       dataIndex: 'name',
       key: 'name',
       align: 'center',
@@ -76,12 +77,14 @@ const User = ({
       dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
       align: 'center',
+      width: 200,
     },
     {
       title: 'Ngày mở',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       align: 'center',
+      width: 200,
       render: dateString => {
         const date = new Date(dateString);
         return (
@@ -100,6 +103,7 @@ const User = ({
       dataIndex: 'dateClosed',
       key: 'dateClosed',
       align: 'center',
+      width: 200,
       render: dateString => {
         const date = new Date(dateString);
         return (
@@ -115,13 +119,13 @@ const User = ({
     },
     {
       key: 'action',
+      width: 200,
       render: (text, record) => {
         const { _id } = record;
 
         return (
           <span>
-            {!record.users.map(user => user.id).includes(user._id) &&
-            displayPerform !== _id ? (
+            {!record.users.map(user => user.id).includes(user._id) ? (
               <Button onClick={() => onClickJoinPublicTest(_id)} type="primary">
                 Join bài test
               </Button>
@@ -141,7 +145,7 @@ const User = ({
 
   const columnsPrivate = [
     {
-      title: 'Name',
+      title: 'Tên bài test',
       dataIndex: 'name',
       key: 'name',
       className: 'column',
@@ -151,8 +155,8 @@ const User = ({
       // dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
       className: 'column',
+      width: 200,
       render: ({ voices, minSentences }) => {
-        // console.log(data);
         return voices.length * minSentences;
       },
     },
@@ -161,6 +165,7 @@ const User = ({
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       className: 'column',
+      width: 200,
       render: dateString => {
         const date = new Date(dateString);
         return (
@@ -179,6 +184,7 @@ const User = ({
       dataIndex: 'dateClosed',
       key: 'dateClosed',
       className: 'column',
+      width: 200,
       render: dateString => {
         const date = new Date(dateString);
         return (
@@ -194,6 +200,7 @@ const User = ({
     },
     {
       key: 'action',
+      width: 200,
       render: (text, record) => {
         const { _id } = record;
         return (
@@ -220,6 +227,8 @@ const User = ({
                 className="table"
                 rowKey="_id"
                 columns={columnsPublic}
+                pagination={{ pageSize: 10 }}
+                scroll={{ y: 240 }}
                 dataSource={publicTest.filter(
                   item =>
                     Date.now() >= new Date(item.dateOpened) &&
@@ -236,6 +245,8 @@ const User = ({
                 className="table"
                 rowKey="_id"
                 columns={columnsPrivate}
+                pagination={{ pageSize: 10 }}
+                scroll={{ y: 240 }}
                 dataSource={privateTest.filter(
                   item =>
                     Date.now() >= new Date(item.dateOpened) &&
@@ -267,6 +278,7 @@ export default withRouter(
       setTestCurrently,
       updateRealUserForAudio,
       resetAudio,
+      updatePublicTestAfterUserJoin,
     },
   )(User),
 );

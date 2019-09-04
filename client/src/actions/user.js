@@ -12,6 +12,7 @@ import {
   SET_INDEX_AUDIO,
   CHANGE_PASSWORD,
   RESET_AUDIOS,
+  UPDATE_PUBLIC_TEST_AFTER_USER_JOIN,
 } from './types';
 import axios from 'axios';
 import { setAlert } from './alert';
@@ -138,7 +139,6 @@ export const updateRealUserForAudio = (userId, testId) => async dispatch => {
     }
   } catch (error) {
     console.log(error);
-    // console.log(error.response.data.message);
   }
 };
 
@@ -221,5 +221,12 @@ export const changePassword = (
 export const resetAudio = () => dispatch => {
   dispatch({
     type: RESET_AUDIOS,
+  })
+}
+
+export const updatePublicTestAfterUserJoin = (testId, userId) => dispatch => {
+  dispatch({
+    type: UPDATE_PUBLIC_TEST_AFTER_USER_JOIN,
+    payload: {testId, userId}
   })
 }

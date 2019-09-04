@@ -146,14 +146,6 @@ const Evaluate = ({
     if (index !== indexAudio && audios[indexAudio - 1]) {
       setPoint(audios[indexAudio - 1].user.point);
     }
-
-    // console.log('indexAudio', indexAudio);
-    // if (audios[indexAudio - 1].user.point) {
-    //   console.log(audios[indexAudio - 1].user.point);
-    //   setPoint(audios[indexAudio - 1].user.point);
-    // } else {
-    //   setPoint(null);
-    // }
   };
 
   const columnsPoint = [

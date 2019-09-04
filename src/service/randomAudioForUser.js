@@ -53,7 +53,6 @@ const randomAudioForUser = async (voice, test) => {
         // i = 1, j= {0, 1} => A[2], A[3]
         // i = 2, j = {0, 1} => A[4], A[5]
         const random = audioRandom[i][j];
-        // console.log('random', random);
 
         await Audio.findByIdAndUpdate(
           audios[j + (minPeopleJoin / minPeopleListenAudio) * i]._id,
