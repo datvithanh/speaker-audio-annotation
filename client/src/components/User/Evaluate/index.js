@@ -233,7 +233,7 @@ const Evaluate = ({
                     </audio>
                   </div>
                   <div className="evaluate">
-                    <h3>Đánh giá chất lượng giọng đọc</h3>
+                    <h3>Đánh giá chất lượng giọng nói</h3>
                     <Radio.Group onChange={onChange} value={point}>
                       <Radio style={radioStyle} value={5}>
                         5 điểm, như giọng người thật.
