@@ -9,7 +9,7 @@ body {
   font-family: sans-serif;
   font-size: 1rem;
   line-height: 1.6;
-  background-color: #f8f8f8;
+  background: hsl(0, 0%, 93%);
   color: #333;
 }
 
@@ -25,8 +25,3 @@ ul {
 img {
   width: 100%;
 }
-
-
-
-
-

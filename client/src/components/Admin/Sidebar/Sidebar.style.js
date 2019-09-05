@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const SidebarStyle = styled.div`
   ul {
-    width: 300px;
+    width: 250px;
     height: 100%;
     min-height: 100vh;
     background: rgb(37, 37, 37);
@@ -17,7 +17,7 @@ const SidebarStyle = styled.div`
     color: white;
     display: block;
     padding: 1em;
-    font-size: 20px;
+    font-size: 17px;
   }
 
   li:hover {

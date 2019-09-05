@@ -94,6 +94,7 @@ export const setPointForAudio = (
     point,
     indexAudio,
   };
+
   try {
     const res = await axios.put(
       process.env.REACT_APP_API_DOMAIN + `/api/users/set-point`,

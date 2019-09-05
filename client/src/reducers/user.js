@@ -106,7 +106,6 @@ export default function(state = initialState, action) {
       return {
         ...state,
         publicTest: state.publicTest.map(test => {
-          console.log(state.publicTest);
           if (test._id === payload.testId) {
             test.users.push({  indexAudio: 0, id: payload.userId })
             return {

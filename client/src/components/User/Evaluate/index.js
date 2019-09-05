@@ -29,7 +29,7 @@ const Evaluate = ({
   setIndexAudio,
 }) => {
   const [point, setPoint] = useState();
-  const [disabledButton, setDisableButton] = useState(true);
+  // const [disabledButton, setDisableButton] = useState(true);
   const [disableButtonBack, setDisableButtonBack] = useState(false);
   const [disableButtonNext, setDisableButtonNext] = useState(false);
   const [displaySpinner, setDisplaySpinner] = useState(false);
@@ -78,13 +78,41 @@ const Evaluate = ({
     setIndexAudio,
   ]);
 
-  const onClickHandler = () => {
+  // const onClickHandler = () => {
+  //   if (indexAudio < audios.length) {
+  //     setPointForAudio(
+  //       match.params.id,
+  //       audios[indexAudio]._id,
+  //       user._id,
+  //       point,
+  //       indexAudio,
+  //     );
+  //   }
+  //   if (indexAudio < audios.length) {
+  //     if (audios[indexAudio + 1] && audios[indexAudio + 1].user.point) {
+  //       setPoint(audios[indexAudio + 1].user.point);
+  //     } else {
+  //       setPoint(null);
+  //     }
+
+  //     setDisableButton(true);
+  //     setAudios(audios[indexAudio]._id, point);
+  //   }
+  // };
+
+  const onClickFinishButton = () => {
+    setDisplayFinishForm(true);
+  };
+
+  const onChange = e => {
+    setPoint(e.target.value);
+    // setDisableButton(false);
     if (indexAudio < audios.length) {
       setPointForAudio(
         match.params.id,
         audios[indexAudio]._id,
         user._id,
-        point,
+        e.target.value,
         indexAudio,
       );
     }
@@ -95,22 +123,13 @@ const Evaluate = ({
         setPoint(null);
       }
 
-      setDisableButton(true);
-      setAudios(audios[indexAudio]._id, point);
+      // setDisableButton(true);
+      setAudios(audios[indexAudio]._id, e.target.value);
     }
   };
 
-  const onClickFinishButton = () => {
-    setDisplayFinishForm(true);
-  };
-
-  const onChange = e => {
-    setPoint(e.target.value);
-    setDisableButton(false);
-  };
-
   const backSentence = () => {
-    setDisableButton(true);
+    // setDisableButton(true);
 
     if (indexAudio > 0) {
       decreaseIndexAudio();
@@ -122,7 +141,7 @@ const Evaluate = ({
   };
 
   const nextSentence = () => {
-    setDisableButton(true);
+    // setDisableButton(true);
 
     if (indexAudio < audios.length - 1) {
       increaseIndexAudio();
@@ -152,7 +171,7 @@ const Evaluate = ({
     {
       title: 'Số thứ tự',
       dataIndex: '_id',
-      width: 150,
+      width: 100,
       render: _id => {
         const index = audios.findIndex(item => item._id === _id);
 
@@ -169,7 +188,8 @@ const Evaluate = ({
     {
       title: 'Điểm',
       dataIndex: 'user.point',
-      width: 150,
+      width: 80,
+      align: 'center',
     },
   ];
 
@@ -185,29 +205,25 @@ const Evaluate = ({
             audios[indexAudio] &&
             indexAudio < audios.length && (
               <EvaluateStyle>
-                <div>
+                <div className="table">
                   <Table
                     columns={columnsPoint}
                     dataSource={audios}
                     rowKey="_id"
                     bordered
+                    size="middle"
                     pagination={{ pageSize: 10 }}
-                    scroll={{ y: 840 }}
                   />
-                  <Button
+                  {/* <Button
                     disabled={!displayFinishButton}
                     className="btn btn-warning"
                     onClick={onClickFinishButton}
                   >
                     Nộp kết quả
-                  </Button>
+                  </Button> */}
                 </div>
                 <div className="content-evaluate">
                   <div key={audios[indexAudio]._id} className="container">
-                    <div className="voice">
-                      <h5>Giọng đọc: {audios[indexAudio].voice}</h5>
-                    </div>
-
                     <div className="user-evaluate">
                       <h5>
                         Câu thứ <b>{indexAudio + 1}</b> (tổng số {audios.length}{' '}
@@ -222,7 +238,10 @@ const Evaluate = ({
                       </div>
                     </div>
 
-                    <audio controls>
+                    <audio
+                      controls
+                      autoPlay={audios[indexAudio].user.point ? false : true}
+                    >
                       <source
                         src={
                           process.env.REACT_APP_API_DOMAIN +
@@ -263,12 +282,19 @@ const Evaluate = ({
                       Câu trước
                     </Button>
                     <Button
+                      disabled={!displayFinishButton}
+                      className="btn btn-warning"
+                      onClick={onClickFinishButton}
+                    >
+                      Kết thúc
+                    </Button>
+                    {/* <Button
                       disabled={disabledButton}
                       className="btn btn-warning"
                       onClick={onClickHandler}
                     >
                       Lưu điểm
-                    </Button>
+                    </Button> */}
                     <Button
                       disabled={disableButtonNext}
                       className="btn btn-warning"
@@ -292,7 +318,7 @@ const Evaluate = ({
                   style={{ margin: '0 auto' }}
                   onClick={() => setDisplayFinishForm(false)}
                 >
-                  Quay lại đánh giá
+                  Xem lại đánh giá
                 </Button>,
                 <Button
                   style={{ margin: '0 auto' }}

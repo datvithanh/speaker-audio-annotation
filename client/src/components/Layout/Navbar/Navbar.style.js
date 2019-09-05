@@ -12,7 +12,7 @@ const NavbarStyle = styled.div`
     width: 100%;
     z-index: 10;
     background-color: white;
-    height: 90px;
+    height: 70px;
   }
 
   .welcome {
@@ -31,7 +31,7 @@ const NavbarStyle = styled.div`
   }
 
   img {
-    width: 150px;
+    width: 100px;
     height: auto;
   }
 
@@ -44,15 +44,17 @@ const NavbarStyle = styled.div`
   li {
     display: flex;
     align-items: center;
-    margin-left: 2px;
   }
 
   ul a {
     text-decoration: none;
     color: black;
     display: block;
+    width: 145px;
+    text-align: center;
+    margin-left: 2px;
     padding: 1em;
-    font-size: 25px;
+    font-size: 18px;
   }
 
   .active,
@@ -67,9 +69,6 @@ const NavbarStyle = styled.div`
 
   .logo:hover {
     background: white;
-  }
-
-  h1:hover {
   }
 `;
 
