@@ -72,7 +72,7 @@ const Login = ({ login, isAuthenticated, user, setAlert }) => {
           <input type="submit" className="btn btn-primary" value="Đăng nhập" />
         </div>
         <p className="my-1">
-          Bạn chưa có tài khoản? <Link to="/register">Đăng ký</Link>
+          Bạn chưa có tài khoản? <Link style={{ textDecoration: 'underline' }} to="/register">Đăng ký</Link>
         </p>
       </form>
     </LoginStyle>

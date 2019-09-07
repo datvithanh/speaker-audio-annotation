@@ -93,7 +93,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         </div>
       </form>
       <p className="my-1">
-        Bạn đã có tài khoản? <Link to="/login">Đăng nhập</Link>
+        Bạn đã có tài khoản? <Link style={{textDecoration: 'underline'}} to="/login">Đăng nhập</Link>
       </p>
     </RegisterStyle>
   );

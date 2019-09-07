@@ -35,6 +35,7 @@ const Evaluate = ({
   const [displaySpinner, setDisplaySpinner] = useState(false);
   const [displayFinishButton, setDisplayFinishButton] = useState(false);
   const [displayFinishForm, setDisplayFinishForm] = useState(false);
+  const [pageCurrent, setPageCurrent] = useState();
 
   useEffect(() => {
     if (user) {
@@ -50,6 +51,7 @@ const Evaluate = ({
         if (check) {
           setDisplayFinishButton(true);
         }
+        setPageCurrent(parseInt(indexAudio / 10, 10) + 1);
       } else if (
         audios &&
         audios.length !== 0 &&
@@ -176,12 +178,20 @@ const Evaluate = ({
         const index = audios.findIndex(item => item._id === _id);
 
         return (
-          <span
-            style={{ cursor: 'Pointer', textDecoration: 'underline' }}
-            onClick={() => jumpToSentence(_id)}
-          >
-            Câu {index + 1}
-          </span>
+          <>
+            {index === indexAudio ? (
+              <span
+                className="STT-highlight"
+                onClick={() => jumpToSentence(_id)}
+              >
+                Câu {index + 1}
+              </span>
+            ) : (
+              <span className="STT" onClick={() => jumpToSentence(_id)}>
+                Câu {index + 1}
+              </span>
+            )}
+          </>
         );
       },
     },
@@ -192,6 +202,10 @@ const Evaluate = ({
       align: 'center',
     },
   ];
+
+  const onClickPageHandler = page => {
+    setPageCurrent(page * 1);
+  };
 
   return (
     <>
@@ -212,8 +226,13 @@ const Evaluate = ({
                     rowKey="_id"
                     bordered
                     size="middle"
-                    pagination={{ pageSize: 10 }}
+                    pagination={{
+                      pageSize: 10,
+                      current: pageCurrent,
+                      onChange: page => onClickPageHandler(page),
+                    }}
                   />
+                  {/* <Pagination pageSize={10} current={pageCurrent} /> */}
                   {/* <Button
                     disabled={!displayFinishButton}
                     className="btn btn-warning"

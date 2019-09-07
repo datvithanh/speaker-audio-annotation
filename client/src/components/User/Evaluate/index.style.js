@@ -79,6 +79,19 @@ const EvaluateStyle = styled.div`
     overflow-y: auto;
     max-height: 300px;
   }
+
+  .STT {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  .STT-highlight {
+    cursor: pointer;
+    text-decoration: underline;
+    background-color: rgb(247,220,28);
+    padding: 10px;
+    border-radius: 10px;
+  }
 `;
 
 export default EvaluateStyle;

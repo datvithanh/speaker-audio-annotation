@@ -53,13 +53,13 @@ const NavbarStyle = styled.div`
     width: 145px;
     text-align: center;
     margin-left: 2px;
-    padding: 1em;
+    padding: 9px;
     font-size: 18px;
   }
 
   .active,
   a:hover {
-    background: rgb(255, 248, 184);
+    background: rgb(247,220,28);
     color: black;
   }
 

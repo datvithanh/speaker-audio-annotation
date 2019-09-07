@@ -39,7 +39,7 @@ const LoginStyle = styled.div`
   .bg-primary,
   .badge-primary,
   .alert-primary {
-    background: rgb(236, 202, 81);
+    background: rgb(247,220,28);
     color: rgb(0, 0, 0);
   }
 
