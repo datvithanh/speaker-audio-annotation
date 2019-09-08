@@ -183,6 +183,8 @@ async function uploadAudio(req, res) {
   await decompress(filePath, directoryFullPath);
 
   let errorInput = null;
+  let numberOfSentencesUpload = 0;
+  let numberOfAudiosUpload = 0;
   await Promise.all(
     fs.readdirSync(directoryFullPath).map(async fileUnzip => {
       if (
@@ -197,6 +199,10 @@ async function uploadAudio(req, res) {
         fileUnzip.split('.')[0].split('-').length !== 2
       ) {
         errorInput = 'error-format';
+      } else if (fileUnzip.match(/\.(txt)$/)) {
+        numberOfSentencesUpload += 1;
+      } else if (fileUnzip.match(/\.(wav)$/)) {
+        numberOfAudiosUpload += 1;
       }
     }),
   );
@@ -214,6 +220,23 @@ async function uploadAudio(req, res) {
     throw new CustomError(
       errorCode.BAD_REQUEST,
       'Tồn tại file sai định dạng. Bạn cần upload file đúng định dạng Mã_câu-Mã_voice.wav',
+    );
+  }
+
+  if (numberOfSentencesUpload !== test.numberOfSentences) {
+    fsExtra.removeSync(directoryFullPath);
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      `Bạn phải upload đúng ${test.numberOfSentences} câu`,
+    );
+  }
+
+  if (numberOfAudiosUpload !== test.numberOfSentences * test.voices.length) {
+    fsExtra.removeSync(directoryFullPath);
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      `Bạn phải upload đúng ${test.numberOfSentences *
+        test.voices.length} audio`,
     );
   }
 
