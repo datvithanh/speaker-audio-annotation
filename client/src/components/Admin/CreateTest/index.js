@@ -37,8 +37,8 @@ const CreateTest = ({
     minSentences: 20, // a
     minPeopleListenAudio: 3, // b
     accessModifier: 'Private',
-    dateOpened: '2019-07-05',
-    dateClosed: '2019-09-09',
+    dateOpened: '2019-09-11',
+    dateClosed: '2019-09-30',
   });
 
   useEffect(() => {

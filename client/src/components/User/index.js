@@ -73,11 +73,14 @@ const User = ({
       align: 'center',
     },
     {
-      title: 'Số lượng câu',
-      dataIndex: 'numberOfSentences',
+      title: 'Số lượng audio',
+      // dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
-      align: 'center',
+      className: 'column',
       width: 200,
+      render: ({ voices, minSentences }) => {
+        return voices.length * minSentences;
+      },
     },
     {
       title: 'Ngày mở',
