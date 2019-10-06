@@ -37,8 +37,8 @@ const CreateTest = ({
     minSentences: 20, // a
     minPeopleListenAudio: 3, // b
     accessModifier: 'Private',
-    dateOpened: '2019-09-11',
-    dateClosed: '2019-09-30',
+    dateOpened: '2019-10-05',
+    dateClosed: '2019-10-30',
   });
 
   useEffect(() => {
@@ -217,7 +217,7 @@ const CreateTest = ({
                 </select>
               </div>
               <div className="form-group">
-                <h6>Ngày mở</h6>
+                <h6>Ngày bắt đầu (tháng/ngày/năm)</h6>
                 <input
                   type="date"
                   name="dateOpened"
@@ -226,7 +226,7 @@ const CreateTest = ({
                 />
               </div>
               <div className="form-group">
-                <h6>Ngày hết hạn</h6>
+                <h6>Ngày kết thúc (tháng/ngày/năm)</h6>
                 <input
                   type="date"
                   name="dateClosed"

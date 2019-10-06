@@ -126,7 +126,11 @@ const DetailTest = ({
       render: (text, record) => {
         return (
           <span>
-            <Button onClick={() => showModal(record)} type="primary">
+            <Button
+              style={{ margin: '0 auto', display: 'block' }}
+              onClick={() => showModal(record)}
+              type="primary"
+            >
               Xem chi tiết đánh giá
             </Button>
           </span>

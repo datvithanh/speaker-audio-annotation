@@ -56,7 +56,7 @@ const TestManagement = ({ tests, getListTest, history }) => {
       ),
     },
     {
-      title: 'Ngày mở',
+      title: 'Ngày bắt đầu',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       className: 'column',

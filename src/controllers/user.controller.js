@@ -90,6 +90,26 @@ async function getPrivateTestOfUser(req, res) {
   });
 }
 
+const shuffle = async array => {
+  let currentIndex = array.length; // 4
+  let temporaryValue;
+  let randomIndex;
+
+  // While there remain elements to shuffle...
+  while (currentIndex !== 0) {
+    // Pick a remaining element...
+    randomIndex = Math.floor(Math.random() * currentIndex); // 0 -> 3
+    currentIndex -= 1; // currentIndex = 3
+
+    // And swap it with the current element.
+    temporaryValue = array[currentIndex]; // hoan vi arr[3] arr[3]
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+
+  return array;
+};
+
 async function getAudioByUser(req, res) {
   const { user, test } = req.query;
 
@@ -116,6 +136,10 @@ async function getAudioByUser(req, res) {
       };
     }),
   );
+
+  console.log(audiosDisplayForUser.length);
+
+  await shuffle(audiosDisplayForUser);
 
   res.send({
     status: 1,
@@ -161,6 +185,24 @@ async function setPointForAudio(req, res) {
 
   await audio.save();
 
+  res.send({
+    status: 1,
+    results: {
+      indexAudio: userUpdateIndexAudio.indexAudio,
+    },
+  });
+}
+
+async function setMaxIndexAudio(req, res) {
+  const { testId, userId } = req.body;
+  console.log('abc');
+  const test = await Test.findOne({ _id: testId });
+
+  const userUpdateIndexAudio = test.users.find(
+    user => user.id.toString() === userId,
+  );
+  userUpdateIndexAudio.indexAudio = test.minSentences * test.voices.length;
+  await test.save();
   res.send({
     status: 1,
     results: {
@@ -255,4 +297,5 @@ module.exports = {
   updateRealUserForAudio,
   getIndexAudio,
   changePassword,
+  setMaxIndexAudio,
 };

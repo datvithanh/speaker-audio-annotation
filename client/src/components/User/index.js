@@ -31,7 +31,7 @@ const User = ({
 
   useEffect(() => {
     resetAudio();
-    if (user) {
+    if (user && user._id) {
       getPublicTest();
       getPrivateTest(user._id);
       if (
@@ -51,16 +51,18 @@ const User = ({
     }
   }, [user, resetAudio, getPublicTest, getPrivateTest]);
 
-  const onClickJoinPublicTest = _id => {
-    updateRealUserForAudio(user._id, _id);
-    updatePublicTestAfterUserJoin(_id, user._id);
-  };
+  // const onClickJoinPublicTest = _id => {
+  //   updateRealUserForAudio(user._id, _id);
+  //   updatePublicTestAfterUserJoin(_id, user._id);
+  // };
 
   const onClickPerformPrivateTest = _id => {
     setTestCurrently(_id);
     history.push(`/evaluate/${_id}`);
   };
   const onClickPerformPublicTest = _id => {
+    updateRealUserForAudio(user._id, _id);
+    updatePublicTestAfterUserJoin(_id, user._id);
     setTestCurrently(_id);
     history.push(`/evaluate/${_id}`);
   };
@@ -83,7 +85,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày mở',
+      title: 'Ngày bắt đầu',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       align: 'center',
@@ -102,7 +104,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày hết hạn',
+      title: 'Ngày kết thúc',
       dataIndex: 'dateClosed',
       key: 'dateClosed',
       align: 'center',
@@ -128,7 +130,29 @@ const User = ({
 
         return (
           <span>
-            {!record.users.map(user => user.id).includes(user._id) ? (
+            {record.users.length === 0 ||
+            (!record.users.map(user => user.id).includes(user._id) ||
+              record.users.find(item => item.id === user._id.toString())
+                .indexAudio === 0) ? (
+              <Button
+                onClick={() => onClickPerformPublicTest(_id)}
+                type="primary"
+              >
+                Bắt đầu test
+              </Button>
+            ) : record.users.find(item => item.id === user._id.toString())
+                .indexAudio !==
+              record.minSentences * record.voices.length ? (
+              <Button
+                type="primary"
+                onClick={() => onClickPerformPublicTest(_id)}
+              >
+                Thực hiện tiếp
+              </Button>
+            ) : (
+              <div style={{textAlign: 'center'}}>Đã hoàn thành</div>
+            )}
+            {/* {!record.users.map(user => user.id).includes(user._id) ? (
               <Button onClick={() => onClickJoinPublicTest(_id)} type="primary">
                 Join bài test
               </Button>
@@ -139,7 +163,7 @@ const User = ({
               >
                 Thực hiện
               </Button>
-            )}
+            )} */}
           </span>
         );
       },
@@ -164,7 +188,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày mở',
+      title: 'Ngày bắt đầu',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       className: 'column',
@@ -183,7 +207,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày hết hạn',
+      title: 'Ngày kết thúc',
       dataIndex: 'dateClosed',
       key: 'dateClosed',
       className: 'column',
@@ -223,7 +247,7 @@ const User = ({
         <>
           {publicTest && (
             <>
-              <h4>Danh sách các public test bạn có thể tham gia</h4>
+              <h4>Danh sách các bài test bạn có thể tham gia</h4>
 
               <Table
                 bordered
@@ -235,14 +259,16 @@ const User = ({
                 dataSource={publicTest.filter(
                   item =>
                     Date.now() >= new Date(item.dateOpened) &&
-                    Date.now() <= new Date(item.dateClosed),
+                    Date.now() <= new Date(item.dateClosed) &&
+                    (item.users.map(user => user.id).includes(user._id) ||
+                      item.users.length < item.minPeopleJoin),
                 )}
               />
             </>
           )}
           {privateTest && (
             <>
-              <h4>Danh sách các private test bạn được chỉ định tham gia</h4>{' '}
+              <h4>Danh sách các bài test bạn được chỉ định tham gia</h4>{' '}
               <Table
                 bordered
                 className="table"

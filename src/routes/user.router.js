@@ -15,6 +15,7 @@ const {
   updateRealUserForAudio,
   getIndexAudio,
   changePassword,
+  setMaxIndexAudio,
 } = require('../controllers/user.controller');
 
 router.post('/signup', asyncWrap(signup));
@@ -28,5 +29,6 @@ router.put('/set-point', auth, asyncWrap(setPointForAudio));
 router.put('/update-real-user', auth, asyncWrap(updateRealUserForAudio));
 router.get('/get-index-audio', auth, asyncWrap(getIndexAudio));
 router.put('/change-password', auth, asyncWrap(changePassword));
+router.put('/set-max-index-audio', auth, asyncWrap(setMaxIndexAudio));
 
 module.exports = router;

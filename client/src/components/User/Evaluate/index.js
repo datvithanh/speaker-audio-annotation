@@ -9,6 +9,7 @@ import {
   increaseIndexAudio,
   setAudios,
   setIndexAudio,
+  setMaxIndexAudio,
 } from '../../../actions/user';
 import { connect } from 'react-redux';
 import { Radio, Result, Button, Icon, Spin } from 'antd';
@@ -27,6 +28,8 @@ const Evaluate = ({
   getIndexAudio,
   setAudios,
   setIndexAudio,
+  test,
+  setMaxIndexAudio,
 }) => {
   const [point, setPoint] = useState();
   // const [disabledButton, setDisableButton] = useState(true);
@@ -38,7 +41,7 @@ const Evaluate = ({
   const [pageCurrent, setPageCurrent] = useState();
 
   useEffect(() => {
-    if (user) {
+    if (user && test) {
       if (
         audios &&
         audios.length !== 0 &&
@@ -57,8 +60,14 @@ const Evaluate = ({
         audios.length !== 0 &&
         indexAudio === audios.length
       ) {
-        setDisplaySpinner(false);
-        setIndexAudio(indexAudio - 1);
+        // setDisplaySpinner(false);
+
+        if (displayFinishForm === false) {
+          setIndexAudio(indexAudio - 1);
+          //setDisplayFinishButton(true);
+        }
+
+        // setDisplayFinishForm(true);
       } else {
         setDisplaySpinner(true);
         getIndexAudio(user._id, match.params.id);
@@ -69,16 +78,7 @@ const Evaluate = ({
         }, 500);
       }
     }
-  }, [
-    displaySpinner,
-    getAudioForUser,
-    getIndexAudio,
-    match.params.id,
-    user,
-    indexAudio,
-    audios,
-    setIndexAudio,
-  ]);
+  }, [displaySpinner, getAudioForUser, getIndexAudio, match.params.id, user, indexAudio, audios, setIndexAudio, displayFinishForm, test]);
 
   // const onClickHandler = () => {
   //   if (indexAudio < audios.length) {
@@ -103,31 +103,35 @@ const Evaluate = ({
   // };
 
   const onClickFinishButton = () => {
+    // console.log(test);
+    if (test) {
+      setMaxIndexAudio(user._id, test);
+    }
     setDisplayFinishForm(true);
   };
 
   const onChange = e => {
     setPoint(e.target.value);
     // setDisableButton(false);
-    if (indexAudio < audios.length) {
-      setPointForAudio(
-        match.params.id,
-        audios[indexAudio]._id,
-        user._id,
-        e.target.value,
-        indexAudio,
-      );
-    }
-    if (indexAudio < audios.length) {
-      if (audios[indexAudio + 1] && audios[indexAudio + 1].user.point) {
-        setPoint(audios[indexAudio + 1].user.point);
-      } else {
-        setPoint(null);
-      }
+    // if (indexAudio < audios.length) {
+    //   setPointForAudio(
+    //     match.params.id,
+    //     audios[indexAudio]._id,
+    //     user._id,
+    //     e.target.value,
+    //     indexAudio,
+    //   );
+    // }
+    // if (indexAudio < audios.length) {
+    //   if (audios[indexAudio + 1] && audios[indexAudio + 1].user.point) {
+    //     setPoint(audios[indexAudio + 1].user.point);
+    //   } else {
+    //     setPoint(null);
+    //   }
 
-      // setDisableButton(true);
-      setAudios(audios[indexAudio]._id, e.target.value);
-    }
+    //   // setDisableButton(true);
+    //   setAudios(audios[indexAudio]._id, e.target.value);
+    // }
   };
 
   const backSentence = () => {
@@ -144,6 +148,25 @@ const Evaluate = ({
 
   const nextSentence = () => {
     // setDisableButton(true);
+    if (indexAudio < audios.length) {
+      setPointForAudio(
+        match.params.id,
+        audios[indexAudio]._id,
+        user._id,
+        point,
+        indexAudio,
+      );
+    }
+    if (indexAudio < audios.length) {
+      if (audios[indexAudio + 1] && audios[indexAudio + 1].user.point) {
+        setPoint(audios[indexAudio + 1].user.point);
+      } else {
+        setPoint(null);
+      }
+
+      // setDisableButton(true);
+      setAudios(audios[indexAudio]._id, point);
+    }
 
     if (indexAudio < audios.length - 1) {
       increaseIndexAudio();
@@ -166,6 +189,10 @@ const Evaluate = ({
     setIndexAudio(index);
     if (index !== indexAudio && audios[indexAudio - 1]) {
       setPoint(audios[indexAudio - 1].user.point);
+    }
+
+    if (indexAudio < audios.length) {
+      setDisableButtonNext(false);
     }
   };
 
@@ -274,19 +301,19 @@ const Evaluate = ({
                     <h3>Đánh giá chất lượng giọng nói</h3>
                     <Radio.Group onChange={onChange} value={point}>
                       <Radio style={radioStyle} value={5}>
-                        5 điểm, như giọng người thật.
+                        5 điểm - Rất tự nhiên, giống như giọng người thật.
                       </Radio>
                       <Radio style={radioStyle} value={4}>
-                        4 điểm, khá gần với ngôn ngữ tự nhiên.
+                        4 điểm - Tương đối tự nhiên, khá giống giọng người thật.
                       </Radio>
                       <Radio style={radioStyle} value={3}>
-                        3 điểm, nghe được nhưng không tự nhiên.
+                        3 điểm - Hơi tự nhiên, khá nhiều yếu tố nhân tạo.
                       </Radio>
                       <Radio style={radioStyle} value={2}>
-                        2 điểm, giọng quá nhiều yếu tố nhân tạo.
+                        2 điểm - Kém tự nhiên, rất nhiều yếu tố nhân tạo.
                       </Radio>
                       <Radio style={radioStyle} value={1}>
-                        1 điểm, không nghe được, phát âm sai hoặc không rõ ràng.
+                        1 điểm - Rất kém tự nhiên, hoàn toàn nhân tạo.
                       </Radio>
                     </Radio.Group>
                   </div>
@@ -335,12 +362,6 @@ const Evaluate = ({
               extra={[
                 <Button
                   style={{ margin: '0 auto' }}
-                  onClick={() => setDisplayFinishForm(false)}
-                >
-                  Xem lại đánh giá
-                </Button>,
-                <Button
-                  style={{ margin: '0 auto' }}
                   onClick={() => history.push('/')}
                   type="primary"
                 >
@@ -375,6 +396,7 @@ export default withRouter(
       increaseIndexAudio,
       setAudios,
       setIndexAudio,
+      setMaxIndexAudio,
     },
   )(Evaluate),
 );

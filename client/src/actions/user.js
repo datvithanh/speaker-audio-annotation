@@ -13,6 +13,7 @@ import {
   CHANGE_PASSWORD,
   RESET_AUDIOS,
   UPDATE_PUBLIC_TEST_AFTER_USER_JOIN,
+  SET_MAX_INDEX_AUDIO,
 } from './types';
 import axios from 'axios';
 import { setAlert } from './alert';
@@ -64,9 +65,11 @@ export const getAudioForUser = (user, test) => async dispatch => {
         `/api/users/get-audio?user=${user}&test=${test}`,
     );
 
+
     if (res.data.status === 1) {
       dispatch({
         type: GET_AUDIO_FOR_USER,
+        // payload: {"audios": randomArray},
         payload: res.data.results,
       });
     }
@@ -222,12 +225,41 @@ export const changePassword = (
 export const resetAudio = () => dispatch => {
   dispatch({
     type: RESET_AUDIOS,
-  })
-}
+  });
+};
 
 export const updatePublicTestAfterUserJoin = (testId, userId) => dispatch => {
   dispatch({
     type: UPDATE_PUBLIC_TEST_AFTER_USER_JOIN,
-    payload: {testId, userId}
-  })
-}
+    payload: { testId, userId },
+  });
+};
+
+export const setMaxIndexAudio = (userId, testId) => async dispatch => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+
+  const body = {
+    userId,
+    testId,
+  };
+
+  try {
+    const res = await axios.put(
+      process.env.REACT_APP_API_DOMAIN + `/api/users/set-max-index-audio`,
+      body,
+      config,
+    );
+
+    if (res.data.status === 1) {
+      dispatch({
+        type: SET_MAX_INDEX_AUDIO,
+      });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
