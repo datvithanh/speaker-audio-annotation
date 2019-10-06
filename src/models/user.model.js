@@ -27,6 +27,26 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: 7,
     },
+    birthYear: {
+      type: Number,
+      trim: true,
+    },
+    sex: {
+      type: String,
+      trim: true,
+    },
+    job: {
+      type: String,
+    },
+    hometown: {
+      type: String,
+    },
+    yearLivingInHaNoi: {
+      type: Number,
+    },
+    yearLivingInHCM: {
+      type: Number,
+    },
     tokens: [
       {
         token: {

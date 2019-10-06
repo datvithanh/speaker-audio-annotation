@@ -1,23 +1,28 @@
 import styled from 'styled-components';
 
 const RegisterStyle = styled.div`
-  max-width: 700px;
   margin: auto;
   overflow: hidden;
   padding: 0 2rem;
-  margin-top: 5rem;
+  margin-top: 1rem;
   margin-bottom: 3rem;
+  max-width: 60%;
 
   /* Text Styles*/
   .large {
     font-size: 3rem;
     line-height: 1.2;
+    margin: 0 auto;
+    margin-left: auto;
+    display: block;
+    text-align: center;
   }
 
   .lead {
     font-size: 1.5rem;
+    text-align: center;
   }
- 
+
   .text-primary {
     color: black;
   }
@@ -39,7 +44,7 @@ const RegisterStyle = styled.div`
   .bg-primary,
   .badge-primary,
   .alert-primary {
-    background: rgb(247,220,28);
+    background: rgb(247, 220, 28);
     color: rgb(0, 0, 0);
   }
 
@@ -48,7 +53,9 @@ const RegisterStyle = styled.div`
   }
 
   .my-1 {
-    margin: 1rem 0;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
   }
 
   /* Forms */
@@ -73,6 +80,7 @@ const RegisterStyle = styled.div`
     padding: 0.4rem;
     font-size: 1.2rem;
     border: 1px solid #ccc;
+    border-radius: 7px;
   }
 
   .form input[type='submit'],
@@ -87,6 +95,26 @@ const RegisterStyle = styled.div`
   .form .social-input i {
     padding: 0.5rem;
     width: 4rem;
+  }
+
+  .container {
+    display: flex;
+  }
+
+  .column1 {
+    width: 50%;
+    margin-right: 3rem;
+  }
+
+  .column2 {
+    width: 50%;
+    margin-left: 3rem;
+  }
+
+  .button {
+    display: block;
+    margin: 3rem auto;
+    text-align: center;
   }
 
   @media (max-width: 800px) {

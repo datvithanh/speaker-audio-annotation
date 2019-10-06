@@ -19,7 +19,9 @@ export const loadUser = () => async dispatch => {
   }
 
   try {
-    const res = await axios.get(process.env.REACT_APP_API_DOMAIN+'/api/users');
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + '/api/users',
+    );
     dispatch({
       type: USER_LOADED,
       payload: res.data.results,
@@ -32,16 +34,40 @@ export const loadUser = () => async dispatch => {
 };
 
 // Register user
-export const register = ({ name, email, password }) => async dispatch => {
+export const register = ({
+  name,
+  email,
+  password,
+  birthYear,
+  sex,
+  job,
+  hometown,
+  yearLivingInHaNoi,
+  yearLivingInHCM,
+}) => async dispatch => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
     },
   };
 
-  const body = JSON.stringify({ name, email, password });
+  const body = JSON.stringify({
+    name,
+    email,
+    password,
+    birthYear,
+    sex,
+    job,
+    hometown,
+    yearLivingInHaNoi,
+    yearLivingInHCM,
+  });
   try {
-    const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/users/signup', body, config);
+    const res = await axios.post(
+      process.env.REACT_APP_API_DOMAIN + '/api/users/signup',
+      body,
+      config,
+    );
     if (res.data.status === 1) {
       dispatch({
         type: REGISTER_SUCCESS,
@@ -73,7 +99,11 @@ export const login = (email, password) => async dispatch => {
 
   const body = JSON.stringify({ email, password });
   try {
-    const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/users/signin', body, config);
+    const res = await axios.post(
+      process.env.REACT_APP_API_DOMAIN + '/api/users/signin',
+      body,
+      config,
+    );
     if (res.data.status === 1) {
       dispatch({
         type: LOGIN_SUCCESS,
@@ -98,10 +128,12 @@ export const login = (email, password) => async dispatch => {
 // Logout
 export const logout = () => async dispatch => {
   try {
-    const res = await axios.post(process.env.REACT_APP_API_DOMAIN+'/api/users/logout');
+    const res = await axios.post(
+      process.env.REACT_APP_API_DOMAIN + '/api/users/logout',
+    );
     if (res.data.status === 1) {
       dispatch({ type: LOGOUT });
-      dispatch({type: RESET_AUDIOS})
+      dispatch({ type: RESET_AUDIOS });
     } else {
       dispatch(setAlert(res.data.message, 'danger'));
     }
