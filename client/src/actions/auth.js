@@ -9,6 +9,7 @@ import {
   LOGIN_FAILED,
   LOGOUT,
   RESET_AUDIOS,
+  REMOVE_ALERT,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 
@@ -75,11 +76,13 @@ export const register = ({
       });
 
       dispatch(loadUser());
+      dispatch({ type: REMOVE_ALERT });
     } else {
       dispatch(setAlert(res.data.message, 'danger', 1000));
       dispatch({
         type: REGISTER_FAILED,
       });
+      dispatch({ type: REMOVE_ALERT });
     }
   } catch (error) {
     // dispatch(setAlert(error.response.data.message, 'danger', 1000));
