@@ -39,6 +39,7 @@ const testSchema = mongoose.Schema(
           type: Number,
           default: 0,
         },
+        audios: [mongoose.Schema.Types.ObjectId],
         _id: false,
       },
     ],
@@ -55,10 +56,6 @@ const testSchema = mongoose.Schema(
     dateClosed: {
       type: Date,
       required: true,
-    },
-    randomStatus: {
-      type: Boolean,
-      default: false,
     },
   },
   {

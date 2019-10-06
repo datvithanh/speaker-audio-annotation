@@ -90,7 +90,7 @@ async function getPrivateTestOfUser(req, res) {
   });
 }
 
-const shuffle = async array => {
+const shuffle = array => {
   let currentIndex = array.length; // 4
   let temporaryValue;
   let randomIndex;
@@ -118,8 +118,22 @@ async function getAudioByUser(req, res) {
     test,
   });
 
+  let shuffleAudios = [];
+  const testObj = await Test.findOne({ _id: test });
+  const theUser = testObj.users.find(u => u.id.toString() === user);
+  shuffleAudios = theUser ? theUser.audios : [];
+
+  if (!shuffleAudios.length) {
+    shuffleAudios = shuffle(audios.map(audio => audio._id));
+    theUser.audios = shuffleAudios;
+    await testObj.save();
+  }
+
   const audiosDisplayForUser = await Promise.all(
-    audios.map(async ({ _id, link, voice, sentence, users }) => {
+    shuffleAudios.map(async audioId => {
+      const audio = await Audio.findById(audioId);
+      const { _id, link, voice, sentence, users } = audio;
+
       const contentSentence = await Sentence.findOne({
         _id: sentence,
       });
@@ -137,31 +151,12 @@ async function getAudioByUser(req, res) {
     }),
   );
 
-  // console.log(audiosDisplayForUser.length);
-  const testObj = await Test.findOne({ _id: test });
-
-  // let tempArray;
-  // await shuffle(audiosDisplayForUser);
-  if (testObj.randomStatus === false) {
-    await shuffle(audiosDisplayForUser);
-    testObj.randomStatus = true;
-    await testObj.save();
-  }
-
   res.send({
     status: 1,
     results: {
       audios: audiosDisplayForUser,
     },
   });
-  // else {
-  //   res.send({
-  //     status: 1,
-  //     results: {
-  //       audios: audiosDisplayForUser,
-  //     },
-  //   });
-  // }
 }
 
 async function setPointForAudio(req, res) {
@@ -210,7 +205,6 @@ async function setPointForAudio(req, res) {
 
 async function setMaxIndexAudio(req, res) {
   const { testId, userId } = req.body;
-  console.log('abc');
   const test = await Test.findOne({ _id: testId });
 
   const userUpdateIndexAudio = test.users.find(

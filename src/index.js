@@ -8,11 +8,14 @@ const path = require('path');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const cors = require('cors');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const morgan = require('morgan');
 const errorHandler = require('./middlewares/errorHanlder');
 
 const app = express();
 const port = process.env.PORT;
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(cors());
 

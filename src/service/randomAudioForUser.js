@@ -1,7 +1,7 @@
 /* eslint-disable no-plusplus */
 const Audio = require('../models/audio.model');
 
-const shuffle = async array => {
+const shuffle = array => {
   let currentIndex = array.length; // 4
   let temporaryValue;
   let randomIndex;
@@ -37,9 +37,9 @@ const randomAudioForUser = async (voice, test) => {
     for (let i = 0; i <= minSentences - 1; i++) {
       let randomUsers;
       if (users.length !== 0) {
-        randomUsers = await shuffle(users.map(user => user.id));
+        randomUsers = shuffle(users.map(user => user.id));
       } else {
-        randomUsers = await shuffle(systemUsers);
+        randomUsers = shuffle(systemUsers);
       }
 
       const audios = await Audio.find({ test: test._id, voice });
