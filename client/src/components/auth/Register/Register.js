@@ -6,6 +6,7 @@ import { setAlert } from '../../../actions/alert';
 import { register } from '../../../actions/auth';
 import PropTypes from 'prop-types';
 import Alert from '../../../components/Layout/Alert/Alert';
+import { isValidEmail, isValidNumbersOfLiveYear, isValidYear, isStrongPassword } from '../../../utils/validation';
 
 const Register = ({ setAlert, register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
@@ -52,34 +53,34 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (name === '') {
-      return setAlert('Họ tên không được bỏ trống', 'danger', 1000);
-    } else if (email === '') {
-      return setAlert('Email không được bỏ trống', 'danger', 1000);
-    } else if (password === '') {
-      return setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
+      return setAlert('Họ tên không được bỏ trống', 'danger', 5000);
+    } else if (!isValidEmail(email)) {
+      return setAlert('Email không hợp lệ', 'danger', 5000);
+    } else if (!password) {
+      return setAlert('Mật khẩu không được bỏ trống', 'danger', 5000);
+    } else if (!isStrongPassword(password)) {
+      return setAlert('Mật khẩu không đủ mạnh', 'danger', 5000);
     } else if (password !== password2) {
-      setAlert('Mật khẩu không khớp', 'danger', 1000);
-    } else if (birthYear === '') {
-      return setAlert('Năm sinh không được bỏ trống', 'danger', 1000);
+      setAlert('Mật khẩu xác nhận không khớp', 'danger', 5000);
+    } else if (!isValidYear(birthYear)) {
+      return setAlert('Năm sinh không hợp lệ', 'danger', 5000);
     } else if (sex === 'GioiTinh' || sex === '') {
-      return setAlert('Bạn chưa chọn giới tính', 'danger', 1000);
+      return setAlert('Bạn chưa chọn giới tính', 'danger', 5000);
     } else if (job === '') {
-      return setAlert('Nghề nghiệp không được bỏ trống', 'danger', 1000);
+      return setAlert('Nghề nghiệp không được bỏ trống', 'danger', 5000);
     } else if (hometown === '') {
-      return setAlert('Quê quán không được bỏ trống', 'danger', 1000);
-    } else if (birthYear === '') {
-      return setAlert('Năm sinh không được bỏ trống', 'danger', 1000);
-    } else if (yearLivingInHaNoi === '') {
+      return setAlert('Quê quán không được bỏ trống', 'danger', 5000);
+    } else if (!isValidNumbersOfLiveYear(yearLivingInHaNoi)) {
       return setAlert(
-        'Số năm sống ở Hà Nội không được bỏ trống',
+        'Số năm sống ở Hà Nội không hợp lệ',
         'danger',
-        1000,
+        5000,
       );
-    } else if (yearLivingInHCM === '') {
+    } else if (!isValidNumbersOfLiveYear(yearLivingInHCM)) {
       return setAlert(
-        'Số năm sống ở TPHCM không được bỏ trống',
+        'Số năm sống ở TPHCM không hợp lệ',
         'danger',
-        1000,
+        5000,
       );
     } else {
       console.log(sex);
@@ -197,7 +198,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Số năm sống ở Hà Nội"
+                placeholder="Số năm sống ở Hà Nội (Vd: 2.5)"
                 name="yearLivingInHaNoi"
                 value={yearLivingInHaNoi}
                 onChange={e => onChange(e)}
@@ -206,7 +207,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Số năm sống ở TPHCM"
+                placeholder="Số năm sống ở TPHCM (Vd: 2.5)"
                 name="yearLivingInHCM"
                 value={yearLivingInHCM}
                 onChange={e => onChange(e)}

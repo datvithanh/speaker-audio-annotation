@@ -82,7 +82,7 @@ export const register = ({
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    // dispatch(setAlert(error.response.data.message, 'danger', 1000));
     dispatch({
       type: REGISTER_FAILED,
     });

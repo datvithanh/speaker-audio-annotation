@@ -8,5 +8,5 @@ export const setAlert = (msg, alertType, timeout = 5000) => dispatch => {
       alertType,
     },
   });
-  setTimeout(() => dispatch({ type: REMOVE_ALERT }), timeout);
+  // setTimeout(() => dispatch({ type: REMOVE_ALERT }), timeout);
 };
