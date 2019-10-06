@@ -137,9 +137,16 @@ async function getAudioByUser(req, res) {
     }),
   );
 
-  console.log(audiosDisplayForUser.length);
+  // console.log(audiosDisplayForUser.length);
+  const testObj = await Test.findOne({ _id: test });
 
-  await shuffle(audiosDisplayForUser);
+  // let tempArray;
+  // await shuffle(audiosDisplayForUser);
+  if (testObj.randomStatus === false) {
+    await shuffle(audiosDisplayForUser);
+    testObj.randomStatus = true;
+    await testObj.save();
+  }
 
   res.send({
     status: 1,
@@ -147,6 +154,14 @@ async function getAudioByUser(req, res) {
       audios: audiosDisplayForUser,
     },
   });
+  // else {
+  //   res.send({
+  //     status: 1,
+  //     results: {
+  //       audios: audiosDisplayForUser,
+  //     },
+  //   });
+  // }
 }
 
 async function setPointForAudio(req, res) {

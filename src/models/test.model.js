@@ -56,6 +56,10 @@ const testSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
+    randomStatus: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
