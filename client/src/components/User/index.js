@@ -142,7 +142,7 @@ const User = ({
               </Button>
             ) : record.users.find(item => item.id === user._id.toString())
                 .indexAudio !==
-              record.minSentences * record.voices.length ? (
+              record.minSentences * record.voices.length + 1 ? (
               <Button
                 type="primary"
                 onClick={() => onClickPerformPublicTest(_id)}
@@ -150,7 +150,7 @@ const User = ({
                 Thực hiện tiếp
               </Button>
             ) : (
-              <div style={{textAlign: 'center'}}>Đã hoàn thành</div>
+              <div style={{ textAlign: 'center' }}>Đã hoàn thành</div>
             )}
             {/* {!record.users.map(user => user.id).includes(user._id) ? (
               <Button onClick={() => onClickJoinPublicTest(_id)} type="primary">
@@ -245,7 +245,7 @@ const User = ({
         <Spin />
       ) : (
         <>
-          {publicTest && (
+          {publicTest && user && (
             <>
               <h4>Danh sách các bài test bạn có thể tham gia</h4>
 
@@ -266,7 +266,7 @@ const User = ({
               />
             </>
           )}
-          {privateTest && (
+          {privateTest && user && (
             <>
               <h4>Danh sách các bài test bạn được chỉ định tham gia</h4>{' '}
               <Table

@@ -83,7 +83,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
         5000,
       );
     } else {
-      console.log(sex);
       register({
         name,
         email,

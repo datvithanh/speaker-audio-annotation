@@ -210,7 +210,7 @@ async function setMaxIndexAudio(req, res) {
   const userUpdateIndexAudio = test.users.find(
     user => user.id.toString() === userId,
   );
-  userUpdateIndexAudio.indexAudio = test.minSentences * test.voices.length;
+  userUpdateIndexAudio.indexAudio = test.minSentences * test.voices.length + 1;
   await test.save();
   res.send({
     status: 1,

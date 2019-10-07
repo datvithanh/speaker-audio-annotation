@@ -20,33 +20,38 @@ const options = [
     id: 1,
     point: 5,
     text: '5 điểm - Rất tự nhiên, giống như giọng người thật.',
-    tooltip: 'Bạn hãy cho mức điểm này nếu tiếng nói nghe được rất tự nhiên, nghe giống như giọng người thu âm, không nghe thấy yếu tố nhân tạo trong đó. Có thể dùng giọng này để trao đổi, tương tác như tương tác với người.',
+    tooltip:
+      'Bạn hãy cho mức điểm này nếu tiếng nói nghe được rất tự nhiên, nghe giống như giọng người thu âm, không nghe thấy yếu tố nhân tạo trong đó. Có thể dùng giọng này để trao đổi, tương tác như tương tác với người.',
   },
   {
     id: 2,
     point: 4,
     text: '4 điểm - Tương đối tự nhiên, khá giống giọng người thật',
-    tooltip: 'Bạn hãy cho mức điểm này nếu tiếng nói nghe được khá tự nhiên và khá giống giọng người thu âm, có một chút yếu tố nhân tạo nhưng không đáng kể. Có thể dùng giọng này để trao đổi, tương tác được mặc dù có đôi chỗ còn chưa hoàn hảo.',
+    tooltip:
+      'Bạn hãy cho mức điểm này nếu tiếng nói nghe được khá tự nhiên và khá giống giọng người thu âm, có một chút yếu tố nhân tạo nhưng không đáng kể. Có thể dùng giọng này để trao đổi, tương tác được mặc dù có đôi chỗ còn chưa hoàn hảo.',
   },
   {
     id: 3,
     point: 3,
     text: '3 điểm - Hơi tự nhiên, khá nhiều yếu tố nhân tạo',
-    tooltip: 'Bạn hãy cho mức điểm này nếu tiếng nói nghe được có thể hiểu và có thể dùng để giao tiếp nhưng còn khá nhiều yếu tố nhân tạo.',
+    tooltip:
+      'Bạn hãy cho mức điểm này nếu tiếng nói nghe được có thể hiểu và có thể dùng để giao tiếp nhưng còn khá nhiều yếu tố nhân tạo.',
   },
   {
     id: 4,
     point: 2,
     text: '2 điểm - Kém tự nhiên, rất nhiều yếu tố nhân tạo',
-    tooltip: 'Bạn hãy cho mức điểm này nếu tiếng nói nghe được còn kém tự nhiên và có rất nhiều yếu tố nhân tạo. Để giao tiếp với tiếng nói này thì đôi chỗ còn khó nghe.',
+    tooltip:
+      'Bạn hãy cho mức điểm này nếu tiếng nói nghe được còn kém tự nhiên và có rất nhiều yếu tố nhân tạo. Để giao tiếp với tiếng nói này thì đôi chỗ còn khó nghe.',
   },
   {
     id: 5,
     point: 1,
     text: '1 điểm - Rất kém tự nhiên, hoàn toàn nhân tạo',
-    tooltip: 'Bạn hãy cho mức điểm này nếu tiếng nói nghe được rất kém tự nhiên và khó dùng để giao tiếp. Tiếng nói hoàn toàn nhân tạo và nhiều chỗ còn khó nghe.',
+    tooltip:
+      'Bạn hãy cho mức điểm này nếu tiếng nói nghe được rất kém tự nhiên và khó dùng để giao tiếp. Tiếng nói hoàn toàn nhân tạo và nhiều chỗ còn khó nghe.',
   },
-]
+];
 
 const Evaluate = ({
   getAudioForUser,
@@ -61,7 +66,6 @@ const Evaluate = ({
   getIndexAudio,
   setAudios,
   setIndexAudio,
-  test,
   setMaxIndexAudio,
 }) => {
   const [point, setPoint] = useState();
@@ -74,7 +78,7 @@ const Evaluate = ({
   const [pageCurrent, setPageCurrent] = useState();
 
   useEffect(() => {
-    if (user && test) {
+    if (user) {
       if (
         audios &&
         audios.length !== 0 &&
@@ -94,13 +98,19 @@ const Evaluate = ({
         indexAudio === audios.length
       ) {
         // setDisplaySpinner(false);
-
+        // setIndexAudio(indexAudio - 2);
         if (displayFinishForm === false) {
           setIndexAudio(indexAudio - 1);
           //setDisplayFinishButton(true);
         }
 
         // setDisplayFinishForm(true);
+      } else if (
+        audios &&
+        audios.length !== 0 &&
+        indexAudio === audios.length + 1
+      ) {
+        setDisplayFinishForm(true);
       } else {
         setDisplaySpinner(true);
         getIndexAudio(user._id, match.params.id);
@@ -111,7 +121,17 @@ const Evaluate = ({
         }, 500);
       }
     }
-  }, [displaySpinner, getAudioForUser, getIndexAudio, match.params.id, user, indexAudio, audios, setIndexAudio, displayFinishForm, test]);
+  }, [
+    displaySpinner,
+    getAudioForUser,
+    getIndexAudio,
+    match.params.id,
+    user,
+    indexAudio,
+    audios,
+    setIndexAudio,
+    displayFinishForm,
+  ]);
 
   // const onClickHandler = () => {
   //   if (indexAudio < audios.length) {
@@ -137,9 +157,7 @@ const Evaluate = ({
 
   const onClickFinishButton = () => {
     // console.log(test);
-    if (test) {
-      setMaxIndexAudio(user._id, test);
-    }
+    setMaxIndexAudio(user._id, match.params.id);
     setDisplayFinishForm(true);
   };
 
