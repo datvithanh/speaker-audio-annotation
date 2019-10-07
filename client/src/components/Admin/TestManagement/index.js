@@ -47,12 +47,20 @@ const TestManagement = ({ tests, getListTest, history }) => {
       ),
     },
     {
-      title: 'Số người',
+      title: 'Số người cần tham gia',
       dataIndex: 'minPeopleJoin',
       key: 'minPeopleJoin',
       className: 'column',
       render: data => (
         <span style={{ textAlign: 'center', display: 'block' }}>{data}</span>
+      ),
+    },
+    {
+      title: 'Số người đã tham gia',
+      key: 'minPeopleJoin',
+      className: 'column',
+      render: data => (
+        <span style={{ textAlign: 'center', display: 'block' }}>{data.users.length}</span>
       ),
     },
     {
