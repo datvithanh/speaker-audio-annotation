@@ -178,7 +178,7 @@ async function setPointForAudio(req, res) {
 
   audio.users.forEach(user => {
     if (user.userId.toString() === userId) {
-      if (!user.point) {
+      if (!user.point && point) {
         audio.numberOfReviews += 1;
         audio.averagePoint =
           (audio.averagePoint * (audio.numberOfReviews - 1) + point) /
