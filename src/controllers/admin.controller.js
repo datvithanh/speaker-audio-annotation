@@ -14,6 +14,7 @@ const Audio = require('../models/audio.model');
 const Voice = require('../models/voice.model');
 const { SRC_PATH } = require('../constant');
 const randomAudioForUser = require('../service/randomAudioForUser');
+const { mkDirByPathSync } = require('../utils/file');
 
 async function getListUser(req, res) {
   const users = await User.find({});
@@ -111,7 +112,7 @@ async function uploadSentence(req, res) {
   const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
 
   // create folder to contain file zip
-  fs.mkdirSync(directoryFullPath, { recursive: true });
+  mkDirByPathSync(directoryFullPath);
 
   const fileName = sentence.name;
   const filePath = `${directoryFullPath}/${fileName}`;
@@ -166,10 +167,8 @@ async function uploadAudio(req, res) {
   const random = uuid.v4();
   const directoryPath = `/${year}/${month}/${day}/${random}`;
   const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
-
   // create folder to contain file zip
-  fs.mkdirSync(directoryFullPath, { recursive: true });
-
+  mkDirByPathSync(directoryFullPath);
   const fileName = audio.name;
   const filePath = `${directoryFullPath}/${fileName}`;
 
