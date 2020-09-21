@@ -7,7 +7,7 @@
     "start": "node src/index.js",
     "server": "nodemon src/index.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "dev": "concurrently  \"npm run client\"",
     "deploy:server": "pm2 start src --name server-evaluate",
     "lint": "eslint . --ext .js,.jsx -f ./.eslintformatter.js; exit 0",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write"

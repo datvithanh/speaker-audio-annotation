@@ -9,7 +9,7 @@
   background-color: #ffffff !important;
   padding: 0 20px;
   border-radius: 5px;
-  min-height: 45vh;
+  height: 45vh;
   overflow-y: auto;
   overflow-x: hidden;
 }
@@ -18,7 +18,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 10px;
+  text-align: justify;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 0 20px;
 }
 
 .app-data-construction .ant-row-flex {
