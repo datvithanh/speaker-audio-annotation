@@ -46,6 +46,7 @@ const App = () => {
         <div className="App">
           <LayoutApp>
             <Switch>
+              <Route exact path="/test" component={DataConstruction} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
               <PrivateRoute
