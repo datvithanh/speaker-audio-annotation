@@ -18,6 +18,9 @@ const {
   addVoice,
   getVoices,
   deleteVoice,
+  createTeam,
+  uploadTrainningData,
+  createCompetition,
 } = require('../controllers/admin.controller');
 
 router.get('/users', auth, asyncWrap(getListUser));
@@ -34,5 +37,9 @@ router.get('/get-all-audios/:testId', auth, asyncWrap(getAllAudioByTestId));
 router.post('/add-voice', auth, asyncWrap(addVoice));
 router.get('/get-voices', auth, asyncWrap(getVoices));
 router.delete('/delete-voice/:voiceId', auth, asyncWrap(deleteVoice));
+
+router.post('/create-team', auth, asyncWrap(createTeam));
+router.post('/create-competition', auth, asyncWrap(createCompetition));
+router.post('/upload-trainning-data', auth, asyncWrap(uploadTrainningData));
 
 module.exports = router;

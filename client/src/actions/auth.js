@@ -76,16 +76,16 @@ export const register = ({
       });
 
       dispatch(loadUser());
-      // dispatch({ type: REMOVE_ALERT });
+      dispatch({ type: REMOVE_ALERT });
     } else {
       dispatch(setAlert(res.data.message, 'danger', 1000));
       dispatch({
         type: REGISTER_FAILED,
       });
-      // dispatch({ type: REMOVE_ALERT });
+      dispatch({ type: REMOVE_ALERT });
     }
   } catch (error) {
-    // dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    dispatch(setAlert(error.response.data.message, 'danger', 1000));
     dispatch({
       type: REGISTER_FAILED,
     });
@@ -107,6 +107,8 @@ export const login = (email, password) => async dispatch => {
       body,
       config,
     );
+
+    console.log({ data: res.data.results });
     if (res.data.status === 1) {
       dispatch({
         type: LOGIN_SUCCESS,

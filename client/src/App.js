@@ -17,6 +17,7 @@ import CreateTest from './components/Admin/CreateTest';
 import UserManagement from './components/Admin/UserManagement/UserManagement.js';
 import TestManagement from './components/Admin/TestManagement';
 import AddUser from './components/Admin/UserManagement/AddUser/AddUser';
+import DataConstruction from './components/Team/DataConstruction';
 import Layout from './components/Admin/Layout/Layout';
 import LayoutApp from './components/Layout';
 
@@ -30,6 +31,7 @@ import DetailTest from './components/Admin/TestManagement/DetailTest';
 import ChangePassword from './components/User/ChangePassword';
 import VoiceManagement from './components/Admin/VoiceManagement';
 import AddVocie from './components/Admin/VoiceManagement/AddVocie';
+import PrivateTeamRoute from './components/routing/PrivateTeamRoute';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -95,6 +97,18 @@ const App = () => {
                   </Switch>
                 </Layout>
               </PrivateAdminRoute>
+              <PrivateTeamRoute path="/team">
+                <PrivateRoute
+                  exact
+                  path="/team/competitions"
+                  component={() => <div>124</div>}
+                />
+                <PrivateRoute
+                  exact
+                  path="/team/data-construction"
+                  component={DataConstruction}
+                />
+              </PrivateTeamRoute>
               <Redirect to="/" />
             </Switch>
           </LayoutApp>

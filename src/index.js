@@ -21,7 +21,8 @@ app.use(cors());
 
 app.use(fileUpload({ parseNested: true }));
 app.use('/api/users', require('./routes/user.router'));
-app.use('/api/admin/', require('./routes/admin.router'));
+app.use('/api/admin', require('./routes/admin.router'));
+app.use('/api/teams', require('./routes/team.route'));
 
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(errorHandler);

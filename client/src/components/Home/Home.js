@@ -7,6 +7,10 @@ const Home = ({ user }) => {
   if (user && user.role === 1) {
     return <Redirect to="/admin/test-management" />;
   } 
+
+  if (user && user.role === 2) {
+    return <Redirect to="/team/competitions" />;
+  } 
   
   return <User />
 };

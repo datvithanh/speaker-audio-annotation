@@ -12,9 +12,11 @@ const Test = require('../models/test.model');
 const Sentence = require('../models/sentence.model');
 const Audio = require('../models/audio.model');
 const Voice = require('../models/voice.model');
+const AudioTrainning = require('../models/audioTrainning.model');
+const Competition = require('../models/competition.model');
 const { SRC_PATH } = require('../constant');
 const randomAudioForUser = require('../service/randomAudioForUser');
-const { mkDirByPathSync } = require('../utils/file');
+// const { mkDirByPathSync } = require('../utils/file');
 
 async function getListUser(req, res) {
   const users = await User.find({});
@@ -112,7 +114,8 @@ async function uploadSentence(req, res) {
   const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
 
   // create folder to contain file zip
-  mkDirByPathSync(directoryFullPath);
+  // mkDirByPathSync(directoryFullPath);
+  fs.mkdirSync(directoryFullPath, { recursive: true });
 
   const fileName = sentence.name;
   const filePath = `${directoryFullPath}/${fileName}`;
@@ -168,7 +171,8 @@ async function uploadAudio(req, res) {
   const directoryPath = `/${year}/${month}/${day}/${random}`;
   const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
   // create folder to contain file zip
-  mkDirByPathSync(directoryFullPath);
+  // mkDirByPathSync(directoryFullPath);
+  fs.mkdirSync(directoryFullPath, { recursive: true });
   const fileName = audio.name;
   const filePath = `${directoryFullPath}/${fileName}`;
 
@@ -507,6 +511,139 @@ async function deleteVoice(req, res) {
   });
 }
 
+async function createTeam(req, res) {
+  const { email, name, password } = req.body;
+  const isExistMail = await User.findOne({ email: req.body.email });
+  if (isExistMail) {
+    throw new CustomError(
+      errorCode.EMAIL_ALREADY_EXIST,
+      'Email already existed!',
+    );
+  }
+  const team = await User.create({ email, name, password, role: 2 });
+
+  res.send({
+    status: 1,
+    results: {
+      team,
+    },
+  });
+}
+
+async function createCompetition(req, res) {
+  const { name, numberOfListenersPerAudio } = req.body;
+  const checkNameCompetitionExist = await Competition.findOne({ name });
+  if (checkNameCompetitionExist) {
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'Competition already existed!',
+    );
+  }
+
+  const competition = await Competition.create({
+    name,
+    rules: { numberOfListenersPerAudio },
+  });
+
+  res.send({
+    status: 1,
+    results: { competition },
+  });
+}
+
+async function uploadTrainningData(req, res) {
+  const { audio } = req.files;
+  const { competitionName } = req.body;
+  const competition = await Competition.findOne({ name: competitionName });
+
+  if (!competition) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Competition does not exist');
+  }
+
+  if (!audio.name.match(/\.(zip)$/)) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Please upload zip file');
+  }
+
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const random = uuid.v4();
+  const directoryPath = `/${year}/${month}/${day}/${random}`;
+  const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
+  // create folder to contain file zip
+  // console.log({ directoryFullPath });
+  // mkDirByPathSync(directoryFullPath);
+
+  fs.mkdirSync(directoryFullPath, { recursive: true });
+  const fileName = audio.name;
+  const filePath = `${directoryFullPath}/${fileName}`;
+
+  // upload file zip
+  const errUpload = await audio.mv(filePath);
+
+  if (errUpload) {
+    console.log(errUpload);
+  }
+
+  await decompress(filePath, directoryFullPath);
+
+  // remove __MACOSX directory
+  fsExtra.removeSync(`${directoryFullPath}/__MACOSX`);
+
+  let errorInput = null;
+
+  await Promise.all(
+    fs.readdirSync(directoryFullPath).map(async fileUnzip => {
+      if (
+        !fileUnzip.match(/\.(zip)$/) &&
+        !fileUnzip.match(/\.(wav)$/) &&
+        !fileUnzip.match(/\.(txt)$/)
+      ) {
+        errorInput = 'error-ext';
+      }
+    }),
+  );
+
+  if (errorInput === 'error-ext') {
+    fsExtra.removeSync(directoryFullPath);
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'You must upload zip file have only wav file or text file inside',
+    );
+  }
+
+  await Promise.all(
+    fs.readdirSync(directoryFullPath).map(async fileUnzip => {
+      if (fileUnzip.match(/\.(wav)$/)) {
+        const textId = fileUnzip.split('.')[0].split('-')[0];
+        let content = null;
+        try {
+          content = fs.readFileSync(
+            `${directoryFullPath}/${textId}.txt`,
+            'utf8',
+          );
+        } catch (e) {
+          content = null;
+        }
+
+        await AudioTrainning.create({
+          competitionId: competition._id,
+          link: `${directoryFullPath}/${fileUnzip}`,
+          rawOriginContent: content,
+        });
+      }
+    }),
+  );
+
+  res.send({
+    status: 1,
+    results: {
+      directoryPath,
+    },
+  });
+}
+
 module.exports = {
   getListUser,
   addUser,
@@ -521,4 +658,7 @@ module.exports = {
   getVoices,
   addVoice,
   deleteVoice,
+  createTeam,
+  createCompetition,
+  uploadTrainningData,
 };

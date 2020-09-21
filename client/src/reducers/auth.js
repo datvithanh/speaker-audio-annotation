@@ -48,12 +48,12 @@ export default function(state = initialState, action) {
         loading: false,
         user: null,
       };
-    case ADD_USER_SUCCESS: 
+    case ADD_USER_SUCCESS:
     case ADD_USER_FAILED:
       return {
         ...state,
-        loading: false
-      }
+        loading: false,
+      };
     default:
       return state;
   }
