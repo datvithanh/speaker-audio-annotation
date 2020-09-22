@@ -1,0 +1,51 @@
+.app-data-construction {
+  min-height: calc(100vh - 70px);
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(0deg, #fff 5%, #f3f2f1);
+  padding: 20px 0;
+}
+.app-data-construction .content {
+  background-color: #ffffff !important;
+  padding: 0 20px;
+  border-radius: 5px;
+  height: 45vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.app-data-construction .content .text {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: justify;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 0 20px;
+}
+
+.app-data-construction .ant-row-flex {
+  padding: 15px 0;
+}
+.app-data-construction .box-shadow {
+  box-shadow: 0 6px 12px 0px rgba(0, 0, 0, 0.15);
+}
+
+.app-data-construction .flex-center {
+  display: flex;
+  justify-content: center;
+}
+.app-data-construction .icon-btn {
+  cursor: pointer;
+  font-size: 18px;
+}
+.app-data-construction .icon-btn:hover {
+  color: #1890ff;
+}
+.app-data-construction .controls {
+  display: flex;
+  align-items: center;
+  padding: 15px 30px;
+  border-radius: 10000px;
+  background-color: #ffffff;
+}
