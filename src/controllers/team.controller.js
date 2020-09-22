@@ -6,21 +6,45 @@ const Competition = require('../models/competition.model');
 const AudioTrainning = require('../models/audioTrainning.model');
 
 async function getListCompetition(req, res) {
-  const teamInCompetiton = await TeamInCompetition.find({
-    teamId: req.user._id,
-    status: true,
-  })
-    .populate('competitionId')
-    .lean();
+  // const teamInCompetiton = await TeamInCompetition.find({
+  //   teamId: req.user._id,
+  //   status: true,
+  // })
+  //   .populate('competitionId')
+  //   .lean();
 
-  const competitions = teamInCompetiton.map(team => ({
-    ...team.competitionId,
-    numberOfCompletedAudio: team.numberOfCompletedAudio,
-  }));
+  // const competitions = teamInCompetiton.map(team => ({
+  //   ...team.competitionId,
+  //   numberOfCompletedAudio: team.numberOfCompletedAudio,
+  // }));
+  const competitions = await Competition.find({});
+  console.log({ competitions });
+  const returnedCompetition = [];
+  await Promise.all(
+    competitions.map(async competition => {
+      const teamInCompetition = await TeamInCompetition.findOne({
+        competitionId: competition._id,
+        teamId: req.user._id,
+      })
+        .populate('competitionId')
+        .lean();
+      console.log({ teamInCompetition });
+
+      if (teamInCompetition) {
+        returnedCompetition.push({
+          ...teamInCompetition.competitionId,
+          numberOfCompletedAudio: teamInCompetition.numberOfCompletedAudio,
+        });
+      } else {
+        console.log('chay vao day');
+        returnedCompetition.push(competition);
+      }
+    }),
+  );
 
   res.send({
     status: 1,
-    results: { competitions },
+    results: { competitions: returnedCompetition },
   });
 }
 
