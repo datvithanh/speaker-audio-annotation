@@ -18,6 +18,7 @@ import UserManagement from './components/Admin/UserManagement/UserManagement.js'
 import TestManagement from './components/Admin/TestManagement';
 import AddUser from './components/Admin/UserManagement/AddUser/AddUser';
 import DataConstruction from './components/Team/DataConstruction';
+import Competitions from './components/Team/Competitons';
 import Layout from './components/Admin/Layout/Layout';
 import LayoutApp from './components/Layout';
 
@@ -101,11 +102,11 @@ const App = () => {
                 <PrivateRoute
                   exact
                   path="/team/competitions"
-                  component={() => <div>124</div>}
+                  component={Competitions}
                 />
                 <PrivateRoute
                   exact
-                  path="/team/data-construction"
+                  path="/team/competitions/:competitionId"
                   component={DataConstruction}
                 />
               </PrivateTeamRoute>

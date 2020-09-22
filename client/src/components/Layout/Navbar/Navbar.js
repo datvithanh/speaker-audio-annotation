@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 import { logout } from '../../../actions/auth';
 
 const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
+  console.log({ user });
   const authLinks = (
     <ul>
       <li>
@@ -42,7 +43,10 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   return (
     <NavbarStyle>
       <nav className="navbar1">
-        <Link to="/" className="logo-vbee">
+        <Link
+          to={user && user.role === 0 ? '/' : '/team/competitions'}
+          className="logo-vbee"
+        >
           <img src={Logo} alt="VBEE" />
           <img
             className="logo-description"
