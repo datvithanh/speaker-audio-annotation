@@ -1,8 +1,13 @@
 import React, { useEffect } from 'react';
 import { Button, Table } from 'antd';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import CompetitionsStyle from './index.style';
-import { getListCompetition, joinCompetition } from '../../../actions/team';
+import {
+  getListCompetition,
+  joinCompetition,
+  getTaskProcess,
+  getRandomizeAudio,
+} from '../../../actions/team';
 
 const Competitions = ({
   getListCompetition,
@@ -14,9 +19,13 @@ const Competitions = ({
     getListCompetition();
   }, [getListCompetition]);
 
+  const dispatch = useDispatch();
+
   const joinCompetitionHandler = (competitionId, status) => {
     status === 'join' && joinCompetition(competitionId);
     history.push(`/team/competitions/${competitionId}`);
+    dispatch(getTaskProcess(competitionId));
+    dispatch(getRandomizeAudio(competitionId));
   };
 
   const columns = [
@@ -24,6 +33,7 @@ const Competitions = ({
       title: 'Name',
       dataIndex: 'name',
       width: '50%',
+      render: name => name.toUpperCase(),
     },
     {
       title: 'Ngày bắt đầu',
@@ -47,7 +57,7 @@ const Competitions = ({
       key: 'action',
       width: 200,
       render: competition => {
-        return !competition.numberOfCompletedAudio ? (
+        return competition.numberOfCompletedAudio === undefined ? (
           <Button
             style={{ margin: '0 auto', display: 'block' }}
             type="primary"
@@ -57,7 +67,7 @@ const Competitions = ({
           </Button>
         ) : competition.numberOfCompletedAudio &&
           competition.numberOfCompletedAudio ===
-            competition.rules.numberOfListenersPerAudio ? (
+            competition.rules.numberOfAudiosPerListener ? (
           <div style={{ textAlign: 'center', fontStyle: 'italic' }}>
             Đã hoàn thành
           </div>

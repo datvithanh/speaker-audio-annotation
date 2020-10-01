@@ -19,12 +19,12 @@ const audioTrainningSchema = mongoose.Schema(
         _id: false,
         teamId: {
           type: mongoose.Schema.Types.ObjectId,
-          required: true,
+          // required: true,
           ref: 'User',
         },
         content: {
           type: String,
-          required: true,
+          // required: true,
         },
         numberOfVotes: {
           type: Number,

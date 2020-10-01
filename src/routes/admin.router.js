@@ -21,6 +21,7 @@ const {
   createTeam,
   uploadTrainningData,
   createCompetition,
+  exportDataTrainning,
 } = require('../controllers/admin.controller');
 
 router.get('/users', auth, asyncWrap(getListUser));
@@ -41,5 +42,6 @@ router.delete('/delete-voice/:voiceId', auth, asyncWrap(deleteVoice));
 router.post('/create-team', auth, asyncWrap(createTeam));
 router.post('/create-competition', auth, asyncWrap(createCompetition));
 router.post('/upload-trainning-data', auth, asyncWrap(uploadTrainningData));
+router.post('/export-data-trainning', auth, asyncWrap(exportDataTrainning));
 
 module.exports = router;

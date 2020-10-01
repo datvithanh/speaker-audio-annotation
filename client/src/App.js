@@ -21,6 +21,8 @@ import DataConstruction from './components/Team/DataConstruction';
 import Competitions from './components/Team/Competitons';
 import Layout from './components/Admin/Layout/Layout';
 import LayoutApp from './components/Layout';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 //Redux
 import { Provider } from 'react-redux';
@@ -33,6 +35,7 @@ import ChangePassword from './components/User/ChangePassword';
 import VoiceManagement from './components/Admin/VoiceManagement';
 import AddVocie from './components/Admin/VoiceManagement/AddVocie';
 import PrivateTeamRoute from './components/routing/PrivateTeamRoute';
+import FinishTask from './components/Team/DataConstruction/FinishTask';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -102,6 +105,11 @@ const App = () => {
               <PrivateTeamRoute path="/team">
                 <PrivateRoute
                   exact
+                  path="/team/finish"
+                  component={FinishTask}
+                />
+                <PrivateRoute
+                  exact
                   path="/team/competitions"
                   component={Competitions}
                 />
@@ -114,6 +122,18 @@ const App = () => {
               <Redirect to="/" />
             </Switch>
           </LayoutApp>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            style={{ marginTop: '75px' }}
+          />
         </div>
       </Router>
     </Provider>

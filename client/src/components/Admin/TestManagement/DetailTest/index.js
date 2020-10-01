@@ -1,9 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useRef } from 'react';
-import { Select, Table, Modal, Icon, Button, Spin } from 'antd';
+import { Select, Table, Modal, Button, Spin } from 'antd';
 import { connect } from 'react-redux';
 import DetailTestStyle from './index.style';
 import { withRouter } from 'react-router-dom';
+import { SoundOutlined } from '@ant-design/icons';
 
 import {
   getTestById,
@@ -93,9 +94,8 @@ const DetailTest = ({
         <span
           style={{ textAlign: 'center', display: 'block', cursor: 'pointer' }}
         >
-          <Icon
+          <SoundOutlined
             onClick={() => onClickIconAudioHanler(link)}
-            type="sound"
             theme="filled"
           />
         </span>

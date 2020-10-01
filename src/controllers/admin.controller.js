@@ -531,7 +531,7 @@ async function createTeam(req, res) {
 }
 
 async function createCompetition(req, res) {
-  const { name, numberOfListenersPerAudio } = req.body;
+  const { name, numberOfAudiosPerListener } = req.body;
   const checkNameCompetitionExist = await Competition.findOne({ name });
   if (checkNameCompetitionExist) {
     throw new CustomError(
@@ -542,7 +542,7 @@ async function createCompetition(req, res) {
 
   const competition = await Competition.create({
     name,
-    rules: { numberOfListenersPerAudio },
+    rules: { numberOfAudiosPerListener },
   });
 
   res.send({
@@ -613,9 +613,12 @@ async function uploadTrainningData(req, res) {
     );
   }
 
+  let countAudio = 0;
+
   await Promise.all(
     fs.readdirSync(directoryFullPath).map(async fileUnzip => {
       if (fileUnzip.match(/\.(wav)$/)) {
+        countAudio++;
         const textId = fileUnzip.split('.')[0].split('-')[0];
         let content = null;
         try {
@@ -629,18 +632,66 @@ async function uploadTrainningData(req, res) {
 
         await AudioTrainning.create({
           competitionId: competition._id,
-          link: `${directoryFullPath}/${fileUnzip}`,
+          link: `${directoryPath}/${fileUnzip}`,
           rawOriginContent: content,
+          transcripts: content ? [{ numberOfVotes: 0, content }] : [],
         });
       }
     }),
   );
 
+  if (countAudio < competition.rules.numberOfAudiosPerListener) {
+    await AudioTrainning.remove({ competitionId: competition._id });
+    throw new CustomError(
+      errorCode.BAD_REQUEST,
+      'The quantity of audio files less than the number of audio per listener of competition',
+    );
+  }
   res.send({
     status: 1,
     results: {
       directoryPath,
     },
+  });
+}
+
+async function exportDataTrainning(req, res) {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const random = uuid.v4();
+  const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
+
+  fs.mkdirSync(`${directoryFullPath}/train-data`, { recursive: true });
+
+  const audioTrainnings = await AudioTrainning.find({});
+  let count = 0;
+  let textfilePath = null;
+  let audiofilePath = null;
+  audioTrainnings.forEach(audioTrainning => {
+    count++;
+    textfilePath = `${directoryFullPath}/train-data/${count}.txt`;
+    fs.writeFileSync(textfilePath, audioTrainning.rawOriginContent, err => {
+      if (err) return console.log(err);
+
+      return console.log('Ghi file thanh cong');
+    });
+
+    audiofilePath = `${directoryFullPath}/train-data/${count}.wav`;
+
+    fs.copyFileSync(
+      `${SRC_PATH}/static${audioTrainning.link}`,
+      audiofilePath,
+      err => {
+        if (err) throw err;
+        console.log('copy successful');
+      },
+    );
+  });
+
+  res.send({
+    status: 1,
   });
 }
 
@@ -661,4 +712,5 @@ module.exports = {
   createTeam,
   createCompetition,
   uploadTrainningData,
+  exportDataTrainning,
 };

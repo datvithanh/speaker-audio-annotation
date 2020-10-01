@@ -5,8 +5,12 @@
   background-image: linear-gradient(0deg, #fff 5%, #f3f2f1);
   padding: 20px 0;
 }
+
+.app-data-construction .main {
+  margin-top: 50px;
+}
+
 .app-data-construction .content {
-  background-color: #ffffff !important;
   padding: 0 20px;
   border-radius: 5px;
   height: 45vh;
@@ -17,15 +21,27 @@
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   text-align: justify;
   font-size: 20px;
   font-weight: 500;
   padding: 0 20px;
 }
 
-.app-data-construction .ant-row-flex {
-  padding: 15px 0;
+/* .app-data-construction .ant-list-item:nth-child(even) {
+  background-color: #f0f3f4;
+} */
+
+.ant-item-list {
+  background-color: #f0f3f4;
+}
+
+.app-data-construction .ant-list-item {
+  padding: 10px 20px 10px 10px;
+  min-height: 80px;
+}
+.app-data-construction .ant-col .content {
+  padding: 10px 0;
 }
 .app-data-construction .box-shadow {
   box-shadow: 0 6px 12px 0px rgba(0, 0, 0, 0.15);
@@ -37,7 +53,13 @@
 }
 .app-data-construction .icon-btn {
   cursor: pointer;
-  font-size: 18px;
+  font-size: 32px;
+  color: #595959;
+  margin-right: 5px;
+}
+
+.app-data-construction .icon-btn :hover {
+  color: #f1c94b;
 }
 .app-data-construction .icon-btn:hover {
   color: #1890ff;
@@ -46,6 +68,65 @@
   display: flex;
   align-items: center;
   padding: 15px 30px;
-  border-radius: 10000px;
+  border-radius: 5px;
   background-color: #ffffff;
+}
+.app-data-construction .label {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 10px 0;
+  font-family: 'Open Sans';
+}
+
+.app-data-construction .send-button {
+  width: 50px;
+  height: 50px;
+  font-size: 30px;
+  font-weight: bold;
+  /* position: absolute; */
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  right: 0;
+  bottom: 0;
+  margin-left: 5px;
+  border-radius: 100px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.app-data-construction .input-text {
+  flex: 1;
+  padding-right: 15%;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.app-data-construction .input-container {
+  align-items: flex-end;
+  /* padding-top: 10px; */
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.app-data-construction .send-icon {
+  padding: 10px;
+  /* background-color: #595959; */
+  /* border: 0px solid #595959; */
+  /* color: #f1c94b; */
+}
+
+.app-data-construction .send-icon :hover {
+  /* padding: 10px; */
+  /* background-color: #595959; */
+  /* border: 0px solid #595959; */
+  color: #f1c94b;
+}
+
+.app-data-construction .number-of-votes {
+  display: flex;
+  align-items: flex-start;
+  font-size: 25px;
+  font-weight: 500;
+  padding: 1px;
 }

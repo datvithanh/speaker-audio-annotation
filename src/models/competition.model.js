@@ -7,9 +7,12 @@ const competitionSchema = mongoose.Schema(
       required: true,
     },
     rules: {
-      numberOfListenersPerAudio: {
+      numberOfAudiosPerListener: {
         type: Number,
         required: true,
+      },
+      numberOfMinVotersToAcceptAudio: {
+        type: Number,
       },
     },
   },

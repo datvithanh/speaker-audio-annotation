@@ -52,8 +52,24 @@ async function joinCompetition(req, res) {
     );
   }
 
-  await TeamInCompetition.create({ competitionId, teamId: req.user._id });
+  await TeamInCompetition.create({
+    competitionId,
+    teamId: req.user._id,
+  });
   const competition = await Competition.findById(competitionId);
+
+  // update numberOfMinVotersToAcceptAudio
+  const numberOfTeams = await TeamInCompetition.count({
+    competitionId,
+  });
+
+  if (numberOfTeams > 0) {
+    competition.rules.numberOfMinVotersToAcceptAudio = Math.ceil(
+      numberOfTeams * 0.5,
+    );
+    await competition.save();
+  }
+
   res.send({
     status: 1,
     results: {
@@ -74,13 +90,29 @@ async function randomizeAudio(req, res) {
     throw new CustomError(errorCode.BAD_REQUEST, 'Competition does not exist!');
   }
 
+  const teamInCompetition = await TeamInCompetition.findOne({
+    competitionId,
+    teamId: req.user._id,
+  });
+
+  if (
+    teamInCompetition.numberOfCompletedAudio ===
+    competition.rules.numberOfAudiosPerListener
+  ) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'completed');
+  }
+
   const audios = await AudioTrainning.find({
     competitionId,
-    numberOfEditors: { $lt: competition.rules.numberOfListenersPerAudio },
+    numberOfEditors: { $lt: competition.rules.numberOfAudiosPerListener },
     editors: { $nin: [req.user._id] },
   }).sort({
     numberOfEditors: 'asc',
   });
+
+  if (audios.length === 0) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'completed');
+  }
 
   res.send({
     status: 1,
@@ -96,6 +128,10 @@ async function getListTranscipt(req, res) {
     throw new CustomError(errorCode.BAD_REQUEST, 'Missing audioId');
   }
   const audio = await AudioTrainning.findById(audioId);
+
+  if (!audio) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Audio does not exist');
+  }
 
   res.send({
     status: 1,
@@ -152,13 +188,48 @@ async function typing(req, res) {
     audioId,
     {
       $push: {
-        transcripts: { teamId: req.user._id, content: text },
+        transcripts: {
+          teamId: req.user._id,
+          content: text,
+        },
         editors: req.user._id,
       },
       $inc: { numberOfEditors: 1 },
     },
     { new: true },
   );
+
+  // update rawContent
+  const a = await AudioTrainning.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId(audioId),
+      },
+    },
+    {
+      $project: {
+        'transcripts.content': 1,
+        'transcripts.numberOfVotes': 1,
+      },
+    },
+    { $unwind: '$transcripts' },
+    {
+      $sort: {
+        'transcripts.numberOfVotes': -1,
+      },
+    },
+    { $limit: 1 },
+  ]);
+
+  const { transcripts } = a[0];
+
+  const { numberOfVotes, content } = transcripts;
+
+  const competition = await Competition.findById(audio.competitionId);
+  if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
+    audio.rawOriginContent = content;
+    await audio.save();
+  }
 
   await TeamInCompetition.findOneAndUpdate(
     {
@@ -183,18 +254,6 @@ async function voting(req, res) {
   if (!audioId) {
     throw new CustomError(errorCode.BAD_REQUEST, 'Missing audioId');
   }
-  if (!teamId) {
-    throw new CustomError(errorCode.BAD_REQUEST, 'Missing teamId');
-  }
-
-  const isAudioExist = await AudioTrainning.findOne({
-    'transcripts.teamId': mongoose.Types.ObjectId(teamId),
-    _id: audioId,
-  });
-
-  if (!isAudioExist) {
-    throw new CustomError(errorCode.BAD_REQUEST, 'Audio does not exist!');
-  }
 
   const audio = await AudioTrainning.findById(audioId);
 
@@ -217,14 +276,64 @@ async function voting(req, res) {
     );
   }
 
-  const audioUpdated = await AudioTrainning.findOneAndUpdate(
-    { 'transcripts.teamId': mongoose.Types.ObjectId(teamId), _id: audioId },
-    {
-      $inc: { 'transcripts.$.numberOfVotes': 1, numberOfEditors: 1 },
-      $push: { editors: req.user._id },
-    },
-    { new: true },
-  );
+  let audioUpdated;
+
+  if (!teamId) {
+    const isAudioExist = await AudioTrainning.findOne({
+      _id: audioId,
+    });
+
+    if (!isAudioExist) {
+      throw new CustomError(errorCode.BAD_REQUEST, 'Audio does not exist!');
+    }
+
+    audioUpdated = await AudioTrainning.findOneAndUpdate(
+      { 'transcripts.teamId': null, _id: audioId },
+      {
+        $inc: { 'transcripts.$.numberOfVotes': 1, numberOfEditors: 1 },
+        $push: { editors: req.user._id },
+      },
+      { new: true },
+    );
+  } else {
+    const isAudioExist = await AudioTrainning.findOne({
+      'transcripts.teamId': mongoose.Types.ObjectId(teamId),
+      _id: audioId,
+    });
+
+    if (!isAudioExist) {
+      throw new CustomError(errorCode.BAD_REQUEST, 'Audio does not exist!');
+    }
+
+    audioUpdated = await AudioTrainning.findOneAndUpdate(
+      { 'transcripts.teamId': mongoose.Types.ObjectId(teamId), _id: audioId },
+      {
+        $inc: { 'transcripts.$.numberOfVotes': 1, numberOfEditors: 1 },
+        $push: { editors: req.user._id },
+      },
+      { new: true },
+    );
+  }
+
+  // update rawContent
+  const a = await AudioTrainning.aggregate([
+    { $match: { _id: mongoose.Types.ObjectId(audioId) } },
+    { $project: { 'transcripts.content': 1, 'transcripts.numberOfVotes': 1 } },
+    { $unwind: '$transcripts' },
+    { $sort: { 'transcripts.numberOfVotes': -1 } },
+    { $limit: 1 },
+  ]);
+
+  const { transcripts } = a[0];
+
+  const { numberOfVotes, content } = transcripts;
+
+  const competition = await Competition.findById(audio.competitionId);
+  console.log({ numberOfVotes });
+  if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
+    audio.rawOriginContent = content;
+    await audio.save();
+  }
 
   await TeamInCompetition.findOneAndUpdate(
     {
@@ -244,6 +353,50 @@ async function voting(req, res) {
   });
 }
 
+async function getCompetitionById(req, res) {
+  const { competitionId } = req.params;
+  if (!competitionId) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+
+  const competition = await Competition.findById(competitionId);
+  if (!competition) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+
+  res.send({
+    status: 1,
+    results: {
+      competition,
+    },
+  });
+}
+
+async function getTaskProcess(req, res) {
+  const { competitionId } = req.params;
+  if (!competitionId) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+
+  const competition = await Competition.findById(competitionId);
+  if (!competition) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+
+  const teamInCompetition = await TeamInCompetition.findOne({
+    competitionId: competition._id,
+    teamId: req.user._id,
+  });
+
+  res.send({
+    status: 1,
+    results: {
+      numberOfCompletedAudio: teamInCompetition.numberOfCompletedAudio,
+      totalAmountOfAudio: competition.rules.numberOfAudiosPerListener,
+    },
+  });
+}
+
 module.exports = {
   getListCompetition,
   joinCompetition,
@@ -251,4 +404,6 @@ module.exports = {
   getListTranscipt,
   voting,
   typing,
+  getCompetitionById,
+  getTaskProcess,
 };

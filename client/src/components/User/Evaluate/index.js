@@ -12,8 +12,9 @@ import {
   setMaxIndexAudio,
 } from '../../../actions/user';
 import { connect } from 'react-redux';
-import { Radio, Result, Button, Icon, Spin } from 'antd';
+import { Radio, Result, Button, Spin } from 'antd';
 import EvaluateStyle from './index.style';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
 const options = [
   {
@@ -367,7 +368,7 @@ const Evaluate = ({
                       onClick={backSentence}
                       type="primary"
                     >
-                      <Icon type="left" />
+                      <LeftOutlined />
                       Câu trước
                     </Button>
                     <Button
@@ -391,7 +392,7 @@ const Evaluate = ({
                       type="primary"
                     >
                       Câu tiếp
-                      <Icon type="right" />
+                      <RightOutlined type="right" />
                     </Button>
                   </div>
                 </div>

@@ -14,6 +14,7 @@ const teamInCompetitionSchema = mongoose.Schema(
     },
     numberOfCompletedAudio: {
       type: Number,
+      default: 0,
     },
     status: {
       type: Boolean,
