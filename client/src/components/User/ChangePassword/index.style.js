@@ -39,7 +39,7 @@ const ChangePasswordStyle = styled.div`
   .bg-primary,
   .badge-primary,
   .alert-primary {
-    background: rgb(236, 202, 81);
+    background: #0b6398;
     color: rgb(0, 0, 0);
   }
 

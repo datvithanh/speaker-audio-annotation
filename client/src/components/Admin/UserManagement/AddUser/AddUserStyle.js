@@ -17,7 +17,7 @@ const AddUserStyle = styled.div`
   .lead {
     font-size: 1.5rem;
   }
- 
+
   .text-primary {
     color: black;
   }
@@ -39,7 +39,7 @@ const AddUserStyle = styled.div`
   .bg-primary,
   .badge-primary,
   .alert-primary {
-    background: rgb(247,220,28);
+    background: #0b6398;
     color: rgb(0, 0, 0);
   }
 

@@ -6,7 +6,7 @@ const VoiceManagement = styled.div`
   width: 90%;
   .btn {
     display: block;
-    background: rgb(236, 202, 81);
+    background: #0b6398;
     color: #333;
     padding: 0.4rem 1.3rem;
     font-size: 1rem;

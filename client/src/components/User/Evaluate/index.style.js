@@ -88,7 +88,7 @@ const EvaluateStyle = styled.div`
   .STT-highlight {
     cursor: pointer;
     text-decoration: underline;
-    background-color: rgb(247,220,28);
+    background-color: #0b6398;
     padding: 10px;
     border-radius: 10px;
   }

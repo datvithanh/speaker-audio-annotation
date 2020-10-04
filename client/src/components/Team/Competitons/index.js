@@ -59,7 +59,11 @@ const Competitions = ({
       render: competition => {
         return competition.numberOfCompletedAudio === undefined ? (
           <Button
-            style={{ margin: '0 auto', display: 'block' }}
+            style={{
+              margin: '0 auto',
+              display: 'block',
+              backgroundColor: '#0b6398',
+            }}
             type="primary"
             onClick={() => joinCompetitionHandler(competition._id, 'join')}
           >
@@ -73,7 +77,11 @@ const Competitions = ({
           </div>
         ) : (
           <Button
-            style={{ margin: '0 auto', display: 'block' }}
+            style={{
+              margin: '0 auto',
+              display: 'block',
+              backgroundColor: '#0b6398',
+            }}
             type="primary"
             onClick={() => joinCompetitionHandler(competition._id, 'joined')}
           >

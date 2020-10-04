@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import NavbarStyle from './Navbar.style';
-import Logo from '../../../static/img/logo-vbee.svg';
+import Logo from '../../../static/img/logo-vlsp.png';
 import LogoDescription from '../../../static/img/logo-description.svg';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -47,11 +47,11 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           className="logo-vbee"
         >
           <img src={Logo} alt="VBEE" />
-          <img
+          {/* <img
             className="logo-description"
             src={LogoDescription}
             alt="Vietnamese BE your Eyes"
-          />
+          /> */}
         </Link>
         {!loading && (
           <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>

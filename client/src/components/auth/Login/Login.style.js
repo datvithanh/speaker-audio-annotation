@@ -39,8 +39,8 @@ const LoginStyle = styled.div`
   .bg-primary,
   .badge-primary,
   .alert-primary {
-    background: rgb(247,220,28);
-    color: rgb(0, 0, 0);
+    background: #0b6398;
+    color: white;
   }
 
   .btn:hover {

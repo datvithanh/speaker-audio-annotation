@@ -11,8 +11,9 @@ const NavbarStyle = styled.div`
     top: 0;
     width: 100%;
     z-index: 10;
-    background-color: white;
+    background-color: #0b6398;
     height: 70px;
+    color: white;
   }
 
   .welcome {
@@ -48,7 +49,7 @@ const NavbarStyle = styled.div`
 
   ul a {
     text-decoration: none;
-    color: black;
+    color: white;
     display: block;
     width: 145px;
     text-align: center;
@@ -59,16 +60,16 @@ const NavbarStyle = styled.div`
 
   .active,
   a:hover {
-    background: rgb(247,220,28);
+    background-color: #bfd8ea;
     color: black;
   }
 
   .logo-vbee:hover {
-    background: white;
+    background: #0b6398;
   }
 
   .logo:hover {
-    background: white;
+    background: #0b6398;
   }
 `;
 

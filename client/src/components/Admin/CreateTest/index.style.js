@@ -7,7 +7,6 @@ const CreateTestStyle = styled.div`
   margin-top: 1rem;
   margin-bottom: 3rem;
   width: 90%;
-  
 
   /* Text Styles*/
   .large {
@@ -58,7 +57,7 @@ const CreateTestStyle = styled.div`
   .bg-primary,
   .badge-primary,
   .alert-primary {
-    background: rgb(236, 202, 81);
+    background: #0b6398;
     color: rgb(0, 0, 0);
   }
 

@@ -104,9 +104,9 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 
   return (
     <RegisterStyle>
-      <h1 className="large">Đăng ký</h1>
+      <h1 className="large">Đăng ký tài khoản</h1>
       <p className="lead">
-        <i className="fas fa-user"></i> Tạo tài khoản của bạn
+        <i className="fas fa-user"></i> Tạo tài khoản đánh giá chất lượng giọng nói
       </p>
       <Alert />
       <form className="form" onSubmit={e => onSubmit(e)}>

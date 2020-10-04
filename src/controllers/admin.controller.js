@@ -5,6 +5,7 @@ const fsExtra = require('fs-extra');
 const { ObjectId } = require('mongoose').Types;
 const decompress = require('decompress');
 const uuid = require('uuid');
+const AdmZip = require('adm-zip');
 const CustomError = require('../errors/CustomError');
 const errorCode = require('../errors/errorCode');
 const User = require('../models/user.model');
@@ -14,6 +15,7 @@ const Audio = require('../models/audio.model');
 const Voice = require('../models/voice.model');
 const AudioTrainning = require('../models/audioTrainning.model');
 const Competition = require('../models/competition.model');
+const TeamInCompetition = require('../models/teamInCompetition.model');
 const { SRC_PATH } = require('../constant');
 const randomAudioForUser = require('../service/randomAudioForUser');
 // const { mkDirByPathSync } = require('../utils/file');
@@ -661,6 +663,7 @@ async function exportDataTrainning(req, res) {
   const month = date.getMonth() + 1;
   const day = date.getDate();
   const random = uuid.v4();
+  const directoryPath = `/${year}/${month}/${day}/${random}`;
   const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
 
   fs.mkdirSync(`${directoryFullPath}/train-data`, { recursive: true });
@@ -690,9 +693,26 @@ async function exportDataTrainning(req, res) {
     );
   });
 
+  const zip = new AdmZip();
+  zip.addLocalFolder(`${directoryFullPath}/train-data`);
+  zip.writeZip(`${directoryFullPath}/train-data.zip`);
+
   res.send({
     status: 1,
+    link: `${directoryPath}/train-data.zip`,
   });
+}
+
+async function removeCompetition(req, res) {
+  const { competitionId } = req.body;
+  if (!competitionId) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+  const competition = await Competition.findByIdAndDelete(competitionId);
+  await TeamInCompetition.deleteMany({ competitionId });
+  await AudioTrainning.deleteMany({ competitionId });
+
+  res.send({ status: 1, results: { competition } });
 }
 
 module.exports = {
@@ -713,4 +733,5 @@ module.exports = {
   createCompetition,
   uploadTrainningData,
   exportDataTrainning,
+  removeCompetition,
 };
