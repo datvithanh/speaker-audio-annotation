@@ -276,9 +276,12 @@ const Evaluate = ({
     },
     {
       title: 'Điểm',
-      dataIndex: 'user.point',
+      dataIndex: 'user',
       width: 80,
       align: 'center',
+      render: user => {
+        return <span>{user.point}</span>;
+      },
     },
   ];
 
