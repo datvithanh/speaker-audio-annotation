@@ -21,6 +21,7 @@ services:
       - TZ=Asia/Ho_Chi_Minh
       - PORT=5000
       - MONGODB_URL=mongodb://vlsp_mongo:27017/vlsp
+      - JWT_SECRET=thisismykey
   
   vlsp_client:
     build:
