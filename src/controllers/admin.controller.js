@@ -87,9 +87,13 @@ async function createTest(req, res) {
 
   const minPeopleJoin =
     (minPeopleListenAudio * numberOfSentences) / minSentences;
+
+  const dateClosed = new Date(req.body.dateClosed);
+  dateClosed.setDate(dateClosed.getDate() + 1);
   const test = await Test.create({
     ...req.body,
     minPeopleJoin,
+    dateClosed,
     voices: voicesConvertToCode,
   });
   res.send({

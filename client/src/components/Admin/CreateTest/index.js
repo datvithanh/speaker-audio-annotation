@@ -31,14 +31,14 @@ const CreateTest = ({
   // });
   const [formData, setFormData] = useState({
     name: 'Test1',
-    numberOfVoices: 4,
-    voices: ['FIN', 'INI', 'NA1', 'NA2'],
-    numberOfSentences: 40, // n
-    minSentences: 20, // a
+    numberOfVoices: 3,
+    voices: ['FIN', 'INI', 'NA1'],
+    numberOfSentences: 4, // n
+    minSentences: 2, // a
     minPeopleListenAudio: 3, // b
-    accessModifier: 'Private',
-    dateOpened: '2019-10-05',
-    dateClosed: '2019-10-30',
+    accessModifier: 'Public',
+    dateOpened: '2020-10-05',
+    dateClosed: '2020-10-12',
   });
 
   useEffect(() => {
