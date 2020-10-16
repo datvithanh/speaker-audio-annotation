@@ -1,11 +1,12 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React, { Fragment } from 'react';
 import { NavLink, Link } from 'react-router-dom';
 import NavbarStyle from './Navbar.style';
 import Logo from '../../../static/img/logo-vlsp.png';
-import LogoDescription from '../../../static/img/logo-description.svg';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { logout } from '../../../actions/auth';
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const authLinks = (
@@ -14,12 +15,23 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         <span className="welcome">
           Xin chào, <b>{user ? user.name : null}</b>
         </span>
-        <NavLink activeClassName="active" to="/change-password">
+        <NavLink
+          className="buttonNav"
+          activeClassName="active"
+          to="/change-password"
+        >
           <span>Đổi mật khẩu</span>
         </NavLink>
-        <Link className="logout" to="/login" onClick={logout}>
+        <Link className="buttonNav logout" to="/login" onClick={logout}>
           <i className="fas fa-sign-out-alt" /> <span>Đăng xuất</span>
         </Link>
+        <a
+          className="tutorial"
+          target="_blank"
+          href={`${process.env.REACT_APP_API_DOMAIN}/TaiLieuHuongDanVLSPTool.pdf`}
+        >
+          <QuestionCircleOutlined onClick="https://www.google.com/" />
+        </a>
       </li>
     </ul>
   );

@@ -329,7 +329,6 @@ async function voting(req, res) {
   const { numberOfVotes, content } = transcripts;
 
   const competition = await Competition.findById(audio.competitionId);
-  console.log({ numberOfVotes });
   if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
     audio.rawOriginContent = content;
     await audio.save();

@@ -1,7 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './styles.css';
 import { Row, List, Col, Input } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import StyleDataConstruction, {
+  StyleGuide,
+  StyleTextDesc,
+  StyleTextEx,
+  StyleTextTitle,
+} from './index.style';
 
 import {
   getRandomizeAudio,
@@ -72,13 +77,35 @@ const DataConstruction = ({ match, history }) => {
   };
 
   return (
-    <>
+    <StyleDataConstruction>
       <div className="app-data-construction">
         {competition && (
           <h2 className="flex-center">{competition.name.toUpperCase()}</h2>
         )}
-        <Row type="flex" justify="center" className="main">
-          <Col span={12}>
+        <Row type="flex" justify="start" className="main">
+          <Col span={8}>
+            <StyleGuide>
+              <StyleTextTitle>
+                Hướng dẫn chỉnh sửa nội dung audio
+              </StyleTextTitle>
+              <StyleTextDesc>
+                1. Số, ngày tháng, giờ xuất hiện trong nội dung audio cần chuyển
+                về dạng chữ số
+              </StyleTextDesc>
+              <StyleTextEx>Ví dụ: mười lăm &rarr; 15</StyleTextEx>
+              <StyleTextEx>
+                ngày hai mươi tháng 3 &rarr; ngày 20 tháng 3
+              </StyleTextEx>
+              <StyleTextDesc>
+                2. Những từ vay mượn, từ nước ngoài cần chuyển về dạng phiên âm
+                tiếng Việt nếu không rõ từ nước ngoài gốc là từ gì
+              </StyleTextDesc>
+              <StyleTextEx>
+                Ví dụ: hello &rarr; hê-lô, internet &rarr; in-tơ-nét
+              </StyleTextEx>
+            </StyleGuide>
+          </Col>
+          <Col span={16} className="left-content">
             <Row justify="center">
               <span
                 className="text"
@@ -191,7 +218,7 @@ const DataConstruction = ({ match, history }) => {
           </Col>
         </Row>
       </div>
-    </>
+    </StyleDataConstruction>
   );
 };
 

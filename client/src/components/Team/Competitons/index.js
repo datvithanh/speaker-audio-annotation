@@ -30,7 +30,7 @@ const Competitions = ({
 
   const columns = [
     {
-      title: 'Name',
+      title: 'Tên cuộc thi',
       dataIndex: 'name',
       width: '50%',
       render: name => name.toUpperCase(),
@@ -88,6 +88,18 @@ const Competitions = ({
             Thực hiện tiếp
           </Button>
         );
+        // return (
+        //   <a
+        //     href="http://localhost:5000/2020/10/17/18a3526e-0c3f-44e5-8e32-80848920999a/train-data.zip"
+        //     style={{
+        //       textDecoration: 'underline',
+        //       textAlign: 'center',
+        //       display: 'block',
+        //     }}
+        //   >
+        //     Download Training Data
+        //   </a>
+        // );
       },
     },
   ];

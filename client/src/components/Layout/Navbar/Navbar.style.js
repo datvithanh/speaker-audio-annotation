@@ -47,7 +47,7 @@ const NavbarStyle = styled.div`
     align-items: center;
   }
 
-  ul a {
+  .buttonNav {
     text-decoration: none;
     color: white;
     display: block;
@@ -59,7 +59,7 @@ const NavbarStyle = styled.div`
   }
 
   .active,
-  a:hover {
+  .buttonNav:hover {
     background-color: #bfd8ea;
     color: black;
   }
@@ -70,6 +70,19 @@ const NavbarStyle = styled.div`
 
   .logo:hover {
     background: #0b6398;
+  }
+
+  .tutorial {
+    display: flex;
+    padding: 10px;
+    cursor: pointer;
+    /* background-color: white; */
+    color: white;
+  }
+
+  .tutorial:hover {
+    background-color: #bfd8ea;
+    color: black;
   }
 `;
 
