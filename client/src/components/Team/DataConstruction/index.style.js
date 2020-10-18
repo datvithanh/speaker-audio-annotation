@@ -8,11 +8,19 @@ export default styled.div`
     background-image: linear-gradient(0deg, #fff 5%, #f3f2f1);
     padding: 20px 0;
     .main {
+      display: flex;
+      position: relative;
       margin-top: 50px;
       padding: 0 30px;
+
+      .collapse-left-content {
+        position: absolute;
+        left: 80px;
+        top: -20px;
+      }
     }
-    .left-content {
-      padding: 0 30px 0 10%;
+    .right-content {
+      padding: 0 5% 0 5%;
     }
     .content {
       padding: 0 20px;
@@ -109,6 +117,9 @@ export default styled.div`
       font-weight: 500;
       padding: 1px;
     }
+    .link-foreign-dictionary {
+      text-decoration: underline;
+    }
   }
   .ant-item-list {
     background-color: #f0f3f4;
@@ -116,11 +127,12 @@ export default styled.div`
 `;
 
 export const StyleGuide = styled.div`
-  padding: 50px 7.5px 0px 30px;
+  padding: 20px 16px 0px 10%;
+  text-align: justify;
 `;
 
 export const StyleTextDesc = styled.p`
-  font-size: 1rem;
+  font-size: 16px;
   margin: 0;
   opacity: 0.85;
   text-align: justify;
@@ -132,7 +144,7 @@ export const StyleTextEx = styled(StyleTextDesc)`
 
 export const StyleTextTitle = styled(StyleTextDesc)`
   font-weight: bold;
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 1rem;
   font-style: italic;
 `;

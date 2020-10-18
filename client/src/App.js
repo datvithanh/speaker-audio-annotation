@@ -44,6 +44,8 @@ const App = () => {
     store.dispatch(loadUser());
   }, []);
 
+
+
   return (
     <Provider store={store}>
       <Router>
@@ -103,6 +105,7 @@ const App = () => {
                 </Layout>
               </PrivateAdminRoute>
               <PrivateTeamRoute path="/team">
+    
                 <PrivateRoute
                   exact
                   path="/team/finish"

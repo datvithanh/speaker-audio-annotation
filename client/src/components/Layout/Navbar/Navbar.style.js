@@ -87,3 +87,7 @@ const NavbarStyle = styled.div`
 `;
 
 export default NavbarStyle;
+
+export const StyleLogoDescription = styled.span`
+  color: white;
+`;

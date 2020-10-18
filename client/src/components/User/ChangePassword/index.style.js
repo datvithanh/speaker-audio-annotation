@@ -40,7 +40,7 @@ const ChangePasswordStyle = styled.div`
   .badge-primary,
   .alert-primary {
     background: #0b6398;
-    color: rgb(0, 0, 0);
+    color: white;
   }
 
   .btn:hover {

@@ -65,7 +65,6 @@ export const getAudioForUser = (user, test) => async dispatch => {
         `/api/users/get-audio?user=${user}&test=${test}`,
     );
 
-
     if (res.data.status === 1) {
       dispatch({
         type: GET_AUDIO_FOR_USER,
@@ -213,7 +212,10 @@ export const changePassword = (
       dispatch({
         type: CHANGE_PASSWORD,
       });
-      dispatch(setAlert('Đổi mật khẩu thành công', 'success', 1000));
+      dispatch(setAlert('Đổi mật khẩu thành công', 'success', 2000));
+      setTimeout(() => {
+        window.location.href = '/team/competitions';
+      }, 2000);
     } else {
       dispatch(setAlert(res.data.message, 'danger', 1000));
     }

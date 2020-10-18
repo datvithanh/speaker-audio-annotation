@@ -15,7 +15,11 @@ const Home = ({ user }) => {
   }
 
   if (user && user.role === 2) {
-    return <Redirect to="/team/competitions" />;
+    return (
+      <Redirect
+        to={user.actived === false ? '/change-password' : '/team/competitions'}
+      />
+    );
   }
 
   return <User />;
