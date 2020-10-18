@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React, { Fragment } from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import NavbarStyle from './Navbar.style';
+import NavbarStyle, { StyleLogoDescription } from './Navbar.style';
 import Logo from '../../../static/img/logo-vlsp.png';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -30,7 +30,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
           target="_blank"
           href={`${process.env.REACT_APP_API_DOMAIN}/TaiLieuHuongDanVLSPTool.pdf`}
         >
-          <QuestionCircleOutlined onClick="https://www.google.com/" />
+          <QuestionCircleOutlined />
         </a>
       </li>
     </ul>
@@ -39,12 +39,12 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
   const guestLinks = (
     <ul>
       <li>
-        <NavLink activeClassName="active" to="/register">
+        <NavLink className="buttonNav" activeClassName="active" to="/register">
           Đăng ký
         </NavLink>
       </li>
       <li>
-        <NavLink activeClassName="active" to="/login">
+        <NavLink className="buttonNav" activeClassName="active" to="/login">
           Đăng nhập
         </NavLink>
       </li>
@@ -64,6 +64,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             src={LogoDescription}
             alt="Vietnamese BE your Eyes"
           /> */}
+          <StyleLogoDescription>Vietnamese Text To Speech</StyleLogoDescription>
         </Link>
         {!loading && (
           <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>

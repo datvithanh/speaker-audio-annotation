@@ -30,13 +30,13 @@ const Competitions = ({
 
   const columns = [
     {
-      title: 'Tên cuộc thi',
+      // title: 'Tên cuộc thi',
       dataIndex: 'name',
       width: '50%',
       render: name => name.toUpperCase(),
     },
     {
-      title: 'Ngày bắt đầu',
+      // title: 'Ngày bắt đầu',
       dataIndex: 'createdAt',
       align: 'center',
       render: dateString => {
@@ -88,33 +88,60 @@ const Competitions = ({
             Thực hiện tiếp
           </Button>
         );
-        // return (
-        //   <a
-        //     href="http://localhost:5000/2020/10/17/18a3526e-0c3f-44e5-8e32-80848920999a/train-data.zip"
-        //     style={{
-        //       textDecoration: 'underline',
-        //       textAlign: 'center',
-        //       display: 'block',
-        //     }}
-        //   >
-        //     Download Training Data
-        //   </a>
-        // );
       },
     },
   ];
 
+  // // DEMO
+  // const columnsFile = [
+  //   {
+  //     // title: 'Tên cuộc thi',
+  //     dataIndex: 'name',
+  //     width: '50%',
+  //     render: name =>
+  //       'Dữ liệu huấn luyện cho cuộc thi VLSP TTS 2020'.toUpperCase(),
+  //   },
+  //   {
+  //     // title: 'Ngày bắt đầu',
+  //     dataIndex: 'createdAt',
+  //     align: 'center',
+  //     render: dateString => {
+  //       const date = new Date(dateString);
+  //       return (
+  //         <a style={{ textDecoration: 'underline', color: '#0f6398' }}>
+  //           Download
+  //         </a>
+  //       );
+  //     },
+  //   },
+  // ];
+
   return (
-    <CompetitionsStyle>
-      <Table
-        columns={columns}
-        rowKey="_id"
-        bordered
-        className="table"
-        dataSource={competitions}
-        pagination={{ pageSize: 6 }}
-      />
-    </CompetitionsStyle>
+    <>
+      <CompetitionsStyle>
+        <h4>Công việc cần hoàn thành</h4>
+        <Table
+          columns={columns}
+          rowKey="_id"
+          bordered
+          className="table"
+          dataSource={competitions}
+          pagination={{ pageSize: 6 }}
+        />
+      </CompetitionsStyle>
+
+      {/* <CompetitionsStyle>
+        <h4>Tài nguyên được chia sẻ</h4>
+        <Table
+          columns={columnsFile}
+          rowKey="_id"
+          bordered
+          className="table"
+          dataSource={competitions}
+          pagination={{ pageSize: 6 }}
+        />
+      </CompetitionsStyle> */}
+    </>
   );
 };
 

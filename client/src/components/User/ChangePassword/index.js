@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import ChangePasswordStyle from './index.style';
 import { changePassword } from '../../../actions/user';
 
-const ChangePassword = ({ setAlert, changePassword, user }) => {
+const ChangePassword = ({ setAlert, changePassword, user, history }) => {
   const [formData, setFormData] = useState({
     password: '',
     newPassword: '',
@@ -25,6 +25,7 @@ const ChangePassword = ({ setAlert, changePassword, user }) => {
 
   const onSubmit = async e => {
     e.preventDefault();
+
     if (password === '') {
       return setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
     } else if (newPassword === '') {
@@ -35,6 +36,9 @@ const ChangePassword = ({ setAlert, changePassword, user }) => {
       setAlert('Mật khẩu không khớp', 'danger', 1000);
     } else {
       changePassword(user._id, password, newPassword);
+      // setTimeout(() => {
+      //   history.push('/team/competitions');
+      // }, 3000);
     }
   };
 
@@ -88,7 +92,9 @@ const mapStateToProps = state => {
   };
 };
 
-export default withRouter(connect(
-  mapStateToProps,
-  { setAlert, changePassword },
-)(ChangePassword));
+export default withRouter(
+  connect(
+    mapStateToProps,
+    { setAlert, changePassword },
+  )(ChangePassword),
+);
