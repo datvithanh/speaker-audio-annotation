@@ -8,6 +8,10 @@ const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema(
   {
+    actived: {
+      type: Boolean,
+      default: false,
+    },
     type: {
       type: Boolean,
       default: 0, // 0: user create, 1: system create

@@ -286,6 +286,7 @@ async function changePassword(req, res) {
   }
 
   user.password = newPassword;
+  user.actived = true;
   await user.save();
 
   res.send({

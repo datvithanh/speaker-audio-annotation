@@ -224,13 +224,13 @@ async function typing(req, res) {
 
   const { transcripts } = a[0];
 
-  const { numberOfVotes, content } = transcripts;
+  const { content } = transcripts;
 
-  const competition = await Competition.findById(audio.competitionId);
-  if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
-    audio.rawOriginContent = content;
-    await audio.save();
-  }
+  // const competition = await Competition.findById(audio.competitionId);
+  // if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
+  audio.rawOriginContent = content;
+  await audio.save();
+  // }
 
   await TeamInCompetition.findOneAndUpdate(
     {
@@ -327,13 +327,13 @@ async function voting(req, res) {
 
   const { transcripts } = a[0];
 
-  const { numberOfVotes, content } = transcripts;
+  const { content } = transcripts;
 
-  const competition = await Competition.findById(audio.competitionId);
-  if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
-    audio.rawOriginContent = content;
-    await audio.save();
-  }
+  // const competition = await Competition.findById(audio.competitionId);
+  // if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
+  audio.rawOriginContent = content;
+  await audio.save();
+  // }
 
   await TeamInCompetition.findOneAndUpdate(
     {
