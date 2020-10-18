@@ -189,6 +189,7 @@ async function typing(req, res) {
     {
       $push: {
         transcripts: {
+          numberOfVotes: 1,
           teamId: req.user._id,
           content: text,
         },

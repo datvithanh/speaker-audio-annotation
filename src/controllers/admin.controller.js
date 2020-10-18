@@ -719,6 +719,68 @@ async function removeCompetition(req, res) {
   res.send({ status: 1, results: { competition } });
 }
 
+async function exportPartialDataTrainning(req, res) {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const random = uuid.v4();
+  const directoryPath = `/${year}/${month}/${day}/${random}`;
+  const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
+
+  fs.mkdirSync(`${directoryFullPath}/train-data`, { recursive: true });
+
+  const audioTrainnings = await AudioTrainning.find({});
+  let textfilePath = null;
+  let audiofilePath = null;
+  audioTrainnings.forEach(audioTrainning => {
+    const characterArray = audioTrainning.link.split('/');
+    const prefixFileName = characterArray[characterArray.length - 1].split(
+      '.',
+    )[0];
+
+    console.log({ prefixFileName });
+    textfilePath = `${directoryFullPath}/train-data/${prefixFileName}.txt`;
+    fs.writeFileSync(textfilePath, audioTrainning.rawOriginContent, err => {
+      if (err) return console.log(err);
+
+      return console.log('Ghi file thanh cong');
+    });
+
+    audiofilePath = `${directoryFullPath}/train-data/${prefixFileName}.wav`;
+
+    fs.copyFileSync(
+      `${SRC_PATH}/static${audioTrainning.link}`,
+      audiofilePath,
+      err => {
+        if (err) throw err;
+        console.log('copy successful');
+      },
+    );
+  });
+
+  await Promise.all(
+    fs.readdirSync(`${directoryFullPath}/train-data`).map(async fileUnzip => {
+      if (fileUnzip.match(/\.(wav)$/)) {
+        const stats = fs.statSync(
+          `${directoryFullPath}/train-data/${fileUnzip}`,
+        );
+        const fileSizeInBytes = stats.size;
+        console.log({ fileSizeInBytes });
+      }
+    }),
+  );
+
+  // const zip = new AdmZip();
+  // zip.addLocalFolder(`${directoryFullPath}/train-data`);
+  // zip.writeZip(`${directoryFullPath}/train-data.zip`);
+
+  res.send({
+    status: 1,
+    link: `${directoryPath}/train-data.zip`,
+  });
+}
+
 module.exports = {
   getListUser,
   addUser,
@@ -738,4 +800,5 @@ module.exports = {
   uploadTrainningData,
   exportDataTrainning,
   removeCompetition,
+  exportPartialDataTrainning,
 };

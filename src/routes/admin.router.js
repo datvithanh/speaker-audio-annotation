@@ -23,6 +23,7 @@ const {
   createCompetition,
   exportDataTrainning,
   removeCompetition,
+  exportPartialDataTrainning,
 } = require('../controllers/admin.controller');
 
 router.get('/users', auth, asyncWrap(getListUser));
@@ -45,5 +46,10 @@ router.post('/create-competition', auth, asyncWrap(createCompetition));
 router.post('/upload-trainning-data', auth, asyncWrap(uploadTrainningData));
 router.post('/export-data-trainning', auth, asyncWrap(exportDataTrainning));
 router.delete('/competition', auth, asyncWrap(removeCompetition));
+router.post(
+  '/export-partial-data-trainning',
+  auth,
+  asyncWrap(exportPartialDataTrainning),
+);
 
 module.exports = router;
