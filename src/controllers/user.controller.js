@@ -14,7 +14,7 @@ async function signup(req, res) {
     throw new CustomError(errorCode.EMAIL_ALREADY_EXIST, 'Email already exist');
   }
 
-  const user = await User.create(req.body);
+  const user = await User.create({ ...req.body, actived: true });
   const token = await user.generateAuthToken();
 
   res.send({
