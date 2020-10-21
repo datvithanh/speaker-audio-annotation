@@ -13,6 +13,7 @@ import {
   SET_INDEX_AUDIO,
   RESET_AUDIOS,
   UPDATE_PUBLIC_TEST_AFTER_USER_JOIN,
+  GET_TEST_BY_ID,
 } from '../actions/types';
 
 const initialState = {
@@ -107,7 +108,7 @@ export default function(state = initialState, action) {
         ...state,
         publicTest: state.publicTest.map(test => {
           if (test._id === payload.testId) {
-            test.users.push({  indexAudio: 0, id: payload.userId })
+            test.users.push({ indexAudio: 0, id: payload.userId });
             return {
               ...test,
               users: test.users,
@@ -116,6 +117,9 @@ export default function(state = initialState, action) {
           return test;
         }),
       };
+    }
+    case GET_TEST_BY_ID: {
+      return { ...state, testCurrently: payload.test };
     }
     default:
       return state;

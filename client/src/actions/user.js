@@ -14,6 +14,7 @@ import {
   RESET_AUDIOS,
   UPDATE_PUBLIC_TEST_AFTER_USER_JOIN,
   SET_MAX_INDEX_AUDIO,
+  GET_TEST_BY_ID,
 } from './types';
 import axios from 'axios';
 import { setAlert } from './alert';
@@ -263,5 +264,24 @@ export const setMaxIndexAudio = (userId, testId) => async dispatch => {
     }
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getTestById = id => async dispatch => {
+  try {
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + `/api/users/tests/${id}`,
+    );
+
+    console.log({ data: res.data });
+
+    if (res.data.status === 1) {
+      dispatch({
+        type: GET_TEST_BY_ID,
+        payload: res.data.results,
+      });
+    }
+  } catch (error) {
+    console.log(error.response.data.message);
   }
 };

@@ -30,6 +30,10 @@ const UserChoosenStyle = styled.div`
     margin: 1rem auto;
     display: block;
   }
+
+  .btn-primary {
+    color: white;
+  }
 `;
 
 export default UserChoosenStyle;

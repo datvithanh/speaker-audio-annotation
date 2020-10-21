@@ -30,6 +30,7 @@ const CreateTest = ({
   //   dateClosed: '',
   // });
   const [formData, setFormData] = useState({
+    type: '1',
     name: 'Test1',
     numberOfVoices: 3,
     voices: ['FIN', 'INI', 'NA1'],
@@ -37,8 +38,8 @@ const CreateTest = ({
     minSentences: 2, // a
     minPeopleListenAudio: 3, // b
     accessModifier: 'Public',
-    dateOpened: '2020-10-05',
-    dateClosed: '2020-10-12',
+    dateOpened: '2020-10-20',
+    dateClosed: '2020-11-20',
   });
 
   useEffect(() => {
@@ -46,6 +47,7 @@ const CreateTest = ({
   }, [getListUser]);
 
   const {
+    type,
     name,
     numberOfVoices,
     voices,
@@ -81,6 +83,13 @@ const CreateTest = ({
     });
   };
 
+  const onChangeTestType = e => {
+    setFormData({
+      ...formData,
+      type: e.target.value,
+    });
+  };
+
   const onSubmit = e => {
     e.preventDefault();
 
@@ -113,6 +122,7 @@ const CreateTest = ({
       );
     } else {
       addTest({
+        type,
         name,
         numberOfVoices,
         voices,
@@ -135,6 +145,22 @@ const CreateTest = ({
         <form className="form" onSubmit={e => onSubmit(e)}>
           <div className="container">
             <div className="column1">
+              <div className="form-group">
+                <h6>Chọn loại bài test</h6>
+                <select
+                  value={formData.type}
+                  style={{
+                    fontStyle: 'italic',
+                    height: '46px',
+                    backgroundColor: 'white',
+                    borderRadius: '0px',
+                  }}
+                  onChange={e => onChangeTestType(e)}
+                >
+                  <option value="1">Đánh giá giọng nói</option>
+                  <option value="2">Kiểm tra ý định</option>
+                </select>
+              </div>
               <div className="form-group">
                 <h6>Nhập tên bài test</h6>
                 <input
@@ -176,10 +202,10 @@ const CreateTest = ({
                   onChange={e => onChange(e)}
                 />
               </div>
+            </div>
+            <div className="column2">
               <div className="form-group">
-                <h6>
-                  Nhập số câu của một giọng mà bạn muốn một người phải nghe
-                </h6>
+                <h6>Nhập số câu của một giọng một người phải nghe</h6>
                 <input
                   type="text"
                   style={{ fontStyle: 'italic' }}
@@ -188,8 +214,6 @@ const CreateTest = ({
                   onChange={e => onChange(e)}
                 />
               </div>
-            </div>
-            <div className="column2">
               <div className="form-group">
                 <h6>Nhập số người tối thiểu phải nghe 1 audio</h6>
                 <input
@@ -206,7 +230,7 @@ const CreateTest = ({
                   value={formData.accessModifier}
                   style={{
                     fontStyle: 'italic',
-                    height: '40px',
+                    height: '45px',
                     backgroundColor: 'white',
                     borderRadius: '0px',
                   }}

@@ -108,7 +108,6 @@ export const login = (email, password) => async dispatch => {
       config,
     );
 
-    console.log({ data: res.data.results });
     if (res.data.status === 1) {
       dispatch({
         type: LOGIN_SUCCESS,

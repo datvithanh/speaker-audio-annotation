@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Row, List, Col, Input, Tooltip, Button } from 'antd';
+import { Row, List, Col, Input, Tooltip } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import StyleDataConstruction, {
   StyleGuide,
@@ -51,7 +51,6 @@ const DataConstruction = ({ match, history }) => {
   }, [currentAudio]);
 
   const audio = useRef();
-  console.log({ transcriptInputText });
   const toggle = value => () => {
     setCollapsed(value);
   };
@@ -151,9 +150,6 @@ const DataConstruction = ({ match, history }) => {
                     <div className="controls box-shadow">
                       {currentAudio && (
                         <audio controls style={{ width: '100%' }} ref={audio}>
-                          {console.log(
-                            `${process.env.REACT_APP_API_DOMAIN}${currentAudio.link}`,
-                          )}
                           <source
                             src={`${process.env.REACT_APP_API_DOMAIN}${currentAudio.link}`}
                           />

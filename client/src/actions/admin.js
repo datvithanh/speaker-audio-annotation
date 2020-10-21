@@ -73,6 +73,7 @@ export const addUser = ({ name, email, password }) => async dispatch => {
 
 // Add test
 export const addTest = ({
+  type,
   name,
   numberOfVoices,
   voices,
@@ -91,6 +92,7 @@ export const addTest = ({
   };
 
   const body = JSON.stringify({
+    type,
     name,
     numberOfVoices,
     voices,

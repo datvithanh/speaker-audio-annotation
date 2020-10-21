@@ -113,7 +113,8 @@ const User = ({
         const date = new Date(dateString);
         return (
           <span>
-            {date.getDate() +
+            {date.getDate() -
+              1 +
               ' - ' +
               (date.getMonth() + 1) +
               ' - ' +

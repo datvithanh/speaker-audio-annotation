@@ -739,7 +739,6 @@ async function exportPartialDataTrainning(req, res) {
       '.',
     )[0];
 
-    console.log({ prefixFileName });
     textfilePath = `${directoryFullPath}/train-data/${prefixFileName}.txt`;
     fs.writeFileSync(textfilePath, audioTrainning.rawOriginContent, err => {
       if (err) return console.log(err);

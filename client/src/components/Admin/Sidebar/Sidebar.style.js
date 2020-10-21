@@ -26,13 +26,13 @@ const SidebarStyle = styled.div`
 
   .active {
     color: black;
-    background: rgb(255, 248, 184);
+    background: #bfd8ea;
     text-decoration: none;
   }
 
   a:hover {
     color: black;
-    background: rgb(255, 248, 184);
+    background: #bfd8ea;
     text-decoration: none;
   }
 `;

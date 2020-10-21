@@ -10,13 +10,14 @@ import {
   setAudios,
   setIndexAudio,
   setMaxIndexAudio,
+  getTestById,
 } from '../../../actions/user';
 import { connect } from 'react-redux';
 import { Radio, Result, Button, Spin } from 'antd';
 import EvaluateStyle from './index.style';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 
-const options = [
+const options1 = [
   {
     id: 1,
     point: 5,
@@ -54,7 +55,32 @@ const options = [
   },
 ];
 
+const options2 = [
+  {
+    id: 1,
+    point: 1,
+    text: '1. Đúng',
+    // tooltip:
+    //   'Bạn hãy cho mức điểm này nếu tiếng nói nghe được rất tự nhiên, nghe giống như giọng người thu âm, không nghe thấy yếu tố nhân tạo trong đó. Có thể dùng giọng này để trao đổi, tương tác như tương tác với người.',
+  },
+  {
+    id: 2,
+    point: 2,
+    text: '2. Sai',
+    // tooltip:
+    //   'Bạn hãy cho mức điểm này nếu tiếng nói nghe được khá tự nhiên và khá giống giọng người thu âm, có một chút yếu tố nhân tạo nhưng không đáng kể. Có thể dùng giọng này để trao đổi, tương tác được mặc dù có đôi chỗ còn chưa hoàn hảo.',
+  },
+  {
+    id: 3,
+    point: 3,
+    text: '3. Không phải ý định đúng/sai',
+    // tooltip:
+    //   'Bạn hãy cho mức điểm này nếu tiếng nói nghe được có thể hiểu và có thể dùng để giao tiếp nhưng còn khá nhiều yếu tố nhân tạo.',
+  },
+];
+
 const Evaluate = ({
+  test,
   getAudioForUser,
   setPointForAudio,
   audios,
@@ -68,6 +94,7 @@ const Evaluate = ({
   setAudios,
   setIndexAudio,
   setMaxIndexAudio,
+  getTestById,
 }) => {
   const [point, setPoint] = useState();
   // const [disabledButton, setDisableButton] = useState(true);
@@ -77,6 +104,11 @@ const Evaluate = ({
   const [displayFinishButton, setDisplayFinishButton] = useState(false);
   const [displayFinishForm, setDisplayFinishForm] = useState(false);
   const [pageCurrent, setPageCurrent] = useState();
+  const [options, setOptions] = useState([]);
+
+  useEffect(() => {
+    getTestById(match.params.id);
+  }, [getTestById, match.params.id]);
 
   useEffect(() => {
     if (user) {
@@ -122,6 +154,14 @@ const Evaluate = ({
         }, 500);
       }
     }
+
+    if (test && test.type === '1') {
+      setOptions(options1);
+    }
+
+    if (test && test.type === '2') {
+      setOptions(options2);
+    }
   }, [
     displaySpinner,
     getAudioForUser,
@@ -132,6 +172,7 @@ const Evaluate = ({
     audios,
     setIndexAudio,
     displayFinishForm,
+    test,
   ]);
 
   // const onClickHandler = () => {
@@ -275,7 +316,7 @@ const Evaluate = ({
       },
     },
     {
-      title: 'Điểm',
+      title: test && test.type === '1' ? 'Điểm' : 'Lựa chọn',
       dataIndex: 'user',
       width: 80,
       align: 'center',
@@ -354,6 +395,7 @@ const Evaluate = ({
                   </div>
                   <div className="evaluate">
                     <h3>Đánh giá chất lượng giọng nói</h3>
+
                     <Radio.Group onChange={onChange} value={point}>
                       {options.map(option => (
                         <Radio style={radioStyle} value={option.point}>
@@ -367,9 +409,9 @@ const Evaluate = ({
                   <div className="group-button">
                     <Button
                       disabled={disableButtonBack}
-                      className="btn btn-warning"
                       onClick={backSentence}
                       type="primary"
+                      style={{ backgroundColor: '#0b6398' }}
                     >
                       <LeftOutlined />
                       Câu trước
@@ -390,9 +432,9 @@ const Evaluate = ({
                     </Button> */}
                     <Button
                       disabled={disableButtonNext}
-                      className="btn btn-warning"
                       onClick={nextSentence}
                       type="primary"
+                      style={{ backgroundColor: '#0b6398' }}
                     >
                       Câu tiếp
                       <RightOutlined type="right" />
@@ -444,6 +486,7 @@ export default withRouter(
       setAudios,
       setIndexAudio,
       setMaxIndexAudio,
+      getTestById,
     },
   )(Evaluate),
 );

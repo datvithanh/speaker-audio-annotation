@@ -10,7 +10,7 @@ const VoiceManagement = ({ getVoices, voices, deleteVoice }) => {
 
   useEffect(() => {
     getVoices();
-  }, [getVoices, voices]);
+  }, [getVoices]);
 
   const columns = [
     {

@@ -91,6 +91,7 @@ const EvaluateStyle = styled.div`
     background-color: #0b6398;
     padding: 10px;
     border-radius: 10px;
+    color: white;
   }
 `;
 

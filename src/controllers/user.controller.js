@@ -294,6 +294,17 @@ async function changePassword(req, res) {
   });
 }
 
+async function getTestById(req, res) {
+  const test = await Test.findById(req.params.id);
+
+  res.send({
+    status: 1,
+    results: {
+      test,
+    },
+  });
+}
+
 module.exports = {
   signup,
   signin,
@@ -308,4 +319,5 @@ module.exports = {
   getIndexAudio,
   changePassword,
   setMaxIndexAudio,
+  getTestById,
 };
