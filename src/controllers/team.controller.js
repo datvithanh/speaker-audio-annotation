@@ -58,18 +58,6 @@ async function joinCompetition(req, res) {
   });
   const competition = await Competition.findById(competitionId);
 
-  // update numberOfMinVotersToAcceptAudio
-  const numberOfTeams = await TeamInCompetition.count({
-    competitionId,
-  });
-
-  if (numberOfTeams > 0) {
-    competition.rules.numberOfMinVotersToAcceptAudio = Math.ceil(
-      numberOfTeams * 0.5,
-    );
-    await competition.save();
-  }
-
   res.send({
     status: 1,
     results: {
@@ -224,13 +212,13 @@ async function typing(req, res) {
 
   const { transcripts } = a[0];
 
-  const { content } = transcripts;
+  const { numberOfVotes, content } = transcripts;
 
-  // const competition = await Competition.findById(audio.competitionId);
-  // if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
-  audio.rawOriginContent = content;
-  await audio.save();
-  // }
+  const competition = await Competition.findById(audio.competitionId);
+  if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
+    audio.rawOriginContent = content;
+    await audio.save();
+  }
 
   await TeamInCompetition.findOneAndUpdate(
     {
@@ -327,13 +315,13 @@ async function voting(req, res) {
 
   const { transcripts } = a[0];
 
-  const { content } = transcripts;
+  const { numberOfVotes, content } = transcripts;
 
-  // const competition = await Competition.findById(audio.competitionId);
-  // if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
-  audio.rawOriginContent = content;
-  await audio.save();
-  // }
+  const competition = await Competition.findById(audio.competitionId);
+  if (numberOfVotes >= competition.rules.numberOfMinVotersToAcceptAudio) {
+    audio.rawOriginContent = content;
+    await audio.save();
+  }
 
   await TeamInCompetition.findOneAndUpdate(
     {

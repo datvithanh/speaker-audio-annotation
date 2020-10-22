@@ -537,7 +537,11 @@ async function createTeam(req, res) {
 }
 
 async function createCompetition(req, res) {
-  const { name, numberOfAudiosPerListener } = req.body;
+  const {
+    name,
+    numberOfAudiosPerListener,
+    numberOfMinVotersToAcceptAudio,
+  } = req.body;
   const checkNameCompetitionExist = await Competition.findOne({ name });
   if (checkNameCompetitionExist) {
     throw new CustomError(
@@ -548,7 +552,7 @@ async function createCompetition(req, res) {
 
   const competition = await Competition.create({
     name,
-    rules: { numberOfAudiosPerListener },
+    rules: { numberOfAudiosPerListener, numberOfMinVotersToAcceptAudio },
   });
 
   res.send({
@@ -636,11 +640,15 @@ async function uploadTrainningData(req, res) {
           content = null;
         }
 
+        const stats = fs.statSync(`${directoryFullPath}/${fileUnzip}`);
+
         await AudioTrainning.create({
           competitionId: competition._id,
           link: `${directoryPath}/${fileUnzip}`,
           rawOriginContent: content,
           transcripts: content ? [{ numberOfVotes: 0, content }] : [],
+          textLength: content.length,
+          sizeInKilobytes: stats.size / 1000,
         });
       }
     }),

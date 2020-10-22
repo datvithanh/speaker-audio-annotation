@@ -9,6 +9,12 @@ const audioTrainningSchema = mongoose.Schema(
     rawOriginContent: {
       type: String,
     },
+    textLength: {
+      type: Number,
+    },
+    sizeInKilobytes: {
+      type: Number,
+    },
     competitionId: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
