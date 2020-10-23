@@ -5,6 +5,7 @@ const fsExtra = require('fs-extra');
 const { ObjectId } = require('mongoose').Types;
 const decompress = require('decompress');
 const uuid = require('uuid');
+const bcrypt = require('bcryptjs');
 const AdmZip = require('adm-zip');
 const CustomError = require('../errors/CustomError');
 const errorCode = require('../errors/errorCode');
@@ -519,14 +520,20 @@ async function deleteVoice(req, res) {
 
 async function createTeam(req, res) {
   const { email, name, password } = req.body;
-  const isExistMail = await User.findOne({ email: req.body.email });
-  if (isExistMail) {
-    throw new CustomError(
-      errorCode.EMAIL_ALREADY_EXIST,
-      'Email already existed!',
-    );
+  const user = await User.findOne({ email: req.body.email });
+
+  let team;
+
+  if (user && user.actived) return res.send({ status: 0 });
+
+  if (user) {
+    const salt = await bcrypt.genSalt(10);
+    team = await User.findByIdAndUpdate(user._id, {
+      password: await bcrypt.hash(password, salt),
+    });
+  } else {
+    team = await User.create({ email, name, password, role: 2 });
   }
-  const team = await User.create({ email, name, password, role: 2 });
 
   res.send({
     status: 1,
