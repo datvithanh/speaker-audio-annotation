@@ -28,7 +28,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         <a
           className="tutorial"
           target="_blank"
-          href={`${process.env.REACT_APP_API_DOMAIN}/TaiLieuHuongDanVLSPTool.pdf`}
+          href="https://tts.vlsp.org.vn/TaiLieuHuongDanVLSPTool.pdf"
         >
           <QuestionCircleOutlined />
         </a>
