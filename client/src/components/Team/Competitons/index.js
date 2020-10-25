@@ -52,7 +52,26 @@ const Competitions = ({
         );
       },
     },
-
+    {
+      title: 'Ngày kết thúc',
+      dataIndex: 'timeExpired',
+      key: 'timeExpired',
+      align: 'center',
+      width: 200,
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span>
+            {date.getDate() -
+              1 +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
+    },
     {
       key: 'action',
       width: 200,
@@ -70,7 +89,7 @@ const Competitions = ({
             Tham gia
           </Button>
         ) : competition.numberOfCompletedAudio &&
-          competition.numberOfCompletedAudio ===
+          competition.numberOfCompletedAudio >=
             competition.rules.numberOfAudiosPerListener ? (
           <div style={{ textAlign: 'center', fontStyle: 'italic' }}>
             Đã hoàn thành

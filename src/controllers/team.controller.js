@@ -6,7 +6,14 @@ const Competition = require('../models/competition.model');
 const AudioTrainning = require('../models/audioTrainning.model');
 
 async function getListCompetition(req, res) {
-  const competitions = await Competition.find({});
+  const currentDate = new Date();
+  currentDate.setHours(currentDate.getHours() + 7);
+
+  const competitions = await Competition.find({
+    timeExpired: {
+      $gte: currentDate,
+    },
+  });
   const returnedCompetition = [];
   await Promise.all(
     competitions.map(async competition => {

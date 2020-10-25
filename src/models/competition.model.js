@@ -15,6 +15,10 @@ const competitionSchema = mongoose.Schema(
         type: Number,
       },
     },
+    timeExpired: {
+      type: Date,
+      required: true,
+    },
   },
   {
     timestamps: true,
