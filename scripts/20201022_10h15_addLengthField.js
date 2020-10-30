@@ -18,6 +18,7 @@ const { SRC_PATH } = require('../src/constant');
       await AudioTrainning.findByIdAndUpdate(audio._id, {
         textLength: audio.rawOriginContent.length,
         sizeInKilobytes: stats.size / 1000,
+        label: '',
       });
     }),
   );

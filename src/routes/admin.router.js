@@ -21,9 +21,13 @@ const {
   createTeam,
   uploadTrainningData,
   createCompetition,
-  exportDataTrainning,
   removeCompetition,
-  exportPartialDataTrainning,
+  exportData,
+  searchData,
+  assignLabelForAudio,
+  getListCompetition,
+  getAudiosByCompetitionId,
+  assignLabelForSearchedAudios,
 } = require('../controllers/admin.controller');
 
 router.get('/users', auth, asyncWrap(getListUser));
@@ -44,12 +48,17 @@ router.delete('/delete-voice/:voiceId', auth, asyncWrap(deleteVoice));
 router.post('/create-team', auth, asyncWrap(createTeam));
 router.post('/create-competition', auth, asyncWrap(createCompetition));
 router.post('/upload-trainning-data', auth, asyncWrap(uploadTrainningData));
-router.post('/export-data-trainning', auth, asyncWrap(exportDataTrainning));
 router.delete('/competition', auth, asyncWrap(removeCompetition));
-router.post(
-  '/export-partial-data-trainning',
+router.get('/get-list-competition', auth, asyncWrap(getListCompetition));
+router.get('/get-audio-data', auth, asyncWrap(getAudiosByCompetitionId));
+router.post('/export-data', auth, asyncWrap(exportData));
+router.patch('/assign-label-for-audio', auth, asyncWrap(assignLabelForAudio));
+router.patch(
+  '/assign-label-for-searched-audio',
   auth,
-  asyncWrap(exportPartialDataTrainning),
+  asyncWrap(assignLabelForSearchedAudios),
 );
+
+router.get('/search-data', auth, asyncWrap(searchData));
 
 module.exports = router;

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-console */
 const fs = require('fs');
@@ -17,6 +18,7 @@ const Voice = require('../models/voice.model');
 const AudioTrainning = require('../models/audioTrainning.model');
 const Competition = require('../models/competition.model');
 const TeamInCompetition = require('../models/teamInCompetition.model');
+const DataTrainExport = require('../models/dataTrainExport.model');
 const { SRC_PATH } = require('../constant');
 const randomAudioForUser = require('../service/randomAudioForUser');
 // const { mkDirByPathSync } = require('../utils/file');
@@ -518,6 +520,7 @@ async function deleteVoice(req, res) {
   });
 }
 
+// eslint-disable-next-line consistent-return
 async function createTeam(req, res) {
   const { email, name, password } = req.body;
   const user = await User.findOne({ email: req.body.email });
@@ -557,9 +560,13 @@ async function createCompetition(req, res) {
     );
   }
 
+  const timeExpired = new Date(req.body.timeExpired);
+  timeExpired.setDate(timeExpired.getDate() + 1);
+
   const competition = await Competition.create({
     name,
     rules: { numberOfAudiosPerListener, numberOfMinVotersToAcceptAudio },
+    timeExpired,
   });
 
   res.send({
@@ -656,6 +663,7 @@ async function uploadTrainningData(req, res) {
           transcripts: content ? [{ numberOfVotes: 0, content }] : [],
           textLength: content.length,
           sizeInKilobytes: stats.size / 1000,
+          label: '',
         });
       }
     }),
@@ -676,52 +684,6 @@ async function uploadTrainningData(req, res) {
   });
 }
 
-async function exportDataTrainning(req, res) {
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const random = uuid.v4();
-  const directoryPath = `/${year}/${month}/${day}/${random}`;
-  const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
-
-  fs.mkdirSync(`${directoryFullPath}/train-data`, { recursive: true });
-
-  const audioTrainnings = await AudioTrainning.find({});
-  let count = 0;
-  let textfilePath = null;
-  let audiofilePath = null;
-  audioTrainnings.forEach(audioTrainning => {
-    count++;
-    textfilePath = `${directoryFullPath}/train-data/${count}.txt`;
-    fs.writeFileSync(textfilePath, audioTrainning.rawOriginContent, err => {
-      if (err) return console.log(err);
-
-      return console.log('Ghi file thanh cong');
-    });
-
-    audiofilePath = `${directoryFullPath}/train-data/${count}.wav`;
-
-    fs.copyFileSync(
-      `${SRC_PATH}/static${audioTrainning.link}`,
-      audiofilePath,
-      err => {
-        if (err) throw err;
-        console.log('copy successful');
-      },
-    );
-  });
-
-  const zip = new AdmZip();
-  zip.addLocalFolder(`${directoryFullPath}/train-data`);
-  zip.writeZip(`${directoryFullPath}/train-data.zip`);
-
-  res.send({
-    status: 1,
-    link: `${directoryPath}/train-data.zip`,
-  });
-}
-
 async function removeCompetition(req, res) {
   const { competitionId } = req.body;
   if (!competitionId) {
@@ -734,7 +696,169 @@ async function removeCompetition(req, res) {
   res.send({ status: 1, results: { competition } });
 }
 
-async function exportPartialDataTrainning(req, res) {
+async function getListCompetition(req, res) {
+  const competitions = await Competition.find({});
+
+  res.send({ status: 1, results: { competitions } });
+}
+
+async function getAudiosByCompetitionId(req, res) {
+  if (req.query.competitionId === 'undefined') {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+  const { competitionId } = req.query;
+  let { page = 1, limit = 10 } = req.query;
+  page = Number.parseInt(page, 10);
+  limit = Number.parseInt(limit, 10);
+
+  const audios = await AudioTrainning.find({ competitionId })
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec();
+
+  const count = await AudioTrainning.countDocuments({ competitionId });
+
+  res.send({
+    status: 1,
+    results: {
+      audios,
+      total: count,
+      currentPage: page,
+    },
+  });
+}
+
+async function searchData(req, res) {
+  const {
+    textLengthFrom = 0,
+    textLengthTo = 500,
+    sizeFrom = 0,
+    sizeTo = 5000,
+    keyword = '',
+    competitionId,
+    label,
+  } = req.query;
+
+  let { page = 1, limit = 10 } = req.query;
+
+  page = Number.parseInt(page, 10);
+  limit = Number.parseInt(limit, 10);
+
+  if (!competitionId) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+
+  if (
+    isNaN(textLengthFrom) ||
+    isNaN(textLengthTo) ||
+    isNaN(sizeFrom) ||
+    isNaN(sizeTo)
+  ) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Parameter invalid 1');
+  }
+
+  if (textLengthFrom < 0 || textLengthTo < 0 || sizeFrom < 0 || sizeTo < 0) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Parameter invalid 2');
+  }
+
+  const audios = await AudioTrainning.find({
+    competitionId,
+    label: label !== 'all' ? label : { $in: ['train', 'test', ''] },
+    textLength: { $gte: textLengthFrom, $lte: textLengthTo },
+    sizeInKilobytes: { $gte: sizeFrom, $lte: sizeTo },
+    rawOriginContent: { $regex: new RegExp(keyword), $options: 'i' },
+  })
+    .limit(limit * 1)
+    .skip((page - 1) * limit)
+    .exec();
+
+  const count = await AudioTrainning.countDocuments({
+    competitionId,
+    label: label !== 'all' ? label : { $in: ['train', 'test', ''] },
+    textLength: { $gte: textLengthFrom, $lte: textLengthTo },
+    sizeInKilobytes: { $gte: sizeFrom, $lte: sizeTo },
+    rawOriginContent: { $regex: new RegExp(keyword), $options: 'i' },
+  });
+
+  if (page > Math.ceil(count / limit)) {
+    page = 1;
+  }
+
+  res.send({
+    status: 1,
+    results: {
+      audios,
+      total: count,
+      currentPage: page,
+    },
+  });
+}
+
+async function assignLabelForAudio(req, res) {
+  const { audios, label } = req.body;
+  const returnedAudios = await Promise.all(
+    audios.map(async audio => {
+      const au = await AudioTrainning.findByIdAndUpdate(
+        audio,
+        { label },
+        { new: true },
+      );
+      return au;
+    }),
+  );
+
+  res.send({ status: 1, results: { audios: returnedAudios } });
+}
+
+async function assignLabelForSearchedAudios(req, res) {
+  const {
+    textLengthFrom = 0,
+    textLengthTo = 500,
+    sizeFrom = 0,
+    sizeTo = 5000,
+    keyword = '',
+    competitionId,
+    label,
+    labelAssigned,
+  } = req.body;
+
+  if (!competitionId) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Missing competitionId');
+  }
+
+  if (
+    isNaN(textLengthFrom) ||
+    isNaN(textLengthTo) ||
+    isNaN(sizeFrom) ||
+    isNaN(sizeTo)
+  ) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Parameter invalid 1');
+  }
+
+  if (textLengthFrom < 0 || textLengthTo < 0 || sizeFrom < 0 || sizeTo < 0) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Parameter invalid 2');
+  }
+
+  await AudioTrainning.updateMany(
+    {
+      competitionId,
+      label: label !== 'all' ? label : { $in: ['train', 'test', ''] },
+      textLength: { $gte: textLengthFrom, $lte: textLengthTo },
+      sizeInKilobytes: { $gte: sizeFrom, $lte: sizeTo },
+      rawOriginContent: { $regex: new RegExp(keyword), $options: 'i' },
+    },
+    { label: labelAssigned },
+  );
+
+  res.send({
+    status: 1,
+    // results: {
+    //   audios,
+    // },
+  });
+}
+
+async function exportData(req, res) {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -742,10 +866,13 @@ async function exportPartialDataTrainning(req, res) {
   const random = uuid.v4();
   const directoryPath = `/${year}/${month}/${day}/${random}`;
   const directoryFullPath = `${SRC_PATH}/static/${year}/${month}/${day}/${random}`;
+  fs.mkdirSync(`${directoryFullPath}/data`, { recursive: true });
 
-  fs.mkdirSync(`${directoryFullPath}/train-data`, { recursive: true });
+  const audioTrainnings = await AudioTrainning.find({ label: 'train' });
 
-  const audioTrainnings = await AudioTrainning.find({});
+  if (audioTrainnings.length === 0) {
+    throw new CustomError(errorCode.NOT_FOUND);
+  }
   let textfilePath = null;
   let audiofilePath = null;
   audioTrainnings.forEach(audioTrainning => {
@@ -754,14 +881,14 @@ async function exportPartialDataTrainning(req, res) {
       '.',
     )[0];
 
-    textfilePath = `${directoryFullPath}/train-data/${prefixFileName}.txt`;
+    textfilePath = `${directoryFullPath}/data/${prefixFileName}.txt`;
     fs.writeFileSync(textfilePath, audioTrainning.rawOriginContent, err => {
       if (err) return console.log(err);
 
       return console.log('Ghi file thanh cong');
     });
 
-    audiofilePath = `${directoryFullPath}/train-data/${prefixFileName}.wav`;
+    audiofilePath = `${directoryFullPath}/data/${prefixFileName}.wav`;
 
     fs.copyFileSync(
       `${SRC_PATH}/static${audioTrainning.link}`,
@@ -773,25 +900,35 @@ async function exportPartialDataTrainning(req, res) {
     );
   });
 
-  await Promise.all(
-    fs.readdirSync(`${directoryFullPath}/train-data`).map(async fileUnzip => {
-      if (fileUnzip.match(/\.(wav)$/)) {
-        const stats = fs.statSync(
-          `${directoryFullPath}/train-data/${fileUnzip}`,
-        );
-        const fileSizeInBytes = stats.size;
-        console.log({ fileSizeInBytes });
-      }
-    }),
-  );
+  // fs.mkdirSync(`${directoryFullPath}/data/test-data`, { recursive: true });
+  // const audioTestings = await AudioTrainning.find({ label: 'test' });
 
-  // const zip = new AdmZip();
-  // zip.addLocalFolder(`${directoryFullPath}/train-data`);
-  // zip.writeZip(`${directoryFullPath}/train-data.zip`);
+  // audioTestings.forEach(audioTesting => {
+  //   const characterArray = audioTesting.link.split('/');
+  //   const prefixFileName = characterArray[characterArray.length - 1].split(
+  //     '.',
+  //   )[0];
+
+  //   textfilePath = `${directoryFullPath}/data/test-data/${prefixFileName}.txt`;
+  //   fs.writeFileSync(textfilePath, audioTesting.rawOriginContent, err => {
+  //     if (err) return console.log(err);
+
+  //     return console.log('Ghi file thanh cong');
+  //   });
+  // });
+
+  const zip = new AdmZip();
+  zip.addLocalFolder(`${directoryFullPath}/data`);
+  zip.writeZip(`${directoryFullPath}/data.zip`);
+
+  await DataTrainExport.create({
+    fileName: 'data.zip',
+    link: `${directoryPath}/data.zip`,
+  });
 
   res.send({
     status: 1,
-    link: `${directoryPath}/train-data.zip`,
+    results: { link: `${directoryPath}/data.zip` },
   });
 }
 
@@ -812,7 +949,11 @@ module.exports = {
   createTeam,
   createCompetition,
   uploadTrainningData,
-  exportDataTrainning,
   removeCompetition,
-  exportPartialDataTrainning,
+  getListCompetition,
+  exportData,
+  searchData,
+  assignLabelForAudio,
+  getAudiosByCompetitionId,
+  assignLabelForSearchedAudios,
 };

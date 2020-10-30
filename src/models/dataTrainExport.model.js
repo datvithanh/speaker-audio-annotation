@@ -12,11 +12,7 @@ const dataTrainExportSchema = mongoose.Schema(
     },
     accessibleTeam: [
       {
-        _id: false,
-        teamId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'User',
-        },
+        type: String,
       },
     ],
   },

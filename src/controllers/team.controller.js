@@ -4,6 +4,7 @@ const errorCode = require('../errors/errorCode');
 const TeamInCompetition = require('../models/teamInCompetition.model');
 const Competition = require('../models/competition.model');
 const AudioTrainning = require('../models/audioTrainning.model');
+const DataTrainExport = require('../models/dataTrainExport.model');
 
 async function getListCompetition(req, res) {
   const currentDate = new Date();
@@ -392,6 +393,16 @@ async function getTaskProcess(req, res) {
   });
 }
 
+async function getResource(req, res) {
+  const file = await DataTrainExport.find({
+    accessibleTeam: req.user._id,
+  });
+  res.send({
+    status: 1,
+    results: { file },
+  });
+}
+
 module.exports = {
   getListCompetition,
   joinCompetition,
@@ -401,4 +412,5 @@ module.exports = {
   typing,
   getCompetitionById,
   getTaskProcess,
+  getResource,
 };

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
 import CompetitionsStyle from './index.style';
@@ -8,6 +8,7 @@ import {
   getTaskProcess,
   getRandomizeAudio,
 } from '../../../actions/team';
+import axios from 'axios';
 
 const Competitions = ({
   getListCompetition,
@@ -17,8 +18,10 @@ const Competitions = ({
 }) => {
   useEffect(() => {
     getListCompetition();
+    getResource();
   }, [getListCompetition]);
 
+  const [resource, setResource] = useState();
   const dispatch = useDispatch();
 
   const joinCompetitionHandler = (competitionId, status) => {
@@ -26,6 +29,16 @@ const Competitions = ({
     history.push(`/team/competitions/${competitionId}`);
     dispatch(getTaskProcess(competitionId));
     dispatch(getRandomizeAudio(competitionId));
+  };
+
+  const getResource = async () => {
+    const res = await axios.get(
+      process.env.REACT_APP_API_DOMAIN + `/api/teams/get-resource`,
+    );
+
+    if (res && res.data) {
+      setResource(res.data.results.file);
+    }
   };
 
   const columns = [
@@ -112,28 +125,30 @@ const Competitions = ({
   ];
 
   // // DEMO
-  // const columnsFile = [
-  //   {
-  //     // title: 'Tên cuộc thi',
-  //     dataIndex: 'name',
-  //     width: '50%',
-  //     render: name =>
-  //       'Dữ liệu huấn luyện cho cuộc thi VLSP TTS 2020'.toUpperCase(),
-  //   },
-  //   {
-  //     // title: 'Ngày bắt đầu',
-  //     dataIndex: 'createdAt',
-  //     align: 'center',
-  //     render: dateString => {
-  //       const date = new Date(dateString);
-  //       return (
-  //         <a style={{ textDecoration: 'underline', color: '#0f6398' }}>
-  //           Download
-  //         </a>
-  //       );
-  //     },
-  //   },
-  // ];
+  const columnsFile = [
+    {
+      // title: 'Tên cuộc thi',
+      dataIndex: 'fileName',
+      width: '50%',
+      render: name =>
+        'Dữ liệu huấn luyện cho cuộc thi VLSP TTS 2020'.toUpperCase(),
+    },
+    {
+      // title: 'Ngày bắt đầu',
+      dataIndex: 'link',
+      align: 'center',
+      render: link => {
+        return (
+          <Button
+            style={{ color: 'white', backgroundColor: '#0f6398' }}
+            href={`${process.env.REACT_APP_API_DOMAIN}/${link}`}
+          >
+            Download
+          </Button>
+        );
+      },
+    },
+  ];
 
   return (
     <>
@@ -149,17 +164,17 @@ const Competitions = ({
         />
       </CompetitionsStyle>
 
-      {/* <CompetitionsStyle>
+      <CompetitionsStyle>
         <h4>Tài nguyên được chia sẻ</h4>
         <Table
           columns={columnsFile}
           rowKey="_id"
           bordered
           className="table"
-          dataSource={competitions}
+          dataSource={resource}
           pagination={{ pageSize: 6 }}
         />
-      </CompetitionsStyle> */}
+      </CompetitionsStyle>
     </>
   );
 };

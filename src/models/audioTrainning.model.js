@@ -20,6 +20,9 @@ const audioTrainningSchema = mongoose.Schema(
       required: true,
       ref: 'Competition',
     },
+    label: {
+      type: String,
+    },
     transcripts: [
       {
         _id: false,

@@ -13,6 +13,7 @@ const {
   getListCompetition,
   getCompetitionById,
   getTaskProcess,
+  getResource,
 } = require('../controllers/team.controller');
 
 router.get('/get-list-competition', auth, asyncWrap(getListCompetition));
@@ -28,5 +29,6 @@ router.get(
 );
 
 router.get('/get-task-process/:competitionId', auth, asyncWrap(getTaskProcess));
+router.get('/get-resource', auth, asyncWrap(getResource));
 
 module.exports = router;

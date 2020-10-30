@@ -36,6 +36,8 @@ import VoiceManagement from './components/Admin/VoiceManagement';
 import AddVocie from './components/Admin/VoiceManagement/AddVocie';
 import PrivateTeamRoute from './components/routing/PrivateTeamRoute';
 import FinishTask from './components/Team/DataConstruction/FinishTask';
+import DataManagement from './components/Admin/DataManagement';
+import DataInCompetition from './components/Admin/DataManagement/DataInCompetition';
 if (localStorage.token) {
   setAuthToken(localStorage.token);
 }
@@ -43,8 +45,6 @@ const App = () => {
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
-
-
 
   return (
     <Provider store={store}>
@@ -101,11 +101,20 @@ const App = () => {
                       path="/admin/voice-management/add-voice"
                       component={AddVocie}
                     />
+                    <PrivateRoute
+                      exact
+                      path="/admin/data-management"
+                      component={DataManagement}
+                    />
+                    <PrivateRoute
+                      exact
+                      path="/admin/data-management/:competitionId"
+                      component={DataInCompetition}
+                    />
                   </Switch>
                 </Layout>
               </PrivateAdminRoute>
               <PrivateTeamRoute path="/team">
-    
                 <PrivateRoute
                   exact
                   path="/team/finish"
