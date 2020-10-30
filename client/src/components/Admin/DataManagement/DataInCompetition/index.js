@@ -104,7 +104,6 @@ const DataInCompetition = ({ match }) => {
 
   const handleOk = e => {
     setVisibleModal(false);
-    setLoading(true);
   };
 
   const handleCancel = e => {
@@ -116,51 +115,29 @@ const DataInCompetition = ({ match }) => {
     audioRef.current.play();
   };
 
-  const getAudiosByCompetitionId = async competitionId => {
-    const searchParams = queryString.stringify({
-      competitionId,
-      keyword: keywordSearch,
-      label: labelSearch,
-      sizeFrom: lengthAudio.minLength,
-      sizeTo: lengthAudio.maxLength,
-      textLengthFrom: lengthText.minLength,
-      textLengthTo: lengthText.maxLength,
-      page,
-      limit,
-    });
-
-    setLoadingAudio(true);
-    await axios
-      .get(
-        process.env.REACT_APP_API_DOMAIN +
-          `/api/admin/search-data?${searchParams}`,
-      )
-      .then(res => {
-        setTimeout(() => {
-          setLoadingAudio(false);
-        }, 500);
-        setAudios(res.data.results.audios);
-        setPage(res.data.results.currentPage);
-        setTotal(res.data.results.total);
-      });
-  };
-
-  const setLabelForAudios = async (audios, label) => {
+  const setLabelForAudios = async (audiosChosenIds, label) => {
     const config = {
       headers: {
         'Content-Type': 'application/json',
       },
     };
 
-    const body = { label, audios };
+    const body = { label, audios: audiosChosenIds };
 
-    await axios.patch(
+    const res = await axios.patch(
       process.env.REACT_APP_API_DOMAIN + `/api/admin/assign-label-for-audio`,
       body,
       config,
     );
 
-    getAudiosByCompetitionId(match.params.competitionId);
+    if (res.data.status === 1) {
+      setAudios(
+        audios.map(audio => {
+          if (audiosChosenIds.includes(audio._id)) return { ...audio, label };
+          return audio;
+        }),
+      );
+    }
   };
 
   const setLabelForSearchedAudios = async labelAssigned => {
@@ -181,12 +158,46 @@ const DataInCompetition = ({ match }) => {
       labelAssigned,
     };
 
-    await axios.patch(
+    const res = await axios.patch(
       process.env.REACT_APP_API_DOMAIN +
         `/api/admin/assign-label-for-searched-audio`,
       body,
       config,
     );
+
+    if (res.data.status === 1) {
+      let assignedAudios = [];
+      if (labelSearch !== 'all') {
+        assignedAudios = audios.filter(
+          audio =>
+            audio.textLength >= lengthText.minLength &&
+            audio.textLength <= lengthText.maxLength &&
+            audio.sizeInKilobytes >= lengthAudio.minLength &&
+            audio.sizeInKilobytes <= lengthAudio.maxLength &&
+            labelSearch !== 'all' &&
+            audio.label === labelSearch &&
+            audio.rawOriginContent
+              .toUpperCase()
+              .includes(keywordSearch.toUpperCase()),
+        );
+      } else {
+        assignedAudios = audios.filter(
+          audio =>
+            audio.textLength >= lengthText.minLength &&
+            audio.textLength <= lengthText.maxLength &&
+            audio.sizeInKilobytes >= lengthAudio.minLength &&
+            audio.sizeInKilobytes <= lengthAudio.maxLength &&
+            audio.rawOriginContent
+              .toUpperCase()
+              .includes(keywordSearch.toUpperCase()),
+        );
+      }
+      setAudios(
+        assignedAudios.map(assignedAudio => {
+          return { ...assignedAudio, label: labelAssigned };
+        }),
+      );
+    }
   };
 
   const rowSelection = {
@@ -218,7 +229,7 @@ const DataInCompetition = ({ match }) => {
       setLabelForSearchedAudios(label);
     }
 
-    getAudiosByCompetitionId(match.params.competitionId);
+    // getAudiosByCompetitionId(match.params.competitionId);
   };
 
   const handleChangeSelectLabelSearch = label => {
@@ -244,20 +255,11 @@ const DataInCompetition = ({ match }) => {
     textLengthFrom = 0,
     textLengthTo = 500,
   ) {
-    sizeFrom = Number.parseInt(sizeFrom);
-    sizeTo = Number.parseInt(sizeTo);
-    textLengthFrom = Number.parseInt(textLengthFrom);
-    textLengthTo = Number.parseInt(textLengthTo);
     setLoadingAudio(true);
-    if (
-      isNaN(sizeFrom) ||
-      isNaN(sizeTo) ||
-      isNaN(textLengthFrom) ||
-      isNaN(textLengthTo)
-    ) {
-      toast.error('Invalid Input!');
-      return;
-    }
+    if (sizeFrom === '') sizeFrom = 0;
+    if (sizeTo === '') sizeTo = 5000;
+    if (textLengthFrom === '') textLengthFrom = 0;
+    if (textLengthTo === '') textLengthTo = 500;
 
     const competitionId = match.params.competitionId;
     const searchParams = queryString.stringify({
@@ -286,8 +288,6 @@ const DataInCompetition = ({ match }) => {
         setTotal(res.data.results.total);
       });
   }
-
-  console.log({ loadingAudio });
 
   const onSearch = keyword => {
     setKeywordSearch(keyword);
@@ -378,7 +378,7 @@ const DataInCompetition = ({ match }) => {
         <track kind="captions" />
       </audio>
       <Row justify="space-between">
-        <Col span={8.5}>
+        <Col span={11.5}>
           <Search
             allowClear
             placeholder="Tìm kiếm theo từ khoá"
@@ -399,7 +399,7 @@ const DataInCompetition = ({ match }) => {
             <Input
               className="site-input-split"
               style={{
-                width: 50,
+                width: 65,
                 borderLeft: 0,
                 borderRight: 0,
                 pointerEvents: 'none',
@@ -408,19 +408,20 @@ const DataInCompetition = ({ match }) => {
               disabled
             />
             <Input
-              style={{ width: 100, textAlign: 'center' }}
-              placeholder="Min(20KB)"
+              style={{ width: 125, textAlign: 'center' }}
+              placeholder="Min(428KB)"
               onChange={length =>
                 setLengthAudio({
                   ...lengthAudio,
                   minLength: length.target.value,
                 })
               }
+              type="number"
             />
             <Input
               className="site-input-split"
               style={{
-                width: 50,
+                width: 65,
                 borderLeft: 0,
                 borderRight: 0,
                 pointerEvents: 'none',
@@ -431,10 +432,11 @@ const DataInCompetition = ({ match }) => {
             <Input
               className="site-input-right"
               style={{
-                width: 120,
+                width: 125,
                 textAlign: 'center',
               }}
-              placeholder="Max(5000KB)"
+              placeholder="Max(3332KB)"
+              type="number"
               onChange={length =>
                 setLengthAudio({
                   ...lengthAudio,
@@ -451,7 +453,7 @@ const DataInCompetition = ({ match }) => {
             <Input
               className="site-input-split"
               style={{
-                width: 50,
+                width: 65,
                 borderLeft: 0,
                 borderRight: 0,
                 pointerEvents: 'none',
@@ -460,19 +462,20 @@ const DataInCompetition = ({ match }) => {
               disabled
             />
             <Input
-              style={{ width: 100, textAlign: 'center' }}
-              placeholder="Min(12)"
+              style={{ width: 125, textAlign: 'center' }}
+              placeholder="Min(10)"
               onChange={length =>
                 setLengthText({
                   ...lengthText,
                   minLength: length.target.value,
                 })
               }
+              type="number"
             />
             <Input
               className="site-input-split"
               style={{
-                width: 50,
+                width: 65,
                 borderLeft: 0,
                 borderRight: 0,
                 pointerEvents: 'none',
@@ -483,16 +486,17 @@ const DataInCompetition = ({ match }) => {
             <Input
               className="site-input-right"
               style={{
-                width: 120,
+                width: 125,
                 textAlign: 'center',
               }}
-              placeholder="Max(500)"
+              placeholder="Max(299)"
               onChange={length =>
                 setLengthText({
                   ...lengthText,
                   maxLength: length.target.value,
                 })
               }
+              type="number"
             />
             <Button
               style={{ flex: 1 }}
