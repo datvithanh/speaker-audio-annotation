@@ -17,11 +17,9 @@ export function isStrongPassword(password) {
 }
 
 export function isUrl(link) {
-  const regexQuery =
-    '/(http(s)?://.)?(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/';
-  const url = new RegExp(regexQuery, 'g');
-  if (url.test(link)) {
-    return true;
-  }
-  return false;
+  var res = link.match(
+    /(http(s)?:\/\/.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g,
+  );
+  if (res == null) return false;
+  else return true;
 }

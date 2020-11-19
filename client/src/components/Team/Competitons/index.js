@@ -142,11 +142,11 @@ const Competitions = ({
   };
 
   const handleOk = e => {
-    // if (!isUrl(formSubmitApi.linkApi)) {
-    //   toast.error('Link nhập không hợp lệ');
-    //   setModalVisible(false);
-    //   return;
-    // }
+    if (!isUrl(formSubmitApi.linkApi)) {
+      toast.error('Link nhập không hợp lệ');
+      setModalVisible(false);
+      return;
+    }
     if (!submission.submitted) {
       submitApi(
         formSubmitApi.linkApi,
