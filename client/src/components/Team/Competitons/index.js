@@ -72,8 +72,6 @@ const Competitions = ({
       config,
     );
 
-    console.log(res.data);
-
     setSubmission(res.data.results.submission);
 
     const { submission } = res.data.results;
@@ -101,7 +99,6 @@ const Competitions = ({
 
     if (res.data.status === 1) {
       const { linkApi, description } = res.data.results;
-      console.log({ linkApi, description });
 
       setFormSubmitApi({ ...formSubmitApi, linkApi, description });
     }
