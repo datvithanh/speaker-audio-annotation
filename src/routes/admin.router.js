@@ -28,6 +28,7 @@ const {
   getListCompetition,
   getAudiosByCompetitionId,
   assignLabelForSearchedAudios,
+  createSubmission,
 } = require('../controllers/admin.controller');
 
 router.get('/users', auth, asyncWrap(getListUser));
@@ -60,5 +61,6 @@ router.patch(
 );
 
 router.get('/search-data', auth, asyncWrap(searchData));
+router.post('/submission', auth, asyncWrap(createSubmission));
 
 module.exports = router;

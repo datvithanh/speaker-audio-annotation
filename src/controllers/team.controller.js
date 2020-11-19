@@ -4,7 +4,9 @@ const errorCode = require('../errors/errorCode');
 const TeamInCompetition = require('../models/teamInCompetition.model');
 const Competition = require('../models/competition.model');
 const AudioTrainning = require('../models/audioTrainning.model');
+const TeamInSubmission = require('../models/teamInSubmisstion.model');
 const DataTrainExport = require('../models/dataTrainExport.model');
+const Submission = require('../models/submission.model');
 
 async function getListCompetition(req, res) {
   const currentDate = new Date();
@@ -403,6 +405,110 @@ async function getResource(req, res) {
   });
 }
 
+async function submitApi(req, res) {
+  const { linkApi, description, submissionId } = req.body;
+
+  const submission = await Submission.findById(submissionId).lean();
+
+  if (Date.now() > submission.timeExpired) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Expired');
+  }
+
+  await TeamInSubmission.create({
+    teamId: req.user._id,
+    submissionId,
+    submitted: true,
+    linkApi,
+    description,
+  });
+
+  res.send({
+    status: 1,
+    results: {
+      submission: {
+        ...submission,
+        submitted: true,
+      },
+    },
+  });
+}
+
+async function getSubmissions(req, res) {
+  const submissions = await Submission.find({
+    accessibleTeam: req.user._id,
+  })
+    .populate('competitionId')
+    .lean();
+
+  const submissionAddState = await Promise.all(
+    submissions.map(async submission => {
+      const teamInSubmission = await TeamInSubmission.findOne({
+        submissionId: submission._id,
+      });
+
+      if (teamInSubmission) {
+        return {
+          ...submission,
+          submitted: teamInSubmission.submitted,
+        };
+      }
+      return {
+        ...submission,
+        submitted: false,
+      };
+    }),
+  );
+  res.send({
+    status: 1,
+    results: { submissions: submissionAddState },
+  });
+}
+
+async function modifyApi(req, res) {
+  const { linkApi, description, submissionId } = req.body;
+
+  const submission = await Submission.findById(submissionId).lean();
+
+  if (Date.now() > submission.timeExpired) {
+    throw new CustomError(errorCode.BAD_REQUEST, 'Expired');
+  }
+
+  await TeamInSubmission.updateOne(
+    { teamId: req.user._id, submissionId },
+    {
+      linkApi,
+      description,
+    },
+  );
+
+  res.send({
+    status: 1,
+    results: {
+      submission: {
+        ...submission,
+        submitted: true,
+      },
+    },
+  });
+}
+
+async function getSubmitApiInfo(req, res) {
+  const { submissionId } = req.params;
+
+  const teamInSubmission = await TeamInSubmission.findOne({
+    teamId: req.user._id,
+    submissionId,
+  });
+
+  const { linkApi, description } = teamInSubmission;
+  res.send({
+    status: 1,
+    results: {
+      linkApi,
+      description,
+    },
+  });
+}
 module.exports = {
   getListCompetition,
   joinCompetition,
@@ -413,4 +519,8 @@ module.exports = {
   getCompetitionById,
   getTaskProcess,
   getResource,
+  submitApi,
+  getSubmissions,
+  modifyApi,
+  getSubmitApiInfo,
 };

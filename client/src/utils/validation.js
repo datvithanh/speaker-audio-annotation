@@ -15,3 +15,13 @@ export function isStrongPassword(password) {
   const regex = /(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/;
   return regex.test(password);
 }
+
+export function isUrl(link) {
+  const regexQuery =
+    '/(http(s)?://.)?(www.)?[-a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/';
+  const url = new RegExp(regexQuery, 'g');
+  if (url.test(link)) {
+    return true;
+  }
+  return false;
+}

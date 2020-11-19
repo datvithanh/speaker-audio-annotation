@@ -19,6 +19,7 @@ const AudioTrainning = require('../models/audioTrainning.model');
 const Competition = require('../models/competition.model');
 const TeamInCompetition = require('../models/teamInCompetition.model');
 const DataTrainExport = require('../models/dataTrainExport.model');
+const Submission = require('../models/submission.model');
 const { SRC_PATH } = require('../constant');
 const randomAudioForUser = require('../service/randomAudioForUser');
 // const { mkDirByPathSync } = require('../utils/file');
@@ -932,6 +933,36 @@ async function exportData(req, res) {
   });
 }
 
+async function createSubmission(req, res) {
+  const { competitionId, timeExpired, name } = req.body;
+
+  const competition = await Competition.findById(competitionId);
+
+  const teamInCompetition = await TeamInCompetition.find({
+    competitionId,
+    numberOfCompletedAudio: competition.rules.numberOfAudiosPerListener,
+  });
+
+  const accessibleTeam = [];
+  teamInCompetition.forEach(tic => {
+    accessibleTeam.push(tic.teamId);
+  });
+
+  const submission = await Submission.create({
+    competitionId,
+    timeExpired,
+    name,
+    accessibleTeam,
+  });
+
+  res.send({
+    status: 1,
+    results: {
+      submission,
+    },
+  });
+}
+
 module.exports = {
   getListUser,
   addUser,
@@ -956,4 +987,5 @@ module.exports = {
   assignLabelForAudio,
   getAudiosByCompetitionId,
   assignLabelForSearchedAudios,
+  createSubmission,
 };

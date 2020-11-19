@@ -30,9 +30,9 @@ const CompetitionsStyle = styled.div`
     padding: 20px;
   }
 
-  .ant-table-thead {
+  /* .ant-table-thead {
     display: none;
-  }
+  } */
 
   .btn:hover {
     background: #ebeb5b;
