@@ -410,6 +410,17 @@ const Competitions = ({
           rows={4}
           value={formSubmitApi.description}
         />
+
+        <div style={{ marginTop: '10px' }}>
+          Hoặc submit kết quả tại Google Form:{' '}
+          <a
+            href="https://forms.gle/KcXKuLJDiQgb8t5K8"
+            style={{ textDecoration: 'underline' }}
+            target="blank"
+          >
+            https://forms.gle/KcXKuLJDiQgb8t5K8
+          </a>
+        </div>
       </Modal>
     </>
   );
