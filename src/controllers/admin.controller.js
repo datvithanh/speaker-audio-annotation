@@ -940,7 +940,9 @@ async function createSubmission(req, res) {
 
   const teamInCompetition = await TeamInCompetition.find({
     competitionId,
-    numberOfCompletedAudio: competition.rules.numberOfAudiosPerListener,
+    numberOfCompletedAudio: {
+      $gte: 300,
+    },
   });
 
   const accessibleTeam = [];
