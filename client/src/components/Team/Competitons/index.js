@@ -135,7 +135,6 @@ const Competitions = ({
   };
 
   const showModal = () => {
-    
     setModalVisible(true);
   };
 
@@ -187,7 +186,9 @@ const Competitions = ({
   };
 
   const displayFormSubmit = submission => {
-    if (new Date(submission.timeExpired) < Date.now()) {
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + 7);
+    if (new Date(submission.timeExpired) < currentDate) {
       toast.error('Đã hết hạn nộp bài!');
       return;
     }
@@ -215,6 +216,8 @@ const Competitions = ({
       align: 'center',
       render: dateString => {
         const date = new Date(dateString);
+        date.setHours(date.getHours() - 7);
+
         return (
           <span style={{ textAlign: 'center', display: 'block' }}>
             {date.getDate() +
