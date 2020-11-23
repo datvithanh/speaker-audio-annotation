@@ -444,6 +444,7 @@ async function getSubmissions(req, res) {
     submissions.map(async submission => {
       const teamInSubmission = await TeamInSubmission.findOne({
         submissionId: submission._id,
+        teamId: req.user._id,
       });
 
       if (teamInSubmission) {
