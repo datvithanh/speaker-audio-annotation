@@ -220,10 +220,14 @@ const Competitions = ({
 
         return (
           <span style={{ textAlign: 'center', display: 'block' }}>
-            {date.getDate() +
-              ' - ' +
+            {date.getHours() +
+              ':' +
+              +date.getMinutes() +
+              '    ' +
+              date.getDate() +
+              '/' +
               (date.getMonth() + 1) +
-              ' - ' +
+              '/' +
               date.getFullYear()}
           </span>
         );
