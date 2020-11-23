@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Table, Modal, Input } from 'antd';
 import { connect, useDispatch } from 'react-redux';
+import moment from 'moment';
 import CompetitionsStyle from './index.style';
 import {
   getListCompetition,
@@ -187,7 +188,6 @@ const Competitions = ({
 
   const displayFormSubmit = submission => {
     const currentDate = new Date();
-    currentDate.setHours(currentDate.getHours() + 7);
     if (new Date(submission.timeExpired) < currentDate) {
       toast.error('Đã hết hạn nộp bài!');
       return;
@@ -220,15 +220,7 @@ const Competitions = ({
 
         return (
           <span style={{ textAlign: 'center', display: 'block' }}>
-            {date.getHours() +
-              ':' +
-              +date.getMinutes() +
-              '    ' +
-              date.getDate() +
-              '/' +
-              (date.getMonth() + 1) +
-              '/' +
-              date.getFullYear()}
+            {moment(date).add(7, 'hours').format('HH:mm DD-MM-YYYY')}
           </span>
         );
       },
