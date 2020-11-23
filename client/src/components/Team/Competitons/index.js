@@ -135,6 +135,7 @@ const Competitions = ({
   };
 
   const showModal = () => {
+    
     setModalVisible(true);
   };
 
@@ -186,6 +187,10 @@ const Competitions = ({
   };
 
   const displayFormSubmit = submission => {
+    if (new Date(submission.timeExpired) < Date.now()) {
+      toast.error('Đã hết hạn nộp bài!');
+      return;
+    }
     showModal();
     setSubmission(submission);
     if (submission.submitted === true) {
