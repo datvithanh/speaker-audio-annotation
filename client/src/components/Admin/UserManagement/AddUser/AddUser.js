@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import Alert from '../../../Layout/Alert/Alert';
-import { setAlert } from '../../../../actions/alert';
 import { addUser } from '../../../../actions/admin';
-import PropTypes from 'prop-types';
 import AddUserStyle from './AddUserStyle';
+import { toast } from 'react-toastify';
 
-const AddUser = ({ setAlert, addUser }) => {
+const AddUser = ({ addUser }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -26,15 +24,15 @@ const AddUser = ({ setAlert, addUser }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (name === '') {
-      setAlert('Tên không được bỏ trống', 'danger', 1000);
+      toast.error('Tên không được bỏ trống');
     } else if (email === '') {
-      setAlert('Email không được bỏ trống', 'danger', 1000);
+      toast.error('Email không được bỏ trống');
     } else if (password === '') {
-      setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
+      toast.error('Mật khẩu không được bỏ trống');
     } else if (password2 === '') {
-      setAlert('Xác thực mật khẩu không được bỏ trống', 'danger', 1000);
+      toast.error('Xác thực mật khẩu không được bỏ trống');
     } else if (password !== password2) {
-      setAlert('Mật khẩu không khớp', 'danger', 1000);
+      toast.error('Mật khẩu không khớp');
     } else {
       addUser({ name, email, password });
     }
@@ -42,7 +40,6 @@ const AddUser = ({ setAlert, addUser }) => {
 
   return (
     <AddUserStyle>
-      <Alert />
       <h1 className="fas fa-user large"> Thêm User</h1>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
@@ -89,11 +86,7 @@ const AddUser = ({ setAlert, addUser }) => {
   );
 };
 
-AddUser.propTypes = {
-  setAlert: PropTypes.func.isRequired,
-};
-
 export default connect(
   null,
-  { setAlert, addUser },
+  { addUser },
 )(AddUser);

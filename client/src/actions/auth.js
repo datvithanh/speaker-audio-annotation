@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setAlert } from './alert';
+
 import {
   REGISTER_SUCCESS,
   REGISTER_FAILED,
@@ -12,6 +12,7 @@ import {
   REMOVE_ALERT,
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
+import { toast } from 'react-toastify';
 
 // Load user
 export const loadUser = () => async dispatch => {
@@ -78,14 +79,13 @@ export const register = ({
       dispatch(loadUser());
       dispatch({ type: REMOVE_ALERT });
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 1000));
+      toast.error(res.data.message);
       dispatch({
         type: REGISTER_FAILED,
       });
-      dispatch({ type: REMOVE_ALERT });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
     dispatch({
       type: REGISTER_FAILED,
     });
@@ -116,13 +116,14 @@ export const login = (email, password) => async dispatch => {
 
       dispatch(loadUser());
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 1000));
+      toast.error(res.data.message);
       dispatch({
         type: LOGIN_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
+
     dispatch({
       type: LOGIN_FAILED,
     });
@@ -139,9 +140,9 @@ export const logout = () => async dispatch => {
       dispatch({ type: LOGOUT });
       dispatch({ type: RESET_AUDIOS });
     } else {
-      dispatch(setAlert(res.data.message, 'danger'));
+      toast.error(res.data.message);
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger'));
+    toast.error(error.response.data.message);
   }
 };

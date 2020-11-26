@@ -17,7 +17,7 @@ import {
   GET_TEST_BY_ID,
 } from './types';
 import axios from 'axios';
-import { setAlert } from './alert';
+import { toast } from 'react-toastify';
 
 export const getPublicTest = () => async dispatch => {
   try {
@@ -113,7 +113,7 @@ export const setPointForAudio = (
     }
   } catch (error) {
     console.log(error);
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
   }
 };
 
@@ -213,15 +213,15 @@ export const changePassword = (
       dispatch({
         type: CHANGE_PASSWORD,
       });
-      dispatch(setAlert('Đổi mật khẩu thành công', 'success', 2000));
+      toast.success('Đổi mật khẩu thành công', { autoClose: 2000 });
       setTimeout(() => {
         window.location.href = '/team/competitions';
       }, 2000);
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 1000));
+      toast.error(res.data.message);
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
   }
 };
 

@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import Alert from '../../Layout/Alert/Alert';
-import { setAlert } from '../../../actions/alert';
-import PropTypes from 'prop-types';
 import ChangePasswordStyle from './index.style';
 import { changePassword } from '../../../actions/user';
+import { toast } from 'react-toastify';
 
-const ChangePassword = ({ setAlert, changePassword, user, history }) => {
+const ChangePassword = ({ changePassword, user, history }) => {
   const [formData, setFormData] = useState({
     password: '',
     newPassword: '',
@@ -27,13 +25,13 @@ const ChangePassword = ({ setAlert, changePassword, user, history }) => {
     e.preventDefault();
 
     if (password === '') {
-      return setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
+      return toast.error('Mật khẩu không được bỏ trống');
     } else if (newPassword === '') {
-      return setAlert('Bạn chưa nhập mật khẩu mới', 'danger', 1000);
+      return toast.error('Bạn chưa nhập mật khẩu mới');
     } else if (newPassword2 === '') {
-      return setAlert('Bạn chưa xác nhận mật khẩu mới', 'danger', 1000);
+      return toast.error('Bạn chưa xác nhận mật khẩu mới');
     } else if (newPassword !== newPassword2) {
-      setAlert('Mật khẩu không khớp', 'danger', 1000);
+      return toast.error('Mật khẩu không khớp');
     } else {
       changePassword(user._id, password, newPassword);
       // setTimeout(() => {
@@ -44,7 +42,6 @@ const ChangePassword = ({ setAlert, changePassword, user, history }) => {
 
   return (
     <ChangePasswordStyle>
-      <Alert />
       <h1 className="fas fa-user large"> Đổi mật khẩu</h1>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
@@ -82,10 +79,6 @@ const ChangePassword = ({ setAlert, changePassword, user, history }) => {
   );
 };
 
-ChangePassword.propTypes = {
-  setAlert: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = state => {
   return {
     user: state.auth.user,
@@ -95,6 +88,6 @@ const mapStateToProps = state => {
 export default withRouter(
   connect(
     mapStateToProps,
-    { setAlert, changePassword },
+    { changePassword },
   )(ChangePassword),
 );

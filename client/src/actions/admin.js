@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { setAlert } from './alert';
+import { toast } from 'react-toastify';
+
 import {
   ADD_USER_SUCCESS,
   ADD_USER_FAILED,
@@ -56,15 +57,15 @@ export const addUser = ({ name, email, password }) => async dispatch => {
       dispatch({
         type: ADD_USER_SUCCESS,
       });
-      dispatch(setAlert('Thêm thành công', 'success', 1000));
+      toast.success('Thêm thành công');
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 1000));
+      toast.error(res.data.message);
       dispatch({
         type: ADD_USER_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
     dispatch({
       type: ADD_USER_FAILED,
     });
@@ -117,13 +118,13 @@ export const addTest = ({
       });
       dispatch(setStepCreateTest('step2'));
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 1000));
+      toast.error(res.data.message);
       dispatch({
         type: ADD_TEST_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
     dispatch({
       type: ADD_TEST_FAILED,
     });
@@ -174,13 +175,13 @@ export const addUserAndFileupload = (
         type: RESET_USER_CHOOSEN,
       });
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 1000));
+      toast.error(res.data.message);
       dispatch({
         type: ADD_USER_USER_AND_FILEUPLOAD_FAILED,
       });
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
     dispatch({
       type: ADD_USER_USER_AND_FILEUPLOAD_FAILED,
     });
@@ -321,18 +322,20 @@ export const addVoice = (voiceId, voiceName) => async dispatch => {
     );
 
     if (res.data.status === 1) {
-      dispatch(setAlert('Thêm voice thành công!', 'danger', 1000));
+      toast.success('Thêm voice thành công!');
     } else {
-      dispatch(setAlert(res.data.message, 'danger', 1000));
+      toast.error(res.data.message);
     }
   } catch (error) {
-    dispatch(setAlert(error.response.data.message, 'danger', 1000));
+    toast.error(error.response.data.message);
   }
 };
 
 export const deleteVoice = voiceId => async dispatch => {
   try {
-    await axios.delete(process.env.REACT_APP_API_DOMAIN + '/api/admin/delete-voice/' + voiceId);
+    await axios.delete(
+      process.env.REACT_APP_API_DOMAIN + '/api/admin/delete-voice/' + voiceId,
+    );
   } catch (error) {
     console.log(error);
   }

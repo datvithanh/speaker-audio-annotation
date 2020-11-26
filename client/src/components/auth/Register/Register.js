@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import RegisterStyle from './Register.style';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setAlert } from '../../../actions/alert';
 import { register } from '../../../actions/auth';
 import PropTypes from 'prop-types';
-import Alert from '../../../components/Layout/Alert/Alert';
-import { isValidEmail, isValidNumbersOfLiveYear, isValidYear, isStrongPassword } from '../../../utils/validation';
+import {
+  isValidEmail,
+  isValidNumbersOfLiveYear,
+  isValidYear,
+  isStrongPassword,
+} from '../../../utils/validation';
+import { toast } from 'react-toastify';
 
-const Register = ({ setAlert, register, isAuthenticated }) => {
+const Register = ({ register, isAuthenticated }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,35 +57,27 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (name === '') {
-      return setAlert('Họ tên không được bỏ trống', 'danger', 5000);
+      return toast.error('Họ tên không được bỏ trống');
     } else if (!isValidEmail(email)) {
-      return setAlert('Email không hợp lệ', 'danger', 5000);
+      return toast.error('Email không hợp lệ');
     } else if (!password) {
-      return setAlert('Mật khẩu không được bỏ trống', 'danger', 5000);
+      return toast.error('Mật khẩu không được bỏ trống');
     } else if (!isStrongPassword(password)) {
-      return setAlert('Mật khẩu không đủ mạnh', 'danger', 5000);
+      return toast.error('Mật khẩu không đủ mạnh');
     } else if (password !== password2) {
-      setAlert('Mật khẩu xác nhận không khớp', 'danger', 5000);
+      return toast.error('Mật khẩu xác nhận không khớp');
     } else if (!isValidYear(birthYear)) {
-      return setAlert('Năm sinh không hợp lệ', 'danger', 5000);
+      return toast.error('Năm sinh không hợp lệ');
     } else if (sex === 'GioiTinh' || sex === '') {
-      return setAlert('Bạn chưa chọn giới tính', 'danger', 5000);
+      return toast.error('Bạn chưa chọn giới tính');
     } else if (job === '') {
-      return setAlert('Nghề nghiệp không được bỏ trống', 'danger', 5000);
+      return toast.error('Nghề nghiệp không được bỏ trống');
     } else if (hometown === '') {
-      return setAlert('Quê quán không được bỏ trống', 'danger', 5000);
+      return toast.error('Quê quán không được bỏ trống');
     } else if (!isValidNumbersOfLiveYear(yearLivingInHaNoi)) {
-      return setAlert(
-        'Số năm sống ở Hà Nội không hợp lệ',
-        'danger',
-        5000,
-      );
+      return toast.error('Số năm sống ở Hà Nội không hợp lệ');
     } else if (!isValidNumbersOfLiveYear(yearLivingInHCM)) {
-      return setAlert(
-        'Số năm sống ở TPHCM không hợp lệ',
-        'danger',
-        5000,
-      );
+      return toast.error('Số năm sống ở TPHCM không hợp lệ');
     } else {
       register({
         name,
@@ -106,9 +102,10 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
     <RegisterStyle>
       <h1 className="large">Đăng ký tài khoản</h1>
       <p className="lead">
-        <i className="fas fa-user"></i> Tạo tài khoản đánh giá chất lượng giọng nói
+        <i className="fas fa-user"></i> Tạo tài khoản đánh giá chất lượng giọng
+        nói
       </p>
-      <Alert />
+
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="container">
           <div className="column1">
@@ -229,7 +226,6 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 };
 
 Register.propTypes = {
-  setAlert: PropTypes.func.isRequired,
   register: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool,
 };
@@ -240,5 +236,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { setAlert, register },
+  { register },
 )(Register);

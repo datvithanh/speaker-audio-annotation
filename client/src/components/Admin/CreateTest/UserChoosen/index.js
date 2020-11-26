@@ -2,15 +2,13 @@ import React from 'react';
 import UserChoosenStyle from './index.style';
 import { connect } from 'react-redux';
 import { Table } from 'antd';
-import { setAlert } from '../../../../actions/alert';
 import { addUserAndFileupload, setUserChosen } from '../../../../actions/admin';
 import { setStepCreateTest } from '../../../../actions/admin';
-import Alert from '../../../Layout/Alert/Alert';
+import { toast } from 'react-toastify';
 
 const UserChoosen = ({
   users,
   setStepCreateTest,
-  setAlert,
   minPeopleJoin,
   userChosen,
   setUserChosen,
@@ -40,11 +38,7 @@ const UserChoosen = ({
 
   const onClickedHandler = () => {
     if (userChosen.length !== minPeopleJoin) {
-      return setAlert(
-        `Bạn phải chọn đủ ${minPeopleJoin} người`,
-        'danger',
-        1000,
-      );
+      return toast.error(`Bạn phải chọn đủ ${minPeopleJoin} người`);
     }
     //addUserAndFileupload(userChosen, test._id, sentencePath, audioPath);
     setStepCreateTest('step4');
@@ -56,14 +50,15 @@ const UserChoosen = ({
         Chỉ định user tham gia bài test Private
       </h1>
       <p className="notice">Cần {minPeopleJoin} người cho bài test</p>
-      <Alert />
       <Table
         className="table"
         rowSelection={rowSelection}
         columns={columns}
         rowKey="_id"
         bordered
-        dataSource={users.filter(user => user.role !== 1 && user.type === false )}
+        dataSource={users.filter(
+          user => user.role !== 1 && user.type === false,
+        )}
       />
       <button className="btn btn-primary" onClick={onClickedHandler}>
         Xác nhận và chuyển sang bước tiếp theo
@@ -83,5 +78,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { addUserAndFileupload, setStepCreateTest, setAlert, setUserChosen },
+  { addUserAndFileupload, setStepCreateTest, setUserChosen },
 )(UserChoosen);

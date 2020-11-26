@@ -3,11 +3,10 @@ import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LoginStyle from './Login.style';
 import { login } from '../../../actions/auth';
-import { setAlert } from '../../../actions/alert';
 import PropTypes from 'prop-types';
-import Alert from '../../../components/Layout/Alert/Alert';
+import { toast } from 'react-toastify';
 
-const Login = ({ login, isAuthenticated, user, setAlert }) => {
+const Login = ({ login, isAuthenticated, user }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -25,9 +24,9 @@ const Login = ({ login, isAuthenticated, user, setAlert }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (email === '') {
-      return setAlert('Email không được bỏ trống', 'danger', 1000);
+      return toast.error('Email không được bỏ trống');
     } else if (password === '') {
-      return setAlert('Mật khẩu không được bỏ trống', 'danger', 1000);
+      return toast.error('Mật khẩu không được bỏ trống');
     } else {
       await login(email, password);
     }
@@ -44,7 +43,6 @@ const Login = ({ login, isAuthenticated, user, setAlert }) => {
 
   return (
     <LoginStyle>
-      <Alert />
       <h1 className="large">Đăng nhập</h1>
       <p className="lead">
         <i className="fas fa-user"></i> Đăng nhập vào tài khoản của bạn
@@ -72,7 +70,10 @@ const Login = ({ login, isAuthenticated, user, setAlert }) => {
           <input type="submit" className="btn btn-primary" value="Đăng nhập" />
         </div>
         <p className="my-1">
-          Bạn chưa có tài khoản? <Link style={{ textDecoration: 'underline' }} to="/register">Đăng ký</Link>
+          Bạn chưa có tài khoản?{' '}
+          <Link style={{ textDecoration: 'underline' }} to="/register">
+            Đăng ký
+          </Link>
         </p>
       </form>
     </LoginStyle>
@@ -91,5 +92,5 @@ const mapStateToProps = state => ({
 
 export default connect(
   mapStateToProps,
-  { login, setAlert },
+  { login },
 )(Login);

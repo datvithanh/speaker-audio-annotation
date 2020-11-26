@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import Alert from '../../../Layout/Alert/Alert';
 import { addVoice } from '../../../../actions/admin';
 import AddVoiceStyle from './index.style';
-import { setAlert } from '../../../../actions/alert';
+import { toast } from 'react-toastify';
 
-const AddVoice = ({ addVoice, setAlert }) => {
+const AddVoice = ({ addVoice }) => {
   const [formData, setFormData] = useState({
     voiceId: '',
     voiceName: '',
@@ -23,9 +22,9 @@ const AddVoice = ({ addVoice, setAlert }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (voiceId === '') {
-      setAlert('Mã voice không được bỏ trống', 'danger', 1000);
+      toast.error('Mã voice không được bỏ trống');
     } else if (voiceName === '') {
-      setAlert('Tên voice không được bỏ trống', 'danger', 1000);
+      toast.error('Tên voice không được bỏ trống');
     } else {
       addVoice(voiceId, voiceName);
     }
@@ -33,7 +32,6 @@ const AddVoice = ({ addVoice, setAlert }) => {
 
   return (
     <AddVoiceStyle>
-      <Alert />
       <h1 className="fas fa-user large"> Thêm Voice</h1>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
@@ -65,5 +63,5 @@ const AddVoice = ({ addVoice, setAlert }) => {
 
 export default connect(
   null,
-  { addVoice, setAlert },
+  { addVoice },
 )(AddVoice);

@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import Alert from '../../../components/Layout/Alert/Alert';
 import CreateTestStyle from './index.style';
-import { setAlert } from '../../../actions/alert';
 import {
   addTest,
   setStepCreateTest,
@@ -11,9 +9,9 @@ import {
 import UploadFile from './UploadFile';
 import UserChoosen from './UserChoosen';
 import AlertSuccess from './AlertSuccess';
+import { toast } from 'react-toastify';
 
 const CreateTest = ({
-  setAlert,
   addTest,
   stepCreateTest,
   setStepCreateTest,
@@ -94,31 +92,23 @@ const CreateTest = ({
     e.preventDefault();
 
     if (voices.length !== parseInt(numberOfVoices, 10)) {
-      setAlert(
+      toast.error(
         `Không khớp số lượng voices. Hãy nhập đúng ${numberOfVoices} voices`,
-        'danger',
-        1000,
       );
     } else if (parseInt(numberOfSentences) % parseInt(minSentences) !== 0) {
-      setAlert(
-        `Số câu phải chia hết cho số câu tối thiểu 1 người nghe`,
-        'danger',
-        1000,
-      );
+      toast.error(`Số câu phải chia hết cho số câu tối thiểu 1 người nghe`);
     } else if (
       (parseInt(numberOfSentences) / parseInt(minSentences)) *
         parseInt(minPeopleListenAudio) >
       users.filter(user => user.role !== 1 && user.type === false).length
     ) {
-      setAlert(
+      toast.error(
         `Bài test cần ${(parseInt(numberOfSentences) / parseInt(minSentences)) *
           parseInt(
             minPeopleListenAudio,
           )} số người. Vượt quá số lượng user trong hệ thống: ${
           users.filter(user => user.role !== 1 && user.type === false).length
         }`,
-        'danger',
-        1000,
       );
     } else {
       addTest({
@@ -141,7 +131,6 @@ const CreateTest = ({
     content = (
       <CreateTestStyle>
         <h1 className="fas fa-user large"> Tạo bài test</h1>
-        <Alert />
         <form className="form" onSubmit={e => onSubmit(e)}>
           <div className="container">
             <div className="column1">
@@ -291,5 +280,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { setAlert, addTest, setStepCreateTest, getListUser },
+  { addTest, setStepCreateTest, getListUser },
 )(CreateTest);
