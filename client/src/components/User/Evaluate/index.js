@@ -110,6 +110,8 @@ const Evaluate = ({
   const [pageCurrent, setPageCurrent] = useState();
   const [options, setOptions] = useState([]);
   const [listens, setListens] = useState(0);
+  const [disableInput, setDisableInput] = useState(true);
+  const [disableSelect, setDisableSelect] = useState(true);
   const audioRef = useRef();
 
   useEffect(() => {
@@ -212,6 +214,17 @@ const Evaluate = ({
   //     setAudios(audios[indexAudio]._id, point);
   //   }
   // };
+
+  useEffect(() => {
+    console.log({ listens });
+    if (listens >= 1) {
+      setDisableInput(false);
+      setDisableSelect(false);
+    } else {
+      setDisableInput(true);
+      setDisableSelect(true);
+    }
+  }, [listens]);
 
   const onClickFinishButton = () => {
     // console.log(test);
@@ -475,7 +488,11 @@ const Evaluate = ({
                     <div className="evaluate">
                       <h3>Đánh giá chất lượng giọng nói</h3>
 
-                      <Radio.Group onChange={onChange} value={point}>
+                      <Radio.Group
+                        onChange={onChange}
+                        value={point}
+                        disabled={disableSelect}
+                      >
                         {options.map(option => (
                           <Radio style={radioStyle} value={option.point}>
                             <Tooltip title={option.tooltip} placement="topLeft">
@@ -494,6 +511,7 @@ const Evaluate = ({
                         size="large"
                         placeholder="Nhập nội dung audio"
                         onChange={onChangeTextHandler}
+                        disabled={disableInput}
                       />
                     </div>
                   )}
