@@ -25,7 +25,7 @@ const randomAudioForUser = require('../service/randomAudioForUser');
 // const { mkDirByPathSync } = require('../utils/file');
 
 async function getListUser(req, res) {
-  const users = await User.find({});
+  const users = await User.find({ role: 0 });
   res.send({
     status: 1,
     results: {
