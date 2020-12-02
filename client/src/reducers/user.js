@@ -84,6 +84,7 @@ export default function(state = initialState, action) {
               user: {
                 ...audio.user,
                 point: payload.point,
+                text: payload.text,
               },
             };
           }

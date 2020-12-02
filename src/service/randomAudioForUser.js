@@ -57,7 +57,12 @@ const randomAudioForUser = async (voice, test) => {
         await Audio.findByIdAndUpdate(
           audios[j + (minPeopleJoin / minPeopleListenAudio) * i]._id,
           {
-            users: random.map(item => ({ userId: item, point: null })),
+            users: random.map(item => ({
+              userId: item,
+              point: null,
+              text: null,
+              listens: 0,
+            })),
             averagePoint: null,
           },
         );

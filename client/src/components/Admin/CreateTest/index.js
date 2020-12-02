@@ -37,7 +37,7 @@ const CreateTest = ({
     minPeopleListenAudio: 3, // b
     accessModifier: 'Public',
     dateOpened: '2020-10-20',
-    dateClosed: '2020-11-20',
+    dateClosed: '2020-12-30',
   });
 
   useEffect(() => {
@@ -148,6 +148,7 @@ const CreateTest = ({
                 >
                   <option value="1">Đánh giá giọng nói</option>
                   <option value="2">Kiểm tra ý định</option>
+                  <option value="3">Gõ nội dung audio</option>
                 </select>
               </div>
               <div className="form-group">

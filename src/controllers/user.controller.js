@@ -160,7 +160,7 @@ async function getAudioByUser(req, res) {
 }
 
 async function setPointForAudio(req, res) {
-  const { testId, audioId, point, userId, indexAudio } = req.body;
+  const { testId, audioId, point, text, userId, indexAudio } = req.body;
   const test = await Test.findOne({ _id: testId });
 
   const userUpdateIndexAudio = test.users.find(
@@ -178,17 +178,27 @@ async function setPointForAudio(req, res) {
 
   audio.users.forEach(user => {
     if (user.userId.toString() === userId) {
-      if (!user.point && point) {
-        audio.numberOfReviews += 1;
-        audio.averagePoint =
-          (audio.averagePoint * (audio.numberOfReviews - 1) + point) /
-          audio.numberOfReviews;
-      } else {
-        audio.averagePoint =
-          (audio.averagePoint * audio.numberOfReviews - user.point + point) /
-          audio.numberOfReviews;
+      if (point) {
+        if (!user.point) {
+          audio.numberOfReviews += 1;
+          audio.averagePoint =
+            (audio.averagePoint * (audio.numberOfReviews - 1) + point) /
+            audio.numberOfReviews;
+        } else {
+          audio.averagePoint =
+            (audio.averagePoint * audio.numberOfReviews - user.point + point) /
+            audio.numberOfReviews;
+        }
+        user.point = point;
       }
-      user.point = point;
+
+      if (text) {
+        if (!user.text) {
+          audio.numberOfReviews += 1;
+        }
+        user.text = text;
+      }
+
       user.lastUpdate = Date.now();
     }
   });
@@ -305,6 +315,47 @@ async function getTestById(req, res) {
   });
 }
 
+async function increaseListensAudio(req, res) {
+  const { audioId, userId } = req.body;
+
+  const audio = await Audio.findById(audioId);
+  let listen = 0;
+  audio.users.forEach(user => {
+    if (user.userId.toString() === userId) {
+      user.listens += 1;
+      listen = user.listens;
+
+      user.lastUpdate = Date.now();
+    }
+  });
+
+  await audio.save();
+
+  res.send({
+    status: 1,
+    results: { listens: listen },
+  });
+}
+
+async function getListensAudio(req, res) {
+  const { audioId, userId } = req.query;
+
+  const audio = await Audio.findById(audioId);
+  let listen = 0;
+  audio.users.forEach(user => {
+    if (user.userId.toString() === userId) {
+      listen = user.listens;
+    }
+  });
+
+  await audio.save();
+
+  res.send({
+    status: 1,
+    results: { listens: listen },
+  });
+}
+
 module.exports = {
   signup,
   signin,
@@ -320,4 +371,6 @@ module.exports = {
   changePassword,
   setMaxIndexAudio,
   getTestById,
+  increaseListensAudio,
+  getListensAudio,
 };

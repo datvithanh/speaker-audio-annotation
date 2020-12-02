@@ -20,6 +20,13 @@ const audioSchema = mongoose.Schema(
         },
         point: {
           type: Number,
+          default: true,
+        },
+        text: {
+          type: String,
+        },
+        listens: {
+          type: Number,
         },
         lastUpdate: {
           type: Date,

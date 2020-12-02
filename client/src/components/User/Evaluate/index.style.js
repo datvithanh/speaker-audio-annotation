@@ -57,6 +57,10 @@ const EvaluateStyle = styled.div`
     text-align: left;
   }
 
+  .texting {
+    margin-top: 50px;
+  }
+
   .group-button {
     display: flex;
     margin-top: 2rem;
@@ -92,6 +96,10 @@ const EvaluateStyle = styled.div`
     padding: 10px;
     border-radius: 10px;
     color: white;
+  }
+
+  .user-evaluate h5 {
+    text-align: center;
   }
 `;
 

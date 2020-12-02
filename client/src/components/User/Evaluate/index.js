@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { withRouter } from 'react-router-dom';
 import { Table, Tooltip } from 'antd';
+import ReactAudioPlayer from 'react-audio-player';
 import {
   getAudioForUser,
   setPointForAudio,
@@ -16,6 +17,8 @@ import { connect } from 'react-redux';
 import { Radio, Result, Button, Spin } from 'antd';
 import EvaluateStyle from './index.style';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import TextArea from 'antd/lib/input/TextArea';
+import Axios from 'axios';
 
 const options1 = [
   {
@@ -97,6 +100,7 @@ const Evaluate = ({
   getTestById,
 }) => {
   const [point, setPoint] = useState();
+  const [text, setText] = useState('');
   // const [disabledButton, setDisableButton] = useState(true);
   const [disableButtonBack, setDisableButtonBack] = useState(false);
   const [disableButtonNext, setDisableButtonNext] = useState(false);
@@ -105,6 +109,8 @@ const Evaluate = ({
   const [displayFinishForm, setDisplayFinishForm] = useState(false);
   const [pageCurrent, setPageCurrent] = useState();
   const [options, setOptions] = useState([]);
+  const [listens, setListens] = useState(0);
+  const audioRef = useRef();
 
   useEffect(() => {
     getTestById(match.params.id);
@@ -118,9 +124,19 @@ const Evaluate = ({
         indexAudio < audios.length &&
         audios[indexAudio]
       ) {
+        getListens(audios[indexAudio]._id, user._id).then(data => {
+          setListens(data);
+        });
         setDisplaySpinner(false);
         setPoint(audios[indexAudio].user.point);
-        const check = audios.every(audio => audio.user.point !== null);
+        setText(audios[indexAudio].user.text);
+        let check = false;
+        if (test.type === '3') {
+          check = audios.every(audio => audio.user.text !== null);
+        } else {
+          check = audios.every(audio => audio.user.point !== null);
+        }
+
         if (check) {
           setDisplayFinishButton(true);
         }
@@ -227,43 +243,54 @@ const Evaluate = ({
     // }
   };
 
-  const backSentence = () => {
+  const backSentence = async () => {
     // setDisableButton(true);
+    const listens = await getListens(audios[indexAudio - 1]._id, user._id);
+    setListens(listens);
 
     if (indexAudio > 0) {
       decreaseIndexAudio();
       setDisableButtonNext(false);
       setPoint(audios[indexAudio - 1].user.point);
+      setText(audios[indexAudio - 1].user.text);
     } else {
       setDisableButtonBack(true);
     }
   };
 
-  const nextSentence = () => {
+  const nextSentence = async () => {
     // setDisableButton(true);
+
     if (indexAudio < audios.length) {
       setPointForAudio(
         match.params.id,
         audios[indexAudio]._id,
         user._id,
         point,
+        text,
         indexAudio,
       );
     }
     if (indexAudio < audios.length) {
       if (audios[indexAudio + 1] && audios[indexAudio + 1].user.point) {
         setPoint(audios[indexAudio + 1].user.point);
+      } else if (audios[indexAudio + 1] && audios[indexAudio + 1].user.text) {
+        setText(audios[indexAudio + 1].user.text);
       } else {
         setPoint(null);
+        setText(null);
       }
 
       // setDisableButton(true);
-      setAudios(audios[indexAudio]._id, point);
+      setAudios({ id: audios[indexAudio]._id, point, text });
     }
 
     if (indexAudio < audios.length - 1) {
+      const listens = await getListens(audios[indexAudio + 1]._id, user._id);
+      setListens(listens);
       increaseIndexAudio();
       setPoint(audios[indexAudio + 1].user.point);
+      setText(audios[indexAudio + 1].user.text);
       setDisableButtonBack(false);
     } else {
       setDisableButtonNext(true);
@@ -277,11 +304,14 @@ const Evaluate = ({
     fontSize: '20px',
   };
 
-  const jumpToSentence = _id => {
+  const jumpToSentence = async _id => {
+    const listens = await getListens(_id, user._id);
+    setListens(listens);
     const index = audios.findIndex(item => item._id === _id);
     setIndexAudio(index);
     if (index !== indexAudio && audios[indexAudio - 1]) {
       setPoint(audios[indexAudio - 1].user.point);
+      setText(audios[indexAudio - 1].user.text);
     }
 
     if (indexAudio < audios.length) {
@@ -316,18 +346,62 @@ const Evaluate = ({
       },
     },
     {
-      title: test && test.type === '1' ? 'Điểm' : 'Lựa chọn',
+      title:
+        test && test.type === '1'
+          ? 'Điểm'
+          : test && test.type === '2'
+          ? 'Lựa chọn'
+          : 'Trạng thái',
       dataIndex: 'user',
       width: 80,
       align: 'center',
       render: user => {
-        return <span>{user.point}</span>;
+        return test.type !== '3' ? (
+          <span>{user.point}</span>
+        ) : user.text ? (
+          <span>Hoàn thành</span>
+        ) : null;
       },
     },
   ];
 
   const onClickPageHandler = page => {
     setPageCurrent(page * 1);
+  };
+
+  const onChangeTextHandler = e => {
+    setText(e.target.value);
+  };
+
+  const increaseListens = async (audioId, userId) => {
+    const body = {
+      audioId,
+      userId,
+    };
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const res = await Axios.post(
+      `${process.env.REACT_APP_API_DOMAIN}/api/users/increase-listens-audio`,
+      body,
+      config,
+    );
+    return res.data.results.listens;
+  };
+
+  const getListens = async (audioId, userId) => {
+    const res = await Axios.get(
+      `${process.env.REACT_APP_API_DOMAIN}/api/users/get-listens-audio?userId=${userId}&&audioId=${audioId}`,
+    );
+    return res.data.results.listens;
+  };
+
+  const onEndedHandler = async () => {
+    const listens = await increaseListens(audios[indexAudio]._id, user._id);
+    setListens(listens);
   };
 
   return (
@@ -368,21 +442,25 @@ const Evaluate = ({
                   <div key={audios[indexAudio]._id} className="container">
                     <div className="user-evaluate">
                       <h5>
-                        Câu thứ <b>{indexAudio + 1}</b> (tổng số {audios.length}{' '}
-                        câu).
+                        Câu {indexAudio + 1}/{audios.length}. Lượt nghe:{' '}
+                        {listens}
                       </h5>
                     </div>
-
-                    <div className="content">
-                      <h5>Nội dung câu: </h5>
-                      <div className="content-text">
-                        {audios[indexAudio].sentence}
+                    {test && test.type !== '3' ? (
+                      <div className="content">
+                        <h5>Nội dung câu: </h5>
+                        <div className="content-text">
+                          {audios[indexAudio].sentence}
+                        </div>
                       </div>
-                    </div>
+                    ) : null}
 
-                    <audio
+                    <ReactAudioPlayer
                       controls
                       autoPlay={audios[indexAudio].user.point ? false : true}
+                      listenInterval={1000}
+                      onEnded={onEndedHandler}
+                      ref={audioRef}
                     >
                       <source
                         src={
@@ -391,21 +469,35 @@ const Evaluate = ({
                         }
                       />
                       <track kind="captions" />
-                    </audio>
+                    </ReactAudioPlayer>
                   </div>
-                  <div className="evaluate">
-                    <h3>Đánh giá chất lượng giọng nói</h3>
+                  {test && test.type !== '3' ? (
+                    <div className="evaluate">
+                      <h3>Đánh giá chất lượng giọng nói</h3>
 
-                    <Radio.Group onChange={onChange} value={point}>
-                      {options.map(option => (
-                        <Radio style={radioStyle} value={option.point}>
-                          <Tooltip title={option.tooltip} placement="topLeft">
-                            {option.text}
-                          </Tooltip>
-                        </Radio>
-                      ))}
-                    </Radio.Group>
-                  </div>
+                      <Radio.Group onChange={onChange} value={point}>
+                        {options.map(option => (
+                          <Radio style={radioStyle} value={option.point}>
+                            <Tooltip title={option.tooltip} placement="topLeft">
+                              {option.text}
+                            </Tooltip>
+                          </Radio>
+                        ))}
+                      </Radio.Group>
+                    </div>
+                  ) : (
+                    <div className="texting">
+                      <TextArea
+                        value={text}
+                        className="input-text"
+                        autoSize={{ minRows: 4, maxRows: 4 }}
+                        size="large"
+                        placeholder="Nhập nội dung audio"
+                        onChange={onChangeTextHandler}
+                      />
+                    </div>
+                  )}
+
                   <div className="group-button">
                     <Button
                       disabled={disableButtonBack}

@@ -83,6 +83,7 @@ export const setPointForAudio = (
   audioId,
   userId,
   point,
+  text,
   indexAudio,
 ) => async dispatch => {
   const config = {
@@ -95,6 +96,7 @@ export const setPointForAudio = (
     audioId,
     userId,
     point,
+    text,
     indexAudio,
   };
 
@@ -183,10 +185,10 @@ export const getIndexAudio = (userId, testId) => async dispatch => {
   }
 };
 
-export const setAudios = (id, point) => dispatch => {
+export const setAudios = ({ id, point, text }) => dispatch => {
   dispatch({
     type: SET_AUDIOS,
-    payload: { id, point },
+    payload: { id, point, text },
   });
 };
 
@@ -272,8 +274,6 @@ export const getTestById = id => async dispatch => {
     const res = await axios.get(
       process.env.REACT_APP_API_DOMAIN + `/api/users/tests/${id}`,
     );
-
-    console.log({ data: res.data });
 
     if (res.data.status === 1) {
       dispatch({

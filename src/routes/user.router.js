@@ -17,6 +17,8 @@ const {
   changePassword,
   setMaxIndexAudio,
   getTestById,
+  increaseListensAudio,
+  getListensAudio,
 } = require('../controllers/user.controller');
 
 router.post('/signup', asyncWrap(signup));
@@ -32,5 +34,7 @@ router.get('/get-index-audio', auth, asyncWrap(getIndexAudio));
 router.put('/change-password', auth, asyncWrap(changePassword));
 router.put('/set-max-index-audio', auth, asyncWrap(setMaxIndexAudio));
 router.get('/tests/:id', auth, asyncWrap(getTestById));
+router.post('/increase-listens-audio', auth, asyncWrap(increaseListensAudio));
+router.get('/get-listens-audio', auth, asyncWrap(getListensAudio));
 
 module.exports = router;

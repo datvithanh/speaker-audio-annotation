@@ -138,6 +138,7 @@ const User = ({
               <Button
                 onClick={() => onClickPerformPublicTest(_id)}
                 type="primary"
+                style={{ color: 'white', backgroundColor: '#0f6398' }}
               >
                 Bắt đầu test
               </Button>
@@ -147,6 +148,7 @@ const User = ({
               <Button
                 type="primary"
                 onClick={() => onClickPerformPublicTest(_id)}
+                style={{ color: 'white', backgroundColor: '#0f6398' }}
               >
                 Thực hiện tiếp
               </Button>
@@ -232,9 +234,35 @@ const User = ({
       render: (text, record) => {
         const { _id } = record;
         return (
-          <Button onClick={() => onClickPerformPrivateTest(_id)} type="primary">
-            Thực hiện
-          </Button>
+          // <Button onClick={() => onClickPerformPrivateTest(_id)} type="primary">
+          //   Thực hiện
+          // </Button>
+          <span>
+            {record.users.length === 0 ||
+            (!record.users.map(user => user.id).includes(user._id) ||
+              record.users.find(item => item.id === user._id.toString())
+                .indexAudio === 0) ? (
+              <Button
+                onClick={() => onClickPerformPrivateTest(_id)}
+                type="primary"
+                style={{ color: 'white', backgroundColor: '#0f6398' }}
+              >
+                Bắt đầu test
+              </Button>
+            ) : record.users.find(item => item.id === user._id.toString())
+                .indexAudio !==
+              record.minSentences * record.voices.length + 1 ? (
+              <Button
+                type="primary"
+                onClick={() => onClickPerformPrivateTest(_id)}
+                style={{ color: 'white', backgroundColor: '#0f6398' }}
+              >
+                Thực hiện tiếp
+              </Button>
+            ) : (
+              <div style={{ textAlign: 'center' }}>Đã hoàn thành</div>
+            )}
+          </span>
         );
       },
     },
