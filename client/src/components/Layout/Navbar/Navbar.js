@@ -28,7 +28,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
         <a
           className="tutorial"
           target="_blank"
-          href="https://tts.vlsp.org.vn/TaiLieuHuongDanVLSPTool.pdf"
+          href="https://tts.vlsp.org.vn/TaiLieuHuongDanVLSP-TTS-2020.pdf"
         >
           <QuestionCircleOutlined />
         </a>
