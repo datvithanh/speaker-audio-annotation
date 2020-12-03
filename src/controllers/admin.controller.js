@@ -37,10 +37,12 @@ async function getListUser(req, res) {
 async function addUser(req, res) {
   const isExistMail = await User.findOne({ email: req.body.email });
   if (isExistMail) {
-    throw new CustomError(errorCode.EMAIL_ALREADY_EXIST, 'Email đã tồn tại');
+    // throw new CustomError(errorCode.EMAIL_ALREADY_EXIST, 'Email đã tồn tại');
+    const salt = await bcrypt.genSalt(10);
+    await User.findOneAndUpdate({ email: req.body.email }, { ...req.body, password: await bcrypt.hash(req.body.password, salt), actived: false });
+  } else {
+    await User.create({ ...req.body, actived: false });
   }
-
-  await User.create(req.body);
 
   res.send({
     status: 1,
