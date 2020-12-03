@@ -130,8 +130,11 @@ const Evaluate = ({
           setListens(data);
         });
         setDisplaySpinner(false);
-        setPoint(audios[indexAudio].user.point);
-        setText(audios[indexAudio].user.text);
+        if (test.type === '3') {
+          setText(audios[indexAudio].user.text);
+        } else {
+          setPoint(audios[indexAudio].user.point);
+        }
         let check = false;
         if (test.type === '3') {
           check = audios.every(audio => audio.user.text !== null);
@@ -216,7 +219,6 @@ const Evaluate = ({
   // };
 
   useEffect(() => {
-    console.log({ listens });
     if (listens >= 1) {
       setDisableInput(false);
       setDisableSelect(false);
@@ -225,6 +227,35 @@ const Evaluate = ({
       setDisableSelect(true);
     }
   }, [listens]);
+
+  // useEffect(() => {
+  //   if (user && user._id && audios && audios[indexAudio]) {
+  //     const link = audios[indexAudio].link;
+  //     if (!link) {
+  //       // setPointForAudio(
+  //       //   match.params.id,
+  //       //   audios[indexAudio]._id,
+  //       //   user._id,
+  //       //   0,
+  //       //   '',
+  //       //   indexAudio,
+  //       // );
+  //       // if (indexAudio < audios.length - 1) {
+  //       //   setIndexAudio(indexAudio + 1);
+  //       // }
+  //     }
+  //   }
+  //   // console.log({ link });
+  // }, [
+  //   audios,
+  //   indexAudio,
+  //   match.params.id,
+  //   point,
+  //   setIndexAudio,
+  //   setPointForAudio,
+  //   text,
+  //   user,
+  // ]);
 
   const onClickFinishButton = () => {
     // console.log(test);
@@ -290,8 +321,11 @@ const Evaluate = ({
       } else if (audios[indexAudio + 1] && audios[indexAudio + 1].user.text) {
         setText(audios[indexAudio + 1].user.text);
       } else {
-        setPoint(null);
-        setText(null);
+        if (test.type === '3') {
+          setText(null);
+        } else {
+          setPoint(null);
+        }
       }
 
       // setDisableButton(true);
@@ -319,12 +353,16 @@ const Evaluate = ({
 
   const jumpToSentence = async _id => {
     const listens = await getListens(_id, user._id);
+    console.log({ indexAudio });
     setListens(listens);
     const index = audios.findIndex(item => item._id === _id);
     setIndexAudio(index);
     if (index !== indexAudio && audios[indexAudio - 1]) {
-      setPoint(audios[indexAudio - 1].user.point);
-      setText(audios[indexAudio - 1].user.text);
+      if (test.type === '3') {
+        setText(audios[indexAudio - 1].user.text);
+      } else {
+        setPoint(audios[indexAudio - 1].user.point);
+      }
     }
 
     if (indexAudio < audios.length) {
@@ -371,8 +409,12 @@ const Evaluate = ({
       render: user => {
         return test.type !== '3' ? (
           <span>{user.point}</span>
-        ) : user.text ? (
-          <span>Hoàn thành</span>
+        ) : user.text !== null ? (
+          user.text !== 'error' ? (
+            <span>Hoàn thành</span>
+          ) : (
+            <span>Câu lỗi</span>
+          )
         ) : null;
       },
     },
@@ -416,6 +458,8 @@ const Evaluate = ({
     const listens = await increaseListens(audios[indexAudio]._id, user._id);
     setListens(listens);
   };
+
+  console.log({ point });
 
   return (
     <>

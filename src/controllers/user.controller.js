@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const { ObjectId } = require('mongoose').Types;
+const fs = require('fs');
 const CustomError = require('../errors/CustomError');
 const errorCode = require('../errors/errorCode');
 const User = require('../models/user.model');
@@ -7,6 +8,7 @@ const Test = require('../models/test.model');
 const Audio = require('../models/audio.model');
 const Sentence = require('../models/sentence.model');
 const Voice = require('../models/voice.model');
+const { SRC_PATH } = require('../constant');
 
 async function signup(req, res) {
   const isExistMail = await User.findOne({ email: req.body.email });
@@ -134,16 +136,21 @@ async function getAudioByUser(req, res) {
       const audio = await Audio.findById(audioId);
       const { _id, link, voice, sentence, users } = audio;
 
+      const buffer = fs.readFileSync(`${SRC_PATH}/static/${link}`);
+
       const contentSentence = await Sentence.findOne({
         _id: sentence,
       });
 
       const voiceName = await Voice.findOne({ _id: voice });
       const userSpec = users.find(item => item.userId.toString() === user);
-
+      if (buffer.length === 0) {
+        userSpec.point = 0;
+        userSpec.text = 'error';
+      }
       return {
         _id,
-        link,
+        link: buffer.length !== 0 ? link : null,
         voice: voiceName.name,
         sentence: contentSentence.content,
         user: userSpec,
