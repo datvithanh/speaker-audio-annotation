@@ -72,13 +72,14 @@ const User = ({
       title: 'Tên bài test',
       dataIndex: 'name',
       key: 'name',
-      align: 'center',
+      // align: 'center',
     },
     {
       title: 'Số lượng audio',
       // dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
       className: 'column',
+      align: 'right',
       width: 200,
       render: ({ voices, minSentences }) => {
         return voices.length * minSentences;
@@ -88,7 +89,7 @@ const User = ({
       title: 'Ngày bắt đầu',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
-      align: 'center',
+      align: 'left',
       width: 200,
       render: dateString => {
         const date = new Date(dateString);
@@ -107,7 +108,8 @@ const User = ({
       title: 'Ngày kết thúc',
       dataIndex: 'dateClosed',
       key: 'dateClosed',
-      align: 'center',
+
+      align: 'left',
       width: 200,
       render: dateString => {
         const date = new Date(dateString);
@@ -179,10 +181,12 @@ const User = ({
       dataIndex: 'name',
       key: 'name',
       className: 'column',
+      align: 'left',
     },
     {
       title: 'Số lượng audio',
       // dataIndex: 'numberOfSentences',
+      align: 'right',
       key: 'numberOfSentences',
       className: 'column',
       width: 200,
@@ -195,6 +199,7 @@ const User = ({
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       className: 'column',
+      align: 'left',
       width: 200,
       render: dateString => {
         const date = new Date(dateString);
@@ -212,6 +217,7 @@ const User = ({
     {
       title: 'Ngày kết thúc',
       dataIndex: 'dateClosed',
+      align: 'left',
       key: 'dateClosed',
       className: 'column',
       width: 200,

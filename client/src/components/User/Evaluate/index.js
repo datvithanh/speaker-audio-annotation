@@ -334,7 +334,7 @@ const Evaluate = ({
 
   const columnsPoint = [
     {
-      title: 'Số thứ tự',
+      title: 'Câu',
       dataIndex: '_id',
       width: 100,
       render: _id => {
@@ -455,13 +455,14 @@ const Evaluate = ({
                   <div key={audios[indexAudio]._id} className="container">
                     <div className="user-evaluate">
                       <h5>
-                        Câu {indexAudio + 1}/{audios.length}. Lượt nghe:{' '}
-                        {listens}
+                        Bạn đang{' '}
+                        {test.type === '3' ? 'nhập nội dung ' : 'đánh giá '}câu{' '}
+                        {indexAudio + 1}/{audios.length}. Lượt nghe: {listens}
                       </h5>
                     </div>
                     {test && test.type !== '3' ? (
                       <div className="content">
-                        <h5>Nội dung câu: </h5>
+                        <h5>Nội dung: </h5>
                         <div className="content-text">
                           {audios[indexAudio].sentence}
                         </div>
