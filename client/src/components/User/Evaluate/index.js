@@ -189,11 +189,11 @@ const Evaluate = ({
     getIndexAudio,
     match.params.id,
     user,
-    indexAudio,
     audios,
     setIndexAudio,
     displayFinishForm,
     test,
+    indexAudio,
   ]);
 
   // const onClickHandler = () => {
@@ -335,9 +335,13 @@ const Evaluate = ({
     if (indexAudio < audios.length - 1) {
       const listens = await getListens(audios[indexAudio + 1]._id, user._id);
       setListens(listens);
-      increaseIndexAudio();
-      setPoint(audios[indexAudio + 1].user.point);
-      setText(audios[indexAudio + 1].user.text);
+      if (test.type === '3') {
+        increaseIndexAudio();
+        setText(audios[indexAudio + 1].user.text);
+      } else {
+        increaseIndexAudio();
+        setPoint(audios[indexAudio + 1].user.point);
+      }
       setDisableButtonBack(false);
     } else {
       setDisableButtonNext(true);
@@ -353,7 +357,6 @@ const Evaluate = ({
 
   const jumpToSentence = async _id => {
     const listens = await getListens(_id, user._id);
-    console.log({ indexAudio });
     setListens(listens);
     const index = audios.findIndex(item => item._id === _id);
     setIndexAudio(index);
@@ -458,8 +461,6 @@ const Evaluate = ({
     const listens = await increaseListens(audios[indexAudio]._id, user._id);
     setListens(listens);
   };
-
-  console.log({ point });
 
   return (
     <>
