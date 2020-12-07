@@ -1,75 +1,70 @@
 /* eslint-disable no-console */
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+require('dotenv');
+const fs = require('fs');
+const moment = require('moment');
+
+require('../src/db/mongoose');
+
 const Audio = require('../src/models/audio.model');
 const User = require('../src/models/user.model');
 const Test = require('../src/models/test.model');
 const Sentence = require('../src/models/sentence.model');
-require('dotenv');
-
-require('../src/db/mongoose');
-
-const csvWriter = createCsvWriter({
-  path: 'src/static/transcript.csv',
-  header: [
-    { id: '_id', title: 'ID' },
-    { id: 'test', title: 'test' },
-    { id: 'link', title: 'link' },
-    { id: 'voice', title: 'voice' },
-    { id: 'sentence', title: 'sentence' },
-    { id: 'createdAt', title: 'createdAt' },
-    { id: 'email', title: 'email' },
-    { id: 'name', title: 'name' },
-    { id: 'listens', title: 'listens' },
-    { id: 'text', title: 'transcript' },
-  ],
-});
 
 (async () => {
+  let data = [];
+
+  const firstTranscriptId = '5fc89918d2eeea6aecd9602a';
+  const secondTranscriptId = '5fc89a77d2eeea6aecd96103';
+  const thirdTranscriptId = '5fc89b7bd2eeea6aecd961dc';
+
+  const firstTranscriptTest = await Test.findById(firstTranscriptId);
+  const secondTranscriptTest = await Test.findById(secondTranscriptId);
+  const thirdTranscriptTest = await Test.findById(thirdTranscriptId);
+
   const audios = await Audio.find({
-    // test: { $in: ['5fcda797fed7ab0a702ce800', '5fcda7b6fed7ab0a702ce820'] }, // dev
-    test: {
-      $in: [
-        '5fc89918d2eeea6aecd9602a',
-        '5fc89a77d2eeea6aecd96103',
-        '5fc89b7bd2eeea6aecd961dc',
-      ],
-    }, // production
-  }).lean();
-
-  const data = [];
-  await Promise.all(
-    audios.map(async audio => {
-      await Promise.all(
-        audio.users.map(async user => {
-          const userObject = await User.findById(user.userId);
-          const testObject = await Test.findById(audio.test);
-          const sentenceObject = await Sentence.findById(audio.sentence);
-
-          data.push({
-            ...audio,
-            email: userObject.email,
-            name: userObject.name,
-            text: user.text,
-            test: testObject.name,
-            sentence: sentenceObject.content,
-            listens: user.listens,
-          });
-        }),
-      );
-    }),
-  );
-  const dataReturned = data.map(a => {
-    delete a.users;
-    delete a.updatedAt;
-    delete a.averagePoint;
-    delete a.__v;
-    delete a.numberOfReviews;
-    return { ...a };
+    test: { $in: [firstTranscriptId, secondTranscriptId, thirdTranscriptId] },
   });
+  console.log('audios.length', audios.length);
 
-  await csvWriter.writeRecords(dataReturned);
+  for (const [index, audio] of audios.entries()) {
+    const { _id, link, voice, sentence: sentenceId, users } = audio;
+    const testId = audio.test.toString();
 
-  // console.log({ dataReturned });
+    console.log((index + 1) / audios.length * 100);
 
-  process.exit();
+    let testName;
+    switch (testId) {
+      case firstTranscriptId: testName = firstTranscriptTest.name; break;
+      case secondTranscriptId: testName = secondTranscriptTest.name; break;
+      case thirdTranscriptId: testName = thirdTranscriptTest.name; break;
+      default: break;
+    }
+
+    const pieceOfData = await Promise.all(users.map(async ({ userId, text, listens, lastUpdate }) => {
+      const user = await User.findById(userId);
+      const sentence = await Sentence.findById(sentenceId);
+
+      return {
+        test: testName,
+        audioId: _id,
+        link,
+        voice,
+        sentence: sentence.content,
+        listens,
+        email: user.email,
+        name: user.name,
+        text,
+        lastUpdatedAt: lastUpdate ? moment(lastUpdate).format('DD-MM-YYYY HH:mm') : '',
+      };
+    }));
+
+    data = [...data, ...pieceOfData];
+  }
+
+  fs.appendFileSync('scripts/transcript.csv', 'test,audio_id,link,voice,sentence,listens,email,name,text,last_updated_at\n');
+  for (const item of data) {
+    fs.appendFileSync('scripts/transcript.csv', Object.values(item).join(',') + '\n');
+  }
+
+  process.exit(1);
 })();

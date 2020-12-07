@@ -1,30 +1,18 @@
 /* eslint-disable no-console */
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-const { ObjectId } = require('mongoose').Types;
-const Audio = require('../src/models/audio.model');
 require('dotenv');
-
 require('../src/db/mongoose');
+const { ObjectId } = require('mongoose').Types;
 
-const csvWriter = createCsvWriter({
-  path: 'src/static/average-point.csv',
-  header: [
-    { id: '_id', title: 'voice' },
-    { id: 'averagePoint', title: 'AveragePoint' },
-  ],
-});
+const fs = require('fs');
+
+const Audio = require('../src/models/audio.model');
 
 (async () => {
-  const audios = await Audio.aggregate([
+  let data = await Audio.aggregate([
     {
       $match: {
         test: {
           $in: [
-            // dev
-            // ObjectId('5fcd0328a765493f035d186e'),
-            // ObjectId('5fcd1aa70705f2d8b5f42227'),
-
-            // production
             ObjectId('5fc895cfd2eeea6aecd95bee'),
             ObjectId('5fc897bfd2eeea6aecd95dd0'),
           ],
@@ -37,15 +25,16 @@ const csvWriter = createCsvWriter({
         averagePoint: { $avg: '$averagePoint' },
       },
     },
-    {
-      $project: {
-        _id: '$_id',
-        averagePoint: { $round: ['$averagePoint', 3] },
-      },
-    },
   ]);
 
-  await csvWriter.writeRecords(audios);
+  
+  data = data.map(item => ({ ...item, averagePoint: item.averagePoint.toFixed(3) }))
+  console.log(data);
 
-  process.exit();
+  fs.appendFileSync('scripts/average_point.csv', 'voice,average_point\n');
+  for (const item of data) {
+    fs.appendFileSync('scripts/average_point.csv', Object.values(item).join(',') + '\n');
+  }
+
+  process.exit(1);
 })();
