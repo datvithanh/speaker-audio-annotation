@@ -30,40 +30,57 @@ const Sentence = require('../src/models/sentence.model');
     const { _id, link, voice, sentence: sentenceId, users } = audio;
     const testId = audio.test.toString();
 
-    console.log((index + 1) / audios.length * 100);
+    console.log(((index + 1) / audios.length) * 100);
 
     let testName;
     switch (testId) {
-      case firstTranscriptId: testName = firstTranscriptTest.name; break;
-      case secondTranscriptId: testName = secondTranscriptTest.name; break;
-      case thirdTranscriptId: testName = thirdTranscriptTest.name; break;
-      default: break;
+      case firstTranscriptId:
+        testName = firstTranscriptTest.name;
+        break;
+      case secondTranscriptId:
+        testName = secondTranscriptTest.name;
+        break;
+      case thirdTranscriptId:
+        testName = thirdTranscriptTest.name;
+        break;
+      default:
+        break;
     }
 
-    const pieceOfData = await Promise.all(users.map(async ({ userId, text, listens, lastUpdate }) => {
-      const user = await User.findById(userId);
-      const sentence = await Sentence.findById(sentenceId);
+    const pieceOfData = await Promise.all(
+      users.map(async ({ userId, text, listens, lastUpdate }) => {
+        const user = await User.findById(userId);
+        const sentence = await Sentence.findById(sentenceId);
 
-      return {
-        test: testName,
-        audioId: _id,
-        link,
-        voice,
-        sentence: sentence.content,
-        listens,
-        email: user.email,
-        name: user.name,
-        text,
-        lastUpdatedAt: lastUpdate ? moment(lastUpdate).format('DD-MM-YYYY HH:mm') : '',
-      };
-    }));
+        return {
+          test: testName,
+          audioId: _id,
+          link,
+          voice,
+          sentence: sentence.content,
+          listens,
+          email: user.email,
+          name: user.name,
+          text,
+          lastUpdatedAt: lastUpdate
+            ? moment(lastUpdate).format('DD-MM-YYYY HH:mm')
+            : '',
+        };
+      }),
+    );
 
     data = [...data, ...pieceOfData];
   }
 
-  fs.appendFileSync('scripts/transcript.csv', 'test,audio_id,link,voice,sentence,listens,email,name,text,last_updated_at\n');
+  fs.appendFileSync(
+    'scripts/transcript.csv',
+    'test,audio_id,link,voice,sentence,listens,email,name,text,last_updated_at\n',
+  );
   for (const item of data) {
-    fs.appendFileSync('scripts/transcript.csv', Object.values(item).join(',') + '\n');
+    fs.appendFileSync(
+      'scripts/transcript.csv',
+      `${Object.values(item).join(',')}\n`,
+    );
   }
 
   process.exit(1);

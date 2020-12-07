@@ -27,13 +27,18 @@ const Audio = require('../src/models/audio.model');
     },
   ]);
 
-  
-  data = data.map(item => ({ ...item, averagePoint: item.averagePoint.toFixed(3) }))
+  data = data.map(item => ({
+    ...item,
+    averagePoint: item.averagePoint.toFixed(3),
+  }));
   console.log(data);
 
   fs.appendFileSync('scripts/average_point.csv', 'voice,average_point\n');
   for (const item of data) {
-    fs.appendFileSync('scripts/average_point.csv', Object.values(item).join(',') + '\n');
+    fs.appendFileSync(
+      'scripts/average_point.csv',
+      `${Object.values(item).join(',')}\n`,
+    );
   }
 
   process.exit(1);
