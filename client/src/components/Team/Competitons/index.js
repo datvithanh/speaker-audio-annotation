@@ -199,105 +199,30 @@ const Competitions = ({
     }
   };
 
-  const columns = [
-    {
-      title: 'Tên công việc',
-      dataIndex: 'name',
-    },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'submitted',
-      align: 'center',
-      render: submitted => (submitted ? 'Đã hoàn thành' : 'Chưa hoàn thành'),
-    },
-    {
-      title: 'Deadline',
-      dataIndex: 'timeExpired',
-      align: 'center',
-      render: dateString => {
-        const date = new Date(dateString);
-        date.setHours(date.getHours() - 7);
-
-        return (
-          <span style={{ textAlign: 'center', display: 'block' }}>
-            {moment(date).add(7, 'hours').format('HH:mm DD-MM-YYYY')}
-          </span>
-        );
-      },
-    },
-    {
-      key: 'action',
-      width: 200,
-      render: submission => {
-        return submission.submitted ? (
-          <Button
-            style={{
-              margin: '0 auto',
-              display: 'block',
-              backgroundColor: '#0b6398',
-            }}
-            type="primary"
-            onClick={() => displayFormSubmit(submission)}
-          >
-            Sửa thông tin
-          </Button>
-        ) : (
-          <Button
-            style={{
-              margin: '0 auto',
-              display: 'block',
-              backgroundColor: '#0b6398',
-            }}
-            type="primary"
-            onClick={() => displayFormSubmit(submission)}
-          >
-            Thực hiện
-          </Button>
-        );
-      },
-    },
-  ];
-
   // const columns = [
   //   {
-  //     // title: 'Tên cuộc thi',
+  //     title: 'Tên công việc',
   //     dataIndex: 'name',
-  //     width: '50%',
-  //     render: name => name.toUpperCase(),
   //   },
   //   {
-  //     // title: 'Ngày bắt đầu',
-  //     dataIndex: 'createdAt',
+  //     title: 'Trạng thái',
+  //     dataIndex: 'submitted',
+  //     align: 'center',
+  //     render: submitted => (submitted ? 'Đã hoàn thành' : 'Chưa hoàn thành'),
+  //   },
+  //   {
+  //     title: 'Deadline',
+  //     dataIndex: 'timeExpired',
   //     align: 'center',
   //     render: dateString => {
   //       const date = new Date(dateString);
+  //       date.setHours(date.getHours() - 7);
+
   //       return (
   //         <span style={{ textAlign: 'center', display: 'block' }}>
-  //           {date.getDate() +
-  //             ' - ' +
-  //             (date.getMonth() + 1) +
-  //             ' - ' +
-  //             date.getFullYear()}
-  //         </span>
-  //       );
-  //     },
-  //   },
-  //   {
-  //     title: 'Ngày kết thúc',
-  //     dataIndex: 'timeExpired',
-  //     key: 'timeExpired',
-  //     align: 'center',
-  //     width: 200,
-  //     render: dateString => {
-  //       const date = new Date(dateString);
-  //       return (
-  //         <span>
-  //           {date.getDate() -
-  //             1 +
-  //             ' - ' +
-  //             (date.getMonth() + 1) +
-  //             ' - ' +
-  //             date.getFullYear()}
+  //           {moment(date)
+  //             .add(7, 'hours')
+  //             .format('HH:mm DD-MM-YYYY')}
   //         </span>
   //       );
   //     },
@@ -305,8 +230,8 @@ const Competitions = ({
   //   {
   //     key: 'action',
   //     width: 200,
-  //     render: competition => {
-  //       return competition.numberOfCompletedAudio === undefined ? (
+  //     render: submission => {
+  //       return submission.submitted ? (
   //         <Button
   //           style={{
   //             margin: '0 auto',
@@ -314,16 +239,10 @@ const Competitions = ({
   //             backgroundColor: '#0b6398',
   //           }}
   //           type="primary"
-  //           onClick={() => joinCompetitionHandler(competition._id, 'join')}
+  //           onClick={() => displayFormSubmit(submission)}
   //         >
-  //           Tham gia
+  //           Sửa thông tin
   //         </Button>
-  //       ) : competition.numberOfCompletedAudio &&
-  //         competition.numberOfCompletedAudio >=
-  //           competition.rules.numberOfAudiosPerListener ? (
-  //         <div style={{ textAlign: 'center', fontStyle: 'italic' }}>
-  //           Đã hoàn thành
-  //         </div>
   //       ) : (
   //         <Button
   //           style={{
@@ -332,14 +251,97 @@ const Competitions = ({
   //             backgroundColor: '#0b6398',
   //           }}
   //           type="primary"
-  //           onClick={() => joinCompetitionHandler(competition._id, 'joined')}
+  //           onClick={() => displayFormSubmit(submission)}
   //         >
-  //           Thực hiện tiếp
+  //           Thực hiện
   //         </Button>
   //       );
   //     },
   //   },
   // ];
+
+  const columns = [
+    {
+      // title: 'Tên cuộc thi',
+      dataIndex: 'name',
+      width: '50%',
+      render: name => name.toUpperCase(),
+    },
+    {
+      // title: 'Ngày bắt đầu',
+      dataIndex: 'createdAt',
+      align: 'center',
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span style={{ textAlign: 'center', display: 'block' }}>
+            {date.getDate() +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
+    },
+    {
+      title: 'Ngày kết thúc',
+      dataIndex: 'timeExpired',
+      key: 'timeExpired',
+      align: 'center',
+      width: 200,
+      render: dateString => {
+        const date = new Date(dateString);
+        return (
+          <span>
+            {date.getDate() -
+              1 +
+              ' - ' +
+              (date.getMonth() + 1) +
+              ' - ' +
+              date.getFullYear()}
+          </span>
+        );
+      },
+    },
+    {
+      key: 'action',
+      width: 200,
+      render: competition => {
+        return competition.numberOfCompletedAudio === undefined ? (
+          <Button
+            style={{
+              margin: '0 auto',
+              display: 'block',
+              backgroundColor: '#0b6398',
+            }}
+            type="primary"
+            onClick={() => joinCompetitionHandler(competition._id, 'join')}
+          >
+            Tham gia
+          </Button>
+        ) : competition.numberOfCompletedAudio &&
+          competition.numberOfCompletedAudio >=
+            competition.rules.numberOfAudiosPerListener ? (
+          <div style={{ textAlign: 'center', fontStyle: 'italic' }}>
+            Đã hoàn thành
+          </div>
+        ) : (
+          <Button
+            style={{
+              margin: '0 auto',
+              display: 'block',
+              backgroundColor: '#0b6398',
+            }}
+            type="primary"
+            onClick={() => joinCompetitionHandler(competition._id, 'joined')}
+          >
+            Thực hiện tiếp
+          </Button>
+        );
+      },
+    },
+  ];
 
   // // DEMO
   const columnsFile = [
@@ -375,7 +377,7 @@ const Competitions = ({
           rowKey="_id"
           bordered
           className="table"
-          dataSource={submissions}
+          dataSource={competitions}
           pagination={{ pageSize: 6 }}
         />
       </CompetitionsStyle>

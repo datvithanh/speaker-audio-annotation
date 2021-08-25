@@ -39,7 +39,14 @@ async function addUser(req, res) {
   if (isExistMail) {
     // throw new CustomError(errorCode.EMAIL_ALREADY_EXIST, 'Email đã tồn tại');
     const salt = await bcrypt.genSalt(10);
-    await User.findOneAndUpdate({ email: req.body.email }, { ...req.body, password: await bcrypt.hash(req.body.password, salt), actived: false });
+    await User.findOneAndUpdate(
+      { email: req.body.email },
+      {
+        ...req.body,
+        password: await bcrypt.hash(req.body.password, salt),
+        actived: false,
+      },
+    );
   } else {
     await User.create({ ...req.body, actived: false });
   }
@@ -658,13 +665,14 @@ async function uploadTrainningData(req, res) {
         }
 
         const stats = fs.statSync(`${directoryFullPath}/${fileUnzip}`);
+        console.log({ content });
 
         await AudioTrainning.create({
           competitionId: competition._id,
           link: `${directoryPath}/${fileUnzip}`,
           rawOriginContent: content,
           transcripts: content ? [{ numberOfVotes: 0, content }] : [],
-          textLength: content.length,
+          textLength: content ? content.length : 0,
           sizeInKilobytes: stats.size / 1000,
           label: '',
         });
