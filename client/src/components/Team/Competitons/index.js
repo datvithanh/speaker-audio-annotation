@@ -262,13 +262,13 @@ const Competitions = ({
 
   const columns = [
     {
-      // title: 'Tên cuộc thi',
+      title: 'Tên cuộc thi',
       dataIndex: 'name',
       width: '50%',
       render: name => name.toUpperCase(),
     },
     {
-      // title: 'Ngày bắt đầu',
+      title: 'Ngày bắt đầu',
       dataIndex: 'createdAt',
       align: 'center',
       render: dateString => {

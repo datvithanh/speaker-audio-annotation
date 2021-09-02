@@ -6,6 +6,10 @@ const audioTrainningSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    link2: {
+      type: String, 
+      required: false,
+    },
     rawOriginContent: {
       type: String,
     },

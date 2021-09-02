@@ -35,6 +35,7 @@ export default function(state = initialState, action) {
       return {
         ...state,
         currentAudio: payload.audio,
+        currentAudio2: payload.audio2,
       };
 
     case FINISH_TASK:

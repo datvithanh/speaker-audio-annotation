@@ -112,10 +112,14 @@ async function randomizeAudio(req, res) {
     throw new CustomError(errorCode.BAD_REQUEST, 'completed');
   }
 
+  const audio_copy = JSON.parse(JSON.stringify(audios[0]));
+  audio_copy.link = audio_copy.link2;
+
   res.send({
     status: 1,
     results: {
       audio: audios[0],
+      audio2: audio_copy,
     },
   });
 }

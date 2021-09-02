@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Row, List, Col, Input, Tooltip } from 'antd';
+import { Row, List, Col, Input, Tooltip, Radio, Space } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import StyleDataConstruction, {
   StyleGuide,
@@ -21,13 +21,22 @@ import { removeRedundantCharacter } from '../../../utils/prePocessStringInput';
 
 const { TextArea } = Input;
 
+const options = [
+  {label: 'Giọng cùng một người', value: 'same'},
+  {label: 'Giọng khác người nói', value: 'different'},
+];
+
 const DataConstruction = ({ match, history }) => {
   const [transcriptInputText, setTranscriptInputText] = useState('');
+  const [sameSpeakerDecision, setSameSpeakerDecision] = useState('');
   const [collapsed, setCollapsed] = useState(false);
 
-  const transcriptInput = useRef();
+  const transcriptInput = useRef()
+  const sameSpeakerInput = useRef();
+
   const {
     currentAudio,
+    currentAudio2,
     competition,
     transcripts,
     completed,
@@ -40,7 +49,7 @@ const DataConstruction = ({ match, history }) => {
     if (completed) {
       return history.push('/team/finish');
     }
-    transcriptInput.current.focus();
+    // transcriptInput.current.focus();
     dispatch(getCompetitionById(match.params.competitionId));
     dispatch(getTaskProcess(match.params.competitionId));
     dispatch(getRandomizeAudio(match.params.competitionId));
@@ -51,19 +60,22 @@ const DataConstruction = ({ match, history }) => {
   }, [currentAudio]);
 
   const audio = useRef();
+  const audio2 = useRef();
+
   const toggle = value => () => {
     setCollapsed(value);
   };
   const sendTranscriptHandler = () => {
-    transcriptInput.current.focus();
-    setTranscriptInputText('');
+    // transcriptInput.current.focus();
+    // setTranscriptInputText('');
+    console.log(sameSpeakerDecision);
     dispatch(
-      typing(removeRedundantCharacter(transcriptInputText), currentAudio._id),
+      typing(removeRedundantCharacter(sameSpeakerDecision), currentAudio._id),
     );
   };
 
   const voteHandler = teamId => {
-    transcriptInput.current.focus();
+    // transcriptInput.current.focus();
     setTranscriptInputText('');
     dispatch(voting(teamId, currentAudio._id));
   };
@@ -72,7 +84,15 @@ const DataConstruction = ({ match, history }) => {
     if (src != null) {
       audio.current.pause();
       audio.current.load();
+
+      audio2.current.pause();
+      audio2.current.load();
     }
+  };
+
+  const radioOnChange = e => {
+    sameSpeakerInput.current.focus();
+    setSameSpeakerDecision(e.target.value);
   };
 
   const onChangeTextAreaHandler = e => {
@@ -159,6 +179,20 @@ const DataConstruction = ({ match, history }) => {
                     </div>
                   </Col>
                 </Row>
+                <Row type="flex" justify="start" align="middle" style={{ marginTop: '10px', width: '100%' }}>
+                  <Col span={24}>
+                    <div className="controls box-shadow">
+                      {currentAudio2 && (
+                        <audio controls style={{ width: '100%' }} ref={audio2}>
+                          <source
+                            src={`${process.env.REACT_APP_API_DOMAIN}${currentAudio2.link}`}
+                          />
+                          {/* <track kind="captions" /> */}
+                        </audio>
+                      )}
+                    </div>
+                  </Col>
+                </Row>
                 <Row style={{ marginTop: '20px', width: '100%' }}>
                   <div
                     className="box-shadow"
@@ -192,14 +226,14 @@ const DataConstruction = ({ match, history }) => {
                                 }}
                               >
                                 <div className="number-of-votes">
-                                  <CopyOutlined
+                                  {/* <CopyOutlined
                                     className="icon-btn"
                                     onClick={() => {
                                       setTranscriptInputText(
                                         transcript.content,
                                       );
                                     }}
-                                  />
+                                  /> */}
                                   <LikeOutlined
                                     className="icon-btn"
                                     onClick={() =>
@@ -220,8 +254,9 @@ const DataConstruction = ({ match, history }) => {
                       className="input-container"
                       type="flex"
                       justify="space-between"
+                      style={{ padding: '10px', margin: '10px'}}
                     >
-                      <TextArea
+                      {/* <TextArea
                         value={transcriptInputText}
                         className="input-text"
                         ref={transcriptInput}
@@ -229,12 +264,18 @@ const DataConstruction = ({ match, history }) => {
                         size="large"
                         placeholder="Nhập nội dung audio"
                         onChange={onChangeTextAreaHandler}
-                      />
+                      /> */}
+                      <Radio.Group onChange={radioOnChange} value={sameSpeakerDecision} ref={sameSpeakerInput}>
+                        <Space direction="vertical">
+                          <Radio value={'Giọng của một người'}>Giọng của một người</Radio>
+                          <Radio value={'Giọng 2 người khác nhau'}>Giọng 2 người khác nhau</Radio>
+                        </Space>
+                      </Radio.Group>
                       <div
                         className="send-button"
                         onClick={sendTranscriptHandler}
                       >
-                        <SendOutlined className="send-icon">Gửi</SendOutlined>
+                      <SendOutlined className="send-icon">Gửi</SendOutlined>
                       </div>
                     </Row>
                   </div>
