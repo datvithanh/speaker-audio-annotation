@@ -109,36 +109,20 @@ const DataConstruction = ({ match, history }) => {
           <Col span={collapsed ? 0 : 8}>
             <StyleGuide>
               <StyleTextTitle>
-                Hướng dẫn chỉnh sửa nội dung audio
+                Hướng dẫn kiểm tra audio
               </StyleTextTitle>
               <StyleTextDesc>
-                1. Số, ngày tháng, giờ được viết dạng chữ số
+                1. Nếu 2 audio là của cùng một người nói, chọn option "Giọng của một người".
               </StyleTextDesc>
-              <StyleTextEx>
-                VD: mười lăm &rarr; 15, ngày hai mươi tháng ba &rarr; ngày 20/3
-              </StyleTextEx>
               <StyleTextDesc>
-                2. Từ nước ngoài được viết theo từ gốc
+                2. Nếu 2 audio là của 2 người khác nhau, chọn option "Giọng của 2 người khác nhau".
               </StyleTextDesc>
-              <StyleTextEx>
-                VD: Hemingway, Jordan (xem danh sách các từ tham khảo{' '}
-                <a
-                  href={`${process.env.REACT_APP_API_DOMAIN}/List-Foreign-Dictionary.xlsx`}
-                  className="link-foreign-dictionary"
-                >
-                  tại đây
-                </a>
-                )
-              </StyleTextEx>
               <StyleTextDesc>
-                3. Các loại khác được viết về dạng nguyên bản
+                3. Nếu audio 1 có chứa giọng của 2 người nói, chọn option "Có 2 người nói trong audio 1", tương tự với audio 2.
               </StyleTextDesc>
-              <StyleTextEx>VD: xen-ti-mét &rarr; cm</StyleTextEx>
               <StyleTextDesc>
-                4. Các trường hợp khó tìm dạng nguyên bản có thể viết dạng phiên
-                âm tiếng Việt
+                4. Nếu cả 2 audio đều chứa giọng của 2 người nói, chọn option "Cả 2 audio có 2 người nói".
               </StyleTextDesc>
-              <StyleTextEx>VD: phát-xít, xi-măng</StyleTextEx>
             </StyleGuide>
           </Col>
           <Col span={collapsed ? 24 : 16} className="right-content">
@@ -167,6 +151,7 @@ const DataConstruction = ({ match, history }) => {
                 </Row>
                 <Row type="flex" justify="start" align="middle">
                   <Col span={24}>
+                    <h5>Audio 1</h5>
                     <div className="controls box-shadow">
                       {currentAudio && (
                         <audio controls style={{ width: '100%' }} ref={audio}>
@@ -181,6 +166,7 @@ const DataConstruction = ({ match, history }) => {
                 </Row>
                 <Row type="flex" justify="start" align="middle" style={{ marginTop: '10px', width: '100%' }}>
                   <Col span={24}>
+                    <h5>Audio 2</h5>
                     <div className="controls box-shadow">
                       {currentAudio2 && (
                         <audio controls style={{ width: '100%' }} ref={audio2}>
@@ -269,6 +255,9 @@ const DataConstruction = ({ match, history }) => {
                         <Space direction="vertical">
                           <Radio value={'Giọng của một người'}>Giọng của một người</Radio>
                           <Radio value={'Giọng 2 người khác nhau'}>Giọng 2 người khác nhau</Radio>
+                          <Radio value={'Có 2 người nói trong audio 1'}>Có 2 người nói trong audio 1</Radio>
+                          <Radio value={'Có 2 người nói trong audio 2'}>Có 2 người nói trong audio 2</Radio>
+                          <Radio value={'Cả 2 audio có 2 người nói'}>Cả 2 audio có 2 người nói</Radio>
                         </Space>
                       </Radio.Group>
                       <div
