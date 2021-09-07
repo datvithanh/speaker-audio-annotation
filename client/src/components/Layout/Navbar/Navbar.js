@@ -64,7 +64,7 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
             src={LogoDescription}
             alt="Vietnamese BE your Eyes"
           /> */}
-          <StyleLogoDescription>Vietnamese Text To Speech</StyleLogoDescription>
+          <StyleLogoDescription></StyleLogoDescription>
         </Link>
         {!loading && (
           <Fragment>{isAuthenticated ? authLinks : guestLinks}</Fragment>
