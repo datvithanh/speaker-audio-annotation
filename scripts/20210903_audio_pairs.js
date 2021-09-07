@@ -20,7 +20,7 @@ require('../src/db/mongoose');
 // })();
 
 async function processLineByLine() {
-  const fileStream = fs.createReadStream('scripts/metadata/public_same_pairs_mapped.txt');
+  const fileStream = fs.createReadStream('scripts/metadata/total_shuffle.txt');
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -31,10 +31,9 @@ async function processLineByLine() {
 
   for await (const line of rl) {
     // Each line in input.txt will be successively available here as `line`.
-    let wav1 = '/label_audios_public/' + line.split(" ")[0];
-    let wav2 = '/label_audios_public/' + line.split(" ")[1];
-    // console.log(line.split(" "));
-    // console.log(wav1, wav2);
+    let wav1 = line.split(" ")[0];
+    let wav2 = line.split(" ")[1];
+    console.log(wav1, wav2);
     AudioTrainning.create({
       competitionId: ObjectId('6125bd406f094a2a35e681d2'),
       link: wav1,

@@ -72,6 +72,7 @@ const DataConstruction = ({ match, history }) => {
     dispatch(
       typing(removeRedundantCharacter(sameSpeakerDecision), currentAudio._id),
     );
+    setSameSpeakerDecision(null);
   };
 
   const voteHandler = teamId => {
