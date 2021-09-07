@@ -35,7 +35,7 @@ async function processLineByLine() {
     let wav2 = line.split(" ")[1];
     console.log(wav1, wav2);
     AudioTrainning.create({
-      competitionId: ObjectId('6125bd406f094a2a35e681d2'),
+      competitionId: ObjectId('6136efbbfd882ac42f4d6da0'),
       link: wav1,
       link2: wav2,
       rawOriginContent: null,

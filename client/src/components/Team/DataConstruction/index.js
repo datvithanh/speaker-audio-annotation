@@ -124,6 +124,9 @@ const DataConstruction = ({ match, history }) => {
               <StyleTextDesc>
                 4. Nếu cả 2 audio đều chứa giọng của 2 người nói, chọn option "Cả 2 audio có 2 người nói".
               </StyleTextDesc>
+              <StyleTextEx>
+                Lưu ý: nếu audio không có giọng người nói hoặc có nhiều hơn 2 người nói -> đánh nhãn tương tự như có 2 người nói.
+              </StyleTextEx>
             </StyleGuide>
           </Col>
           <Col span={collapsed ? 24 : 16} className="right-content">
