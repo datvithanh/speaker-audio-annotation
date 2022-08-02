@@ -13,6 +13,7 @@ import {
 } from './types';
 import setAuthToken from '../utils/setAuthToken';
 import { toast } from 'react-toastify';
+import { response } from 'express';
 
 // Load user
 export const loadUser = () => async dispatch => {
