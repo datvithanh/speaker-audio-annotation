@@ -3,7 +3,7 @@ require('../src/db/mongoose');
 const User = require('../src/models/user.model');
 const Voice = require('../src/models/voice.model');
 
-const emails = ["datvithanh@gmail.com"];
+const emails = ["datvithan@gmail.com"];
 
 (async () => {
   for await (const email of emails) {

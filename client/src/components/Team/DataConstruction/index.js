@@ -158,12 +158,12 @@ const DataConstruction = ({ match, history }) => {
                     <h5>Audio 1</h5>
                     <div className="controls box-shadow">
                       {currentAudio && (
-                        <audio controls style={{ width: '100%' }} ref={audio}>
+                        <video controls style={{ width: '100%' }} ref={audio}>
                           <source
-                            src={`${process.env.REACT_APP_API_DOMAIN}${currentAudio.link}`}
+                            src={`${currentAudio.link}`}
                           />
                           {/* <track kind="captions" /> */}
-                        </audio>
+                        </video>
                       )}
                     </div>
                   </Col>
@@ -173,12 +173,12 @@ const DataConstruction = ({ match, history }) => {
                     <h5>Audio 2</h5>
                     <div className="controls box-shadow">
                       {currentAudio2 && (
-                        <audio controls style={{ width: '100%' }} ref={audio2}>
+                        <video controls style={{ width: '100%' }} ref={audio2}>
                           <source
-                            src={`${process.env.REACT_APP_API_DOMAIN}${currentAudio2.link}`}
+                            src={`${currentAudio2.link}`}
                           />
                           {/* <track kind="captions" /> */}
-                        </audio>
+                        </video>
                       )}
                     </div>
                   </Col>

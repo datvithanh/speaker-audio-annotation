@@ -20,7 +20,7 @@ require('../src/db/mongoose');
 // })();
 
 async function processLineByLine() {
-  const fileStream = fs.createReadStream('scripts/metadata/total_shuffle.txt');
+  const fileStream = fs.createReadStream('/Users/datvithanh/Desktop/hindi/hindi_5_video_pairs.csv');
 
   const rl = readline.createInterface({
     input: fileStream,
@@ -31,19 +31,21 @@ async function processLineByLine() {
 
   for await (const line of rl) {
     // Each line in input.txt will be successively available here as `line`.
-    let wav1 = line.split(" ")[0];
-    let wav2 = line.split(" ")[1];
-    console.log(wav1, wav2);
-    AudioTrainning.create({
-      competitionId: ObjectId('6136efbbfd882ac42f4d6da0'),
-      link: wav1,
-      link2: wav2,
-      rawOriginContent: null,
-      transcripts: [],
-      textLength: 0,
-      sizeInKilobytes: 0,
-      label: '',
-    });
+    let wav1 = "https://storage.googleapis.com/sv_vlsp_2021/" + line.split(",")[2].replace("hindi_5_video_cut", "hindi_5");
+    let wav2 = "https://storage.googleapis.com/sv_vlsp_2021/" + line.split(",")[3].replace("hindi_5_video_cut", "hindi_5");
+    if (line.split(",")[2] !== "utt1") {
+      console.log(wav1, wav2);
+      await AudioTrainning.create({
+        competitionId: ObjectId('62ee9abba2a348d926b43e27'),
+        link: wav1,
+        link2: wav2,
+        rawOriginContent: null,
+        transcripts: [],
+        textLength: 0,
+        sizeInKilobytes: 0,
+        label: '',
+      });
+    }
   }
 }
 
