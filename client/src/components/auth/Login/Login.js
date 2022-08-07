@@ -24,9 +24,9 @@ const Login = ({ login, isAuthenticated, user }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (email === '') {
-      return toast.error('Email không được bỏ trống');
+      return toast.error('Email cannot be empty');
     } else if (password === '') {
-      return toast.error('Mật khẩu không được bỏ trống');
+      return toast.error('Password cannot be empty');
     } else {
       await login(email, password);
     }
@@ -43,9 +43,9 @@ const Login = ({ login, isAuthenticated, user }) => {
 
   return (
     <LoginStyle>
-      <h1 className="large">Đăng nhập</h1>
+      <h1 className="large">Sign in</h1>
       <p className="lead">
-        <i className="fas fa-user"></i> Đăng nhập vào tài khoản của bạn
+        <i className="fas fa-user"></i> Sign in to your account
       </p>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
@@ -60,19 +60,19 @@ const Login = ({ login, isAuthenticated, user }) => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Mật khẩu"
+            placeholder="Password"
             name="password"
             value={password}
             onChange={e => onChange(e)}
           />
         </div>
         <div className="form-group">
-          <input type="submit" className="btn btn-primary" value="Đăng nhập" />
+          <input type="submit" className="btn btn-primary" value="Sign in" />
         </div>
         <p className="my-1">
-          Bạn chưa có tài khoản?{' '}
+          Don't have an account?{' '}
           <Link style={{ textDecoration: 'underline' }} to="/register">
-            Đăng ký
+            Sign up
           </Link>
         </p>
       </form>

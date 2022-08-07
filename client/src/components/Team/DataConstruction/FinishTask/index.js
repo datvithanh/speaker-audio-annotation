@@ -5,8 +5,8 @@ const FinishTask = ({ history }) => {
   return (
     <Result
       status="success"
-      title="Bạn đã hoàn thành nhiệm vụ"
-      subTitle="Cảm ơn bạn đã tham gia xây dựng tập dữ liệu training cùng chúng tôi!"
+      title="You have completed the evaluation."
+      subTitle="Thank you for your contribution to the challenge!"
       extra={[
         <Button
           style={{ margin: '0 auto' }}

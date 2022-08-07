@@ -69,13 +69,13 @@ const User = ({
 
   const columnsPublic = [
     {
-      title: 'Tên bài test',
+      title: 'Test name',
       dataIndex: 'name',
       key: 'name',
       // align: 'center',
     },
     {
-      title: 'Số lượng audio',
+      title: 'Number of utterances',
       // dataIndex: 'numberOfSentences',
       key: 'numberOfSentences',
       className: 'column',
@@ -86,7 +86,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày bắt đầu',
+      title: 'Open date',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       align: 'left',
@@ -105,7 +105,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày kết thúc',
+      title: 'Close date',
       dataIndex: 'dateClosed',
       key: 'dateClosed',
 
@@ -177,14 +177,14 @@ const User = ({
 
   const columnsPrivate = [
     {
-      title: 'Tên bài test',
+      title: 'Test name',
       dataIndex: 'name',
       key: 'name',
       className: 'column',
       align: 'left',
     },
     {
-      title: 'Số lượng audio',
+      title: 'Number of utterances',
       // dataIndex: 'numberOfSentences',
       align: 'right',
       key: 'numberOfSentences',
@@ -195,7 +195,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày bắt đầu',
+      title: 'Open date',
       dataIndex: 'dateOpened',
       key: 'dateOpened',
       className: 'column',
@@ -215,7 +215,7 @@ const User = ({
       },
     },
     {
-      title: 'Ngày kết thúc',
+      title: 'Close date',
       dataIndex: 'dateClosed',
       align: 'left',
       key: 'dateClosed',
@@ -253,7 +253,7 @@ const User = ({
                 type="primary"
                 style={{ color: 'white', backgroundColor: '#0f6398' }}
               >
-                Bắt đầu test
+                Start the evaluation
               </Button>
             ) : record.users.find(item => item.id === user._id.toString())
                 .indexAudio !==
@@ -263,10 +263,10 @@ const User = ({
                 onClick={() => onClickPerformPrivateTest(_id)}
                 style={{ color: 'white', backgroundColor: '#0f6398' }}
               >
-                Thực hiện tiếp
+                Continue
               </Button>
             ) : (
-              <div style={{ textAlign: 'center' }}>Đã hoàn thành</div>
+              <div style={{ textAlign: 'center' }}>Completed</div>
             )}
           </span>
         );
@@ -282,7 +282,7 @@ const User = ({
         <>
           {publicTest && user && (
             <>
-              <h4>Danh sách các bài test bạn có thể tham gia</h4>
+              <h4>Available evaluations that you can join</h4>
 
               <Table
                 bordered
@@ -303,7 +303,7 @@ const User = ({
           )}
           {privateTest && user && (
             <>
-              <h4>Danh sách các bài test bạn được chỉ định tham gia</h4>{' '}
+              <h4>Available evaluations that you are required to join</h4>{' '}
               <Table
                 bordered
                 className="table"

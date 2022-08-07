@@ -25,13 +25,13 @@ const ChangePassword = ({ changePassword, user, history }) => {
     e.preventDefault();
 
     if (password === '') {
-      return toast.error('Mật khẩu không được bỏ trống');
+      return toast.error('Password cannot be empty.');
     } else if (newPassword === '') {
-      return toast.error('Bạn chưa nhập mật khẩu mới');
+      return toast.error('New password missing');
     } else if (newPassword2 === '') {
-      return toast.error('Bạn chưa xác nhận mật khẩu mới');
+      return toast.error('New password is empty');
     } else if (newPassword !== newPassword2) {
-      return toast.error('Mật khẩu không khớp');
+      return toast.error('Passwords do not match!');
     } else {
       changePassword(user._id, password, newPassword);
       // setTimeout(() => {
@@ -42,12 +42,12 @@ const ChangePassword = ({ changePassword, user, history }) => {
 
   return (
     <ChangePasswordStyle>
-      <h1 className="fas fa-user large"> Đổi mật khẩu</h1>
+      <h1 className="fas fa-user large"> Change Password</h1>
       <form className="form" onSubmit={e => onSubmit(e)}>
         <div className="form-group">
           <input
             type="password"
-            placeholder="Mật khẩu cũ"
+            placeholder="Password"
             name="password"
             value={password}
             onChange={e => onChange(e)}
@@ -56,7 +56,7 @@ const ChangePassword = ({ changePassword, user, history }) => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Mật khẩu mới"
+            placeholder="New password"
             name="newPassword"
             value={newPassword}
             onChange={e => onChange(e)}
@@ -65,14 +65,14 @@ const ChangePassword = ({ changePassword, user, history }) => {
         <div className="form-group">
           <input
             type="password"
-            placeholder="Nhập lại mật khẩu mới"
+            placeholder="New password"
             name="newPassword2"
             value={newPassword2}
             onChange={e => onChange(e)}
           />
         </div>
         <div className="form-group">
-          <input type="submit" className="btn btn-primary" value="Xác nhận" />
+          <input type="submit" className="btn btn-primary" value="Confirm" />
         </div>
       </form>
     </ChangePasswordStyle>

@@ -57,27 +57,27 @@ const Register = ({ register, isAuthenticated }) => {
   const onSubmit = async e => {
     e.preventDefault();
     if (name === '') {
-      return toast.error('Họ tên không được bỏ trống');
+      return toast.error('Name cannot be empty');
     } else if (!isValidEmail(email)) {
-      return toast.error('Email không hợp lệ');
+      return toast.error('Invalid email');
     } else if (!password) {
-      return toast.error('Mật khẩu không được bỏ trống');
+      return toast.error('Password cannot be empty');
     } else if (!isStrongPassword(password)) {
-      return toast.error('Mật khẩu không đủ mạnh');
+      return toast.error('Password not strong enough');
     } else if (password !== password2) {
-      return toast.error('Mật khẩu xác nhận không khớp');
+      return toast.error('Incorrect confirmation password');
     } else if (!isValidYear(birthYear)) {
-      return toast.error('Năm sinh không hợp lệ');
+      return toast.error('Invalid birth year');
     } else if (sex === 'GioiTinh' || sex === '') {
-      return toast.error('Bạn chưa chọn giới tính');
+      return toast.error('Gender not selected');
     } else if (job === '') {
-      return toast.error('Nghề nghiệp không được bỏ trống');
+      return toast.error('Job cannot be empty');
     } else if (hometown === '') {
-      return toast.error('Quê quán không được bỏ trống');
+      return toast.error('Hometown cannot be empty');
     } else if (!isValidNumbersOfLiveYear(yearLivingInHaNoi)) {
-      return toast.error('Số năm sống ở Hà Nội không hợp lệ');
+      return toast.error('Year living in Hanoi is invalid');
     } else if (!isValidNumbersOfLiveYear(yearLivingInHCM)) {
-      return toast.error('Số năm sống ở TPHCM không hợp lệ');
+      return toast.error('Year living in Ho Chi Minh City is invalid');
     } else {
       register({
         name,
@@ -100,10 +100,9 @@ const Register = ({ register, isAuthenticated }) => {
 
   return (
     <RegisterStyle>
-      <h1 className="large">Đăng ký tài khoản</h1>
+      <h1 className="large">Sign up</h1>
       <p className="lead">
-        <i className="fas fa-user"></i> Tạo tài khoản đánh giá chất lượng giọng
-        nói
+        <i className="fas fa-user"></i> Register account for speech evaluation
       </p>
 
       <form className="form" onSubmit={e => onSubmit(e)}>
@@ -112,7 +111,7 @@ const Register = ({ register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Họ tên"
+                placeholder="Name"
                 name="name"
                 value={name}
                 onChange={e => onChange(e)}
@@ -130,7 +129,7 @@ const Register = ({ register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="password"
-                placeholder="Mật khẩu"
+                placeholder="Password"
                 name="password"
                 value={password}
                 onChange={e => onChange(e)}
@@ -139,7 +138,7 @@ const Register = ({ register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="password"
-                placeholder="Xác nhận mật khẩu"
+                placeholder="Confirmation password"
                 name="password2"
                 value={password2}
                 onChange={e => onChange(e)}
@@ -148,7 +147,7 @@ const Register = ({ register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Năm sinh (Vd: 1998)"
+                placeholder="Year of birth (eg. 1998)"
                 name="birthYear"
                 value={birthYear}
                 onChange={e => onChange(e)}
@@ -168,15 +167,15 @@ const Register = ({ register, isAuthenticated }) => {
                 }}
                 onChange={e => onChangeSex(e)}
               >
-                <option value="GioiTinh">Giới tính</option>
-                <option value="Nam">Nam</option>
-                <option value="Nu">Nữ</option>
+                <option value="GioiTinh">Gender</option>
+                <option value="Nam">Male</option>
+                <option value="Nu">Female</option>
               </select>
             </div>
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Nghề nghiệp"
+                placeholder="Job"
                 name="job"
                 value={job}
                 onChange={e => onChange(e)}
@@ -185,7 +184,7 @@ const Register = ({ register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Quê quán"
+                placeholder="Hometown"
                 name="hometown"
                 value={hometown}
                 onChange={e => onChange(e)}
@@ -194,7 +193,7 @@ const Register = ({ register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Số năm sống ở Hà Nội (Vd: 2.5)"
+                placeholder="Year living in Hanoi"
                 name="yearLivingInHaNoi"
                 value={yearLivingInHaNoi}
                 onChange={e => onChange(e)}
@@ -203,7 +202,7 @@ const Register = ({ register, isAuthenticated }) => {
             <div className="form-group">
               <input
                 type="text"
-                placeholder="Số năm sống ở TPHCM (Vd: 2.5)"
+                placeholder="Year living in Ho Chi Minh City"
                 name="yearLivingInHCM"
                 value={yearLivingInHCM}
                 onChange={e => onChange(e)}
@@ -212,11 +211,11 @@ const Register = ({ register, isAuthenticated }) => {
           </div>
         </div>
         <div className="button">
-          <input type="submit" className="btn btn-primary" value="Đăng ký" />
+          <input type="submit" className="btn btn-primary" value="Sign up" />
           <p className="my-1">
-            Bạn đã có tài khoản?{' '}
+            Already have an account?{' '}
             <Link style={{ textDecoration: 'underline' }} to="/login">
-              Đăng nhập
+              Sign in
             </Link>
           </p>
         </div>

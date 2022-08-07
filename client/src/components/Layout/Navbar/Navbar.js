@@ -13,17 +13,17 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     <ul>
       <li>
         <span className="welcome">
-          Xin chào, <b>{user ? user.name : null}</b>
+          Hello, <b>{user ? user.name : null}</b>
         </span>
         <NavLink
           className="buttonNav"
           activeClassName="active"
           to="/change-password"
         >
-          <span>Đổi mật khẩu</span>
+          <span>Change password</span>
         </NavLink>
         <Link className="buttonNav logout" to="/login" onClick={logout}>
-          <i className="fas fa-sign-out-alt" /> <span>Đăng xuất</span>
+          <i className="fas fa-sign-out-alt" /> <span>Sign out</span>
         </Link>
         <a
           className="tutorial"
@@ -40,12 +40,12 @@ const Navbar = ({ auth: { isAuthenticated, loading, user }, logout }) => {
     <ul>
       <li>
         <NavLink className="buttonNav" activeClassName="active" to="/register">
-          Đăng ký
+          Sign up
         </NavLink>
       </li>
       <li>
         <NavLink className="buttonNav" activeClassName="active" to="/login">
-          Đăng nhập
+          Sign in
         </NavLink>
       </li>
     </ul>

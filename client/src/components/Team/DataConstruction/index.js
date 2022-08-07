@@ -22,8 +22,8 @@ import { removeRedundantCharacter } from '../../../utils/prePocessStringInput';
 const { TextArea } = Input;
 
 const options = [
-  {label: 'Giọng cùng một người', value: 'same'},
-  {label: 'Giọng khác người nói', value: 'different'},
+  {label: 'Same speaker', value: 'same'},
+  {label: 'Different speakers', value: 'different'},
 ];
 
 const DataConstruction = ({ match, history }) => {
@@ -110,22 +110,22 @@ const DataConstruction = ({ match, history }) => {
           <Col span={collapsed ? 0 : 8}>
             <StyleGuide>
               <StyleTextTitle>
-                Hướng dẫn kiểm tra audio
+                Data Labeling instruction
               </StyleTextTitle>
               <StyleTextDesc>
-                1. Nếu 2 audio là của cùng một người nói, chọn option "Giọng của một người".
+                1. If two audio files are of the same speaker, choose the option "Audio files come from one speaker".
               </StyleTextDesc>
               <StyleTextDesc>
-                2. Nếu 2 audio là của 2 người khác nhau, chọn option "Giọng của 2 người khác nhau".
+                2. if two audio files are of different speakers, choose the option "Audio files come from different speakers".
               </StyleTextDesc>
               <StyleTextDesc>
-                3. Nếu audio 1 có chứa giọng của 2 người nói, chọn option "Có 2 người nói trong audio 1", tương tự với audio 2.
+                3. If Audio 1 contains multiple speakers, choose the option "Audio 1 contains multiple speakers", the same rule is applied to Audio 2.
               </StyleTextDesc>
               <StyleTextDesc>
-                4. Nếu cả 2 audio đều chứa giọng của 2 người nói, chọn option "Cả 2 audio có 2 người nói".
+                4. If both Audio 1 and Audio 2 contain multiple speakers, choose the option "Both audio files contains multiple speakers".
               </StyleTextDesc>
               <StyleTextEx>
-                Lưu ý: nếu audio không có giọng người nói hoặc có nhiều hơn 2 người nói -> đánh nhãn tương tự như có 2 người nói.
+                Note: The sound of laughing SHOULD NOT BE considered an utterance of a speaker. If an audio contains no speaker, choose the option of the audio contains multiple speakers. 
               </StyleTextEx>
             </StyleGuide>
           </Col>
@@ -144,13 +144,13 @@ const DataConstruction = ({ match, history }) => {
                     {processTask.numberOfCompletedAudio /
                       processTask.totalAmountOfAudio ===
                     0.5
-                      ? `Làm tốt lắm, bạn đã hoàn thành được 50%, cố lên!`
+                      ? `Well done, you have finished 50% of the evaluation, keep it up!`
                       : processTask.numberOfCompletedAudio >=
                         processTask.totalAmountOfAudio - 1
-                      ? `Câu cuối cùng!`
+                      ? `The last audio pairs!`
                       : processTask.numberOfCompletedAudio === 0
-                      ? 'Bắt đầu nào'
-                      : `Bạn đã hoàn thành ${processTask.numberOfCompletedAudio} / ${processTask.totalAmountOfAudio} câu`}
+                      ? 'Start'
+                      : `You have completed labeling ${processTask.numberOfCompletedAudio} / ${processTask.totalAmountOfAudio} audio pairs`}
                   </span>
                 </Row>
                 <Row type="flex" justify="start" align="middle">
@@ -257,18 +257,18 @@ const DataConstruction = ({ match, history }) => {
                       /> */}
                       <Radio.Group onChange={radioOnChange} value={sameSpeakerDecision} ref={sameSpeakerInput}>
                         <Space direction="vertical">
-                          <Radio value={'Giọng của một người'}>Giọng của một người</Radio>
-                          <Radio value={'Giọng 2 người khác nhau'}>Giọng 2 người khác nhau</Radio>
-                          <Radio value={'Có 2 người nói trong audio 1'}>Có 2 người nói trong audio 1</Radio>
-                          <Radio value={'Có 2 người nói trong audio 2'}>Có 2 người nói trong audio 2</Radio>
-                          <Radio value={'Cả 2 audio có 2 người nói'}>Cả 2 audio có 2 người nói</Radio>
+                          <Radio value={'Audio files come from one speaker'}>Audio files come from one speaker</Radio>
+                          <Radio value={'Audio files come from different speakers'}>Audio files come from different speakers</Radio>
+                          <Radio value={'Audio 1 contains multiple speakers'}>Audio 1 contains multiple speakers</Radio>
+                          <Radio value={'Audio 2 contains multiple speakers'}>Audio 2 contains multiple speakers</Radio>
+                          <Radio value={'Both audio files contains multiple speakers'}>Both audio files contains multiple speakers</Radio>
                         </Space>
                       </Radio.Group>
                       <div
                         className="send-button"
                         onClick={sendTranscriptHandler}
                       >
-                      <SendOutlined className="send-icon">Gửi</SendOutlined>
+                      <SendOutlined className="send-icon">Submit</SendOutlined>
                       </div>
                     </Row>
                   </div>
@@ -282,8 +282,8 @@ const DataConstruction = ({ match, history }) => {
               placement="topLeft"
               title={
                 collapsed
-                  ? 'Xem hướng dẫn chỉnh sửa nội dung audio'
-                  : 'Ẩn hướng dẫn'
+                  ? 'View audio edit instructions'
+                  : 'Hide instructions'
               }
             >
               {collapsed ? (
