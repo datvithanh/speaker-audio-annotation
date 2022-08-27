@@ -125,7 +125,10 @@ const DataConstruction = ({ match, history }) => {
                 4. Nếu cả 2 audio đều chứa giọng của 2 người nói, chọn option "Cả 2 audio có 2 người nói".
               </StyleTextDesc>
               <StyleTextEx>
-                Lưu ý: nếu audio không có giọng người nói hoặc có nhiều hơn 2 người nói -> đánh nhãn tương tự như có 2 người nói.
+                Lưu ý: nếu audio không có giọng người nói hoặc có nhiều hơn 2 người nói -> đánh nhãn tương tự như có 2 người nói. 
+              </StyleTextEx>
+              <StyleTextEx>
+                Nếu audio có tiếng cười nhưng không lấn át tiếng nói của người nói chính thì vẫn tính là audio có 1 người nói.
               </StyleTextEx>
             </StyleGuide>
           </Col>
@@ -258,7 +261,8 @@ const DataConstruction = ({ match, history }) => {
                       /> */}
                       <Radio.Group onChange={radioOnChange} value={sameSpeakerDecision} ref={sameSpeakerInput}>
                         <Space direction="vertical">
-                          <Radio value={'Giọng của một người'}>Giọng của một người</Radio>
+                          <Radio value={'Giọng của một người (nam)'}>Giọng của một người (nam)</Radio>
+                          <Radio value={'Giọng của một người (nữ)'}>Giọng của một người (nữ)</Radio>
                           <Radio value={'Giọng 2 người khác nhau'}>Giọng 2 người khác nhau</Radio>
                           <Radio value={'Có 2 người nói trong audio 1'}>Có 2 người nói trong audio 1</Radio>
                           <Radio value={'Có 2 người nói trong audio 2'}>Có 2 người nói trong audio 2</Radio>
