@@ -19,28 +19,67 @@ require('../src/db/mongoose');
 //   });
 // })();
 
+// arab.csv       indo.csv       mongolian.csv  vietnam.csv
+// france.csv     japan.csv      thailand.csv
+
 async function processLineByLine() {
-  const fileStream = fs.createReadStream('/Users/datvithanh/Desktop/hindi/hindi_5_video_pairs.csv');
+  const fileStream = fs.createReadStream('/Users/dat.vithanh/Desktop/audio_files/vietnam.csv');
 
   const rl = readline.createInterface({
     input: fileStream,
     crlfDelay: Infinity
   });
-  // Note: we use the crlfDelay option to recognize all instances of CR LF
-  // ('\r\n') in input.txt as a single line break.
 
   for await (const line of rl) {
     // Each line in input.txt will be successively available here as `line`.
-    let wav1 = "https://storage.googleapis.com/sv_vlsp_2021/" + line.split(",")[2].replace("hindi_5_video_cut", "hindi_5");
-    let wav2 = "https://storage.googleapis.com/sv_vlsp_2021/" + line.split(",")[3].replace("hindi_5_video_cut", "hindi_5");
+    let wav1 = "https://storage.googleapis.com/sv_vlsp_2021/audio_files/" + line.split(",")[2].replace("/home3/thanhpv/gdrive/msv_video_video_cut/", "");
+    let wav2 = "https://storage.googleapis.com/sv_vlsp_2021/audio_files/" + line.split(",")[3].replace("/home3/thanhpv/gdrive/msv_video_video_cut/", "");
     if (line.split(",")[2] !== "utt1") {
       console.log(wav1, wav2);
-      await AudioTrainning.create({
+      AudioTrainning.create({
         competitionId: ObjectId('62ee9abba2a348d926b43e27'),
         link: wav1,
         link2: wav2,
         rawOriginContent: null,
-        transcripts: [],
+        transcripts: [
+          {
+            _id: false,
+            teamId: ObjectId("6309c7b556970f70c831b9c4"),
+            teamId: "6309c7b556970f70c831b9c4",
+            content: "Giọng của một người (nam)",
+            numberOfVotes: 0,
+          },
+          {
+            _id: false,
+            teamId: ObjectId("6309c7b556970f70c831b9c4"),
+            content: "Giọng của một người (nữ)",
+            numberOfVotes: 0,
+          },
+          {
+            _id: false,
+            teamId: ObjectId("6309c7b556970f70c831b9c4"),
+            content: "Giọng 2 người khác nhau",
+            numberOfVotes: 0,
+          },
+          {
+            _id: false,
+            teamId: ObjectId("6309c7b556970f70c831b9c4"),
+            content: "Có 2 người nói trong audio 1",
+            numberOfVotes: 0,
+          },
+          {
+            _id: false,
+            teamId: ObjectId("6309c7b556970f70c831b9c4"),
+            content: "Có 2 người nói trong audio 2",
+            numberOfVotes: 0,
+          },
+          {
+            _id: false,
+            teamId: ObjectId("6309c7b556970f70c831b9c4"),
+            content: "Cả 2 audio có 2 người nói",
+            numberOfVotes: 0,
+          },
+        ],
         textLength: 0,
         sizeInKilobytes: 0,
         label: '',

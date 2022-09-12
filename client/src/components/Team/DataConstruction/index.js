@@ -113,23 +113,29 @@ const DataConstruction = ({ match, history }) => {
                 Hướng dẫn kiểm tra audio
               </StyleTextTitle>
               <StyleTextDesc>
-                1. Nếu 2 audio là của cùng một người nói, chọn option "Giọng của một người".
+                1. Nếu 2 audio là của cùng một giọng nam nói, NHẤN LIKE "Giọng của một người(nam)".
               </StyleTextDesc>
               <StyleTextDesc>
-                2. Nếu 2 audio là của 2 người khác nhau, chọn option "Giọng của 2 người khác nhau".
+                2. Nếu 2 audio là của cùng một giọng nữ nói, NHẤN LIKE "Giọng của một người(nữ)".
               </StyleTextDesc>
               <StyleTextDesc>
-                3. Nếu audio 1 có chứa giọng của 2 người nói, chọn option "Có 2 người nói trong audio 1", tương tự với audio 2.
+                3. Nếu 2 audio là của 2 người khác nhau, NHẤN LIKE "Giọng của 2 người khác nhau".
               </StyleTextDesc>
               <StyleTextDesc>
-                4. Nếu cả 2 audio đều chứa giọng của 2 người nói, chọn option "Cả 2 audio có 2 người nói".
+                4. Nếu audio 1 có chứa giọng của 2 người nói, NHẤN LIKE "Có 2 người nói trong audio 1", tương tự với audio 2.
+              </StyleTextDesc>
+              <StyleTextDesc>
+                5. Nếu cả 2 audio đều chứa giọng của 2 người nói, NHẤN LIKE "Cả 2 audio có 2 người nói".
               </StyleTextDesc>
               <StyleTextEx>
-                Lưu ý: nếu audio không có giọng người nói hoặc có nhiều hơn 2 người nói -> đánh nhãn tương tự như có 2 người nói. 
+                Lưu ý: nếu audio không có giọng người nói hoặc có nhiều hơn 2 người nói -> chọn giống với trường hợp audio có 2 người nói, ví dụ: audio 1 không có giọng hoặc có 2 người nói -> nhấn like "Có 2 người nói trong audio 1". Tương tự với audio 2 và trường hợp cả 2 audio.
               </StyleTextEx>
               <StyleTextEx>
                 Nếu audio có tiếng cười nhưng không lấn át tiếng nói của người nói chính thì vẫn tính là audio có 1 người nói.
               </StyleTextEx>
+              <StyleTextDesc>
+                6. <b>CHỉ LIKE MỘT LẦN MỖI CẶP VIDEO. NGƯỜI THỰC HIỆN CẦN XEM KỸ VIDEO TRƯỚC KHI BẤM NÚT LIKE</b>
+              </StyleTextDesc>
             </StyleGuide>
           </Col>
           <Col span={collapsed ? 24 : 16} className="right-content">
@@ -196,7 +202,7 @@ const DataConstruction = ({ match, history }) => {
                         paddingTop: '7px',
                         background: '#fff',
                         borderRadius: '5px',
-                        height: '140px',
+                        height: '500px',
                       }}
                     >
                       <Col className="content">
@@ -259,7 +265,7 @@ const DataConstruction = ({ match, history }) => {
                         placeholder="Nhập nội dung audio"
                         onChange={onChangeTextAreaHandler}
                       /> */}
-                      <Radio.Group onChange={radioOnChange} value={sameSpeakerDecision} ref={sameSpeakerInput}>
+                      {/* <Radio.Group onChange={radioOnChange} value={sameSpeakerDecision} ref={sameSpeakerInput}>
                         <Space direction="vertical">
                           <Radio value={'Giọng của một người (nam)'}>Giọng của một người (nam)</Radio>
                           <Radio value={'Giọng của một người (nữ)'}>Giọng của một người (nữ)</Radio>
@@ -274,7 +280,7 @@ const DataConstruction = ({ match, history }) => {
                         onClick={sendTranscriptHandler}
                       >
                       <SendOutlined className="send-icon">Gửi</SendOutlined>
-                      </Button>
+                      </Button> */}
                     </Row>
                   </div>
                 </Row>
