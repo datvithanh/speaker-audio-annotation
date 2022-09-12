@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Row, List, Col, Input, Tooltip, Radio, Space } from 'antd';
+import { Row, List, Col, Input, Tooltip, Radio, Space, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import StyleDataConstruction, {
   StyleGuide,
@@ -269,12 +269,12 @@ const DataConstruction = ({ match, history }) => {
                           <Radio value={'Cả 2 audio có 2 người nói'}>Cả 2 audio có 2 người nói</Radio>
                         </Space>
                       </Radio.Group>
-                      <div
+                      <Button
                         className="send-button"
                         onClick={sendTranscriptHandler}
                       >
                       <SendOutlined className="send-icon">Gửi</SendOutlined>
-                      </div>
+                      </Button>
                     </Row>
                   </div>
                 </Row>
