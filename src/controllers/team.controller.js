@@ -100,13 +100,21 @@ async function randomizeAudio(req, res) {
     throw new CustomError(errorCode.BAD_REQUEST, 'completed');
   }
 
-  const audios = await AudioTrainning.find({
-    competitionId,
-    numberOfEditors: { $lt: competition.rules.numberOfAudiosPerListener },
-    editors: { $nin: [req.user._id] },
-  }).sort({
-    numberOfEditors: 'asc',
-  });
+  const audios = await AudioTrainning.aggregate([
+    {
+      $match: {
+        competitionId: mongoose.Types.ObjectId('62ee9abba2a348d926b43e27'),
+        numberOfEditors: { $lt: 2 },
+        editors: { $nin: [mongoose.Types.ObjectId('631992fbf8aef62470a1f963')] },
+      },
+    },
+    {
+      $sort: { numberOfEditors: 1 },
+    },
+    {
+      $limit: 20,
+    },
+  ]);
 
   if (audios.length === 0) {
     throw new CustomError(errorCode.BAD_REQUEST, 'completed');

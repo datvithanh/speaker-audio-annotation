@@ -202,7 +202,7 @@ const DataConstruction = ({ match, history }) => {
                         paddingTop: '7px',
                         background: '#fff',
                         borderRadius: '5px',
-                        height: '5750',
+                        height: '550px',
                       }}
                     >
                       <Col className="content">
