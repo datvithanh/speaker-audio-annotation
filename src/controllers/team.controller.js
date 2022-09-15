@@ -103,9 +103,9 @@ async function randomizeAudio(req, res) {
   const audios = await AudioTrainning.aggregate([
     {
       $match: {
-        competitionId: mongoose.Types.ObjectId('62ee9abba2a348d926b43e27'),
+        competitionId: mongoose.Types.ObjectId(competitionId),
         numberOfEditors: { $lt: 2 },
-        editors: { $nin: [mongoose.Types.ObjectId('631992fbf8aef62470a1f963')] },
+        editors: { $nin: [mongoose.Types.ObjectId(req.user._id)] },
       },
     },
     {
