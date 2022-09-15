@@ -100,11 +100,13 @@ async function randomizeAudio(req, res) {
     throw new CustomError(errorCode.BAD_REQUEST, 'completed');
   }
 
+  // 2 nguoi vote 2 option khac nhau => ko show
+  // audio ma co 1 option dc 2 ng vote => ko show
+
   const audios = await AudioTrainning.aggregate([
     {
       $match: {
         competitionId: mongoose.Types.ObjectId(competitionId),
-        numberOfEditors: { $lt: 2 },
         editors: { $nin: [mongoose.Types.ObjectId(req.user._id)] },
       },
     },
